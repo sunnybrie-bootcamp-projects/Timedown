@@ -1,6 +1,6 @@
-#h1 Timedown
+# H1 Timedown
 
-#h2 Technologies
+# H2 Technologies
 Technologies
 Postgresql Database
 Express
