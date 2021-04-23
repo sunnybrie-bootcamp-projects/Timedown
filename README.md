@@ -24,8 +24,8 @@ Users should be able to...
 
 ## Nice-to-haves
 1. Clock-in/Clock-out feature
-2. Push notifications for upcoming tasks
-3. Pomodoro timer that triggers when clocked-in.
+2. Pomodoro timer that triggers when clocked-in.
+3. Push notifications for upcoming tasks
 4. Option to recalibrate time blocks when you miss or delete a block
 5. Indicators on tasks that show whether or not you’re on track to finish them by their deadline.
 6. Pattern recognition/insights feature.
@@ -35,3 +35,11 @@ Users should be able to...
     > If this turns out to be the case, I will instead use a simple calendar API (such EZCalDev), create dummy account, and populate it with dummy events in order demonstrate the core features of the app.
 - Running out of time to set up the customer User settings feature
     > In this case, I can hard-code in what would be the default scheduling settings, such as giving a 15-minute buffer around pre-existing events.
+   
+---
+
+[Data_Schema_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368235/Data_Schema_TIMEDOWN.pdf)
+[userflow_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368236/userflow_TIMEDOWN.pdf)
+[wireframes_mobile_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368237/wireframes_mobile_TIMEDOWN.pdf)
+[wireframes_landscape_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368238/wireframes_landscape_TIMEDOWN.pdf)
+
