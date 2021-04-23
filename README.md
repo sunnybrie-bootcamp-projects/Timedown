@@ -1,4 +1,5 @@
 # Timedown
+---
 
 ## Technologies
 - Technologies
@@ -27,3 +28,9 @@ Users should be able to...
 4. Option to recalibrate time blocks when you miss or delete a block
 5. Indicators on tasks that show whether or not you’re on track to finish them by their deadline.
 6. Pattern recognition/insights feature.
+
+## Technical Risks
+- Google Calendar API might be too complicated to implement in time
+    If this turns out to be the case, I will instead use a simple calendar API (such EZCalDev), create dummy account, and populate it with dummy events in order demonstrate the core features of the app.
+- Running out of time to set up the customer User settings feature
+    In this case, I can hard-code in what would be the default scheduling settings, such as giving a 15-minute buffer around pre-existing events.
