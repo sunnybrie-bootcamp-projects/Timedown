@@ -1,5 +1,6 @@
 # Timedown
----
+
+Timedown is a flexible time management app designed to cultivate a healthy work-life balance while staying on top of your deadlines. It allows a user to submit a task and uses the information to determine how they should allocate their time spent working on it so they finish before the due date. It then synchronizes with a user's calendar to suggest time blocks that fit into their schedule. 
 
 ## Technologies
 - Technologies
@@ -13,12 +14,12 @@
 ## MVP
 Users should be able to...
 - Log in with their Google account
-- Sync with your Google Calendar.
+- Synchronize with their Google Calendar.
 - Set custom scheduling settings
-- Submit new task
-- Generate suggested time blocks for a task based on estimated time and due date
-- Manually adjust time blocks TIMEDOWN generates for your calendar
-- Option to insert time blocks as events into your their Google calendar, or keep time blocks in your app.
+- Submit new tasks
+- Generate suggested time blocks for a task based on est. time needed and due date
+- Manually adjust time blocks on their calendar
+- Option to insert time blocks as events into into their Google calendar, or keep time blocks in their app.
 - Check-off the time blocks when completed
 
 ## Nice-to-haves
