@@ -38,8 +38,7 @@ Users should be able to...
    
 ---
 
-[Data_Schema_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368235/Data_Schema_TIMEDOWN.pdf)
-[userflow_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368236/userflow_TIMEDOWN.pdf)
-[wireframes_mobile_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368237/wireframes_mobile_TIMEDOWN.pdf)
-[wireframes_landscape_TIMEDOWN.pdf](https://github.com/sunnybrie/Timedown/files/6368238/wireframes_landscape_TIMEDOWN.pdf)
+![Data_Schema_TIMEDOWN](https://user-images.githubusercontent.com/76143251/115933182-31c9b980-a443-11eb-85f0-5dc30ce9d617.png)
+![userflow_TIMEDOWN](https://user-images.githubusercontent.com/76143251/115933184-32fae680-a443-11eb-83fe-75323839bdb3.png)
+
 
