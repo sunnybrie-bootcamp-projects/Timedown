@@ -27,21 +27,21 @@
     <title>React App</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    
 
-    
-    <div id="logInBox">
-      <button id="authorize_button" style="display: none;">Authorize</button>
+    <div id="LoginInfo" padding="20px" backgroundColor="aliceblue">
+      <button id="authorize_button" style="display: inline-block;">Authorize</button>
       <button id="signout_button" style="display: none;">Sign Out</button>
     </div>
+    
+    
+    
 
     <!-- AUTHENTICATION SCRIPTS -->
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
-      var CLIENT_ID = '<YOUR_CLIENT_ID>';
-      var API_KEY = '<YOUR_API_KEY>';
+      var CLIENT_ID = '672610100992-9ob4krjvvh9kfs8sr0jb4d7hlsvcmcv8.apps.googleusercontent.com';
+      var API_KEY = 'AIzaSyA09anzQMkA1rwqB_ZGzBIrv_RW7r5RyhI';
 
       // Array of API discovery doc URLs for APIs used by the quickstart
       var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
@@ -119,7 +119,7 @@
        * @param {string} message Text to be placed in pre element.
        */
       function appendPre(message) {
-        var pre = document.getElementById('content');
+        var pre = document.getElementById('LoginInfo');
         var textContent = document.createTextNode(message + '\n');
         pre.appendChild(textContent);
       }
