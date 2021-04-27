@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from "dotenv"; 
 import pgp from "pg-promise";
 
 const db = initDb();
