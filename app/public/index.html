@@ -29,33 +29,22 @@
   <body>
     <div id="root"></div>
 
-    <div id="LoginInfo" padding="20px" backgroundColor="aliceblue">
-      <button id="authorize_button" style="display: inline-block;">Authorize</button>
-      <button id="signout_button" style="display: none;">Sign Out</button>
-    </div>
+
     
     
     
 
     <!-- AUTHENTICATION SCRIPTS -->
+<!--    
     <script type="text/javascript">
-      // Client ID and API key from the Developer Console
-      var CLIENT_ID = '672610100992-9ob4krjvvh9kfs8sr0jb4d7hlsvcmcv8.apps.googleusercontent.com';
-      var API_KEY = 'AIzaSyA09anzQMkA1rwqB_ZGzBIrv_RW7r5RyhI';
-
-      // Array of API discovery doc URLs for APIs used by the quickstart
-      var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
-
-      // Authorization scopes required by the API; multiple scopes can be
-      // included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+      
 
       var authorizeButton = document.getElementById('authorize_button');
       var signoutButton = document.getElementById('signout_button');
 
-      /**
-       *  On load, called to load the auth2 library and API client library.
-       */
+    /**
+         *  On load, called to load the auth2 library and API client library.
+         */
       function handleClientLoad() {
         gapi.load('client:auth2', initClient);
       }
@@ -119,7 +108,7 @@
        * @param {string} message Text to be placed in pre element.
        */
       function appendPre(message) {
-        var pre = document.getElementById('LoginInfo');
+        var pre = document.getElementById('root');
         var textContent = document.createTextNode(message + '\n');
         pre.appendChild(textContent);
       }
@@ -155,11 +144,13 @@
           }
         });
       }
+
     </script>
 
-    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-
+-->
   </body>
 </html>

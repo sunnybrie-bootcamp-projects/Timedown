@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import Account from "./Account.js";
 import * as apiClient from "./apiClient";
 
 const App = () => {
@@ -14,8 +15,7 @@ const App = () => {
   return (
     <main className="App">
       <h1>Here it is!</h1>
-      <TaskList tasks={tasks} />
-      <AddTask loadTasks={loadTasks} />
+      <Account />
     </main>
   );
 };
