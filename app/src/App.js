@@ -3,55 +3,35 @@ import "./App.css";
 import * as React from "react";
 
 import Account from "./Account.js";
-import * as apiClient from "./apiClient";
+import Planner from "./components/Planner.js";
+// import * as apiClient from "./apiClient";
 
 const App = () => {
-  const [tasks, setTasks] = React.useState([]);
+  const [isSignedIn, setIsSignedIn] = React.useState(false);
+  const [user, setUser] = React.useState({});
 
-  const loadTasks = async () => setTasks(await apiClient.getTasks());
+  function logOut() {
+    setUser({});
+    setIsSignedIn(false);
+    console.log("logout successful");
+  }
 
   React.useEffect(() => {
-    loadTasks();
-  }, []);
+    console.log(user);
+  }, [user, isSignedIn]);
 
   return (
     <main className="App">
       <h1>Here it is!</h1>
-      <Account />
+      <Account
+        user={user}
+        setUser={(e) => setUser(e)}
+        logOut={() => logOut()}
+        isSignedIn={isSignedIn}
+        setIsSignedIn={(e) => setIsSignedIn(e)}
+      />
+      {isSignedIn ? <Planner /> : <p>Yo, sign in already.</p>}
     </main>
-  );
-};
-
-const TaskList = ({ tasks }) => (
-  <ul>
-    {tasks.map(({ id, name }) => (
-      <li key={id}>{name}</li>
-    ))}
-  </ul>
-);
-
-const AddTask = ({ loadTasks }) => {
-  const [task, setTask] = React.useState("");
-
-  const canAdd = task !== "";
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (canAdd) {
-      await apiClient.addTask(task);
-      loadTasks();
-      setTask("");
-    }
-  };
-
-  return (
-    <form onSubmit={onSubmit}>
-      <label>
-        New task:{" "}
-        <input onChange={(e) => setTask(e.currentTarget.value)} value={task} />
-      </label>
-      <button disabled={!canAdd}>Add</button>
-    </form>
   );
 };
 

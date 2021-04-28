@@ -2,3 +2,12 @@
   min-height: 3em;
   min-width: 3em;
 }
+
+.planner {
+  display: block;
+  margin: auto;
+  height: 80vh;
+  width: 80%;
+
+  background-color: aquamarine;
+}

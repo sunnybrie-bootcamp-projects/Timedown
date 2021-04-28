@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 
-function Account() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [user, setUser] = useState({});
+function Account(props) {
+  const { user, setUser, logOut, isSignedIn, setIsSignedIn } = props;
 
   function responseGoogle(response) {
     console.log(response);
     setUser(response.profileObj);
     setIsSignedIn(true);
-  }
-
-  function logOut() {
-    setUser({});
-    setIsSignedIn(false);
-    console.log("logout successful");
   }
 
   useEffect(() => {
