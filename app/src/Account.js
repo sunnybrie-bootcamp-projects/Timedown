@@ -19,7 +19,7 @@ function Account() {
       {user !== {} ? (
         <>
           <h2>Logged in as...</h2>
-          <image src={user.imageUrl} />
+          <img id="profilePic" alt="profile photo" src={user.imageUrl} />
           <h3> {user.name} </h3>
         </>
       ) : (

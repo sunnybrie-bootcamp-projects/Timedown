@@ -1,3 +1,5 @@
+import "./App.css";
+
 import * as React from "react";
 
 import Account from "./Account.js";
