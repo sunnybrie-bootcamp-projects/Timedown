@@ -1,13 +1,32 @@
-#profilePic img {
-  min-height: 3em;
-  min-width: 3em;
-}
-
 .planner {
   display: block;
+  position: absolute;
+  top: 3em;
+  left: 2em;
   margin: auto;
-  height: 80vh;
-  width: 80%;
+  min-height: 80vh;
+  width: 60vw;
 
   background-color: aquamarine;
+}
+
+.calendar {
+  display: block;
+  margin: auto;
+  min-height: 30em;
+  width: 80%;
+
+  background-color: floralwhite;
+}
+
+.detailsBoard {
+  display: block;
+  position: absolute;
+  top: 3em;
+  right: 2em;
+  margin: auto;
+  width: 30%;
+  min-height: 80vh;
+
+  background-color: lightcoral;
 }

@@ -3,6 +3,7 @@ import "./App.css";
 import * as React from "react";
 
 import Account from "./Account.js";
+import DetailsBoard from "./components/DetailsBoard.js";
 import Planner from "./components/Planner.js";
 // import * as apiClient from "./apiClient";
 
@@ -22,15 +23,8 @@ const App = () => {
 
   return (
     <main className="App">
-      <h1>Here it is!</h1>
-      <Account
-        user={user}
-        setUser={(e) => setUser(e)}
-        logOut={() => logOut()}
-        isSignedIn={isSignedIn}
-        setIsSignedIn={(e) => setIsSignedIn(e)}
-      />
-      {isSignedIn ? <Planner /> : <p>Yo, sign in already.</p>}
+      <Planner />
+      <DetailsBoard />
     </main>
   );
 };
