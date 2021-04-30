@@ -17,9 +17,7 @@ const App = () => {
     console.log("logout successful");
   }
 
-  React.useEffect(() => {
-    console.log(user);
-  }, [user, isSignedIn]);
+  React.useEffect(() => {}, []);
 
   return (
     <main className="App">
