@@ -24,6 +24,28 @@
   background-color: floralwhite;
 }
 
+.day {
+  display: block;
+  position: absolute;
+  margin: auto 12.5%;
+  min-height: 100%;
+  max-width: 70%;
+
+  overflow: auto;
+}
+
+.timeLine {
+  display: block;
+  position: absolute;
+  left: 10%;
+  margin: auto;
+  min-height: 100%;
+  max-width: 10%;
+
+  background-color: #242424;
+  color: antiquewhite;
+}
+
 .detailsBoard {
   display: block;
   position: absolute;
