@@ -1,7 +1,11 @@
-import dotenv from "dotenv"; 
+import dotenv from "dotenv";
 import pgp from "pg-promise";
 
 const db = initDb();
+
+db.any("SELECT * FROM tasks").then((results) => {
+  console.log(results);
+});
 
 export const getTasks = async () => await db.any("SELECT * FROM tasks");
 
