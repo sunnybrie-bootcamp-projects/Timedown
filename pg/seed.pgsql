@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.1
--- Dumped by pg_dump version 13.1
+-- Dumped from database version 13.2
+-- Dumped by pg_dump version 13.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,19 +21,56 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
+-- Name: checkins; Type: TABLE; Schema: public; Owner: tpl5_2021h1
+--
+
+CREATE TABLE public.checkins (
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.checkins OWNER TO tpl5_2021h1;
+
+--
+-- Name: checkins_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
+--
+
+CREATE SEQUENCE public.checkins_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.checkins_id_seq OWNER TO tpl5_2021h1;
+
+--
+-- Name: checkins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER SEQUENCE public.checkins_id_seq OWNED BY public.checkins.id;
+
+
+--
+-- Name: tasks; Type: TABLE; Schema: public; Owner: tpl5_2021h1
 --
 
 CREATE TABLE public.tasks (
     id integer NOT NULL,
-    name text
+    "userId" integer,
+    "dueDate" timestamp with time zone,
+    "estTime" text,
+    summary text,
+    description text
 );
 
 
-ALTER TABLE public.tasks OWNER TO postgres;
+ALTER TABLE public.tasks OWNER TO tpl5_2021h1;
 
 --
--- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
 --
 
 CREATE SEQUENCE public.tasks_id_seq
@@ -45,48 +82,234 @@ CREATE SEQUENCE public.tasks_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.tasks_id_seq OWNER TO postgres;
+ALTER TABLE public.tasks_id_seq OWNER TO tpl5_2021h1;
 
 --
--- Name: tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
 --
 
 ALTER SEQUENCE public.tasks_id_seq OWNED BY public.tasks.id;
 
 
 --
--- Name: tasks id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: timeblocks; Type: TABLE; Schema: public; Owner: tpl5_2021h1
+--
+
+CREATE TABLE public.timeblocks (
+    id integer NOT NULL,
+    "taskId" integer,
+    "userId" integer,
+    start timestamp with time zone,
+    "end" timestamp with time zone
+);
+
+
+ALTER TABLE public.timeblocks OWNER TO tpl5_2021h1;
+
+--
+-- Name: timeblocks_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
+--
+
+CREATE SEQUENCE public.timeblocks_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.timeblocks_id_seq OWNER TO tpl5_2021h1;
+
+--
+-- Name: timeblocks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER SEQUENCE public.timeblocks_id_seq OWNED BY public.timeblocks.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: tpl5_2021h1
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username text,
+    email text,
+    settings text,
+    "blackOuts" text
+);
+
+
+ALTER TABLE public.users OWNER TO tpl5_2021h1;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO tpl5_2021h1;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: checkins id; Type: DEFAULT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.checkins ALTER COLUMN id SET DEFAULT nextval('public.checkins_id_seq'::regclass);
+
+
+--
+-- Name: tasks id; Type: DEFAULT; Schema: public; Owner: tpl5_2021h1
 --
 
 ALTER TABLE ONLY public.tasks ALTER COLUMN id SET DEFAULT nextval('public.tasks_id_seq'::regclass);
 
 
 --
--- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Name: timeblocks id; Type: DEFAULT; Schema: public; Owner: tpl5_2021h1
 --
 
-COPY public.tasks (id, name) FROM stdin;
-1	🙏 Be nice when you add test entries
-2	⏲ Added entries will be reset every Sunday
-3	End white supremacy
-4	Advocate for living wage
-5	Provide universal health care
+ALTER TABLE ONLY public.timeblocks ALTER COLUMN id SET DEFAULT nextval('public.timeblocks_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: checkins; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
+--
+
+COPY public.checkins (id) FROM stdin;
 \.
 
 
 --
--- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
 --
 
-SELECT pg_catalog.setval('public.tasks_id_seq', 5, true);
+COPY public.tasks (id, "userId", "dueDate", "estTime", summary, description) FROM stdin;
+1	1	2021-06-06 00:00:00-07	60 hours	First Draft	First draft of my book.
+2	1	2021-05-30 00:00:00-07	30 hours	Brand Stylebook	description here
+\.
 
 
 --
--- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Data for Name: timeblocks; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
+--
+
+COPY public.timeblocks (id, "taskId", "userId", start, "end") FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
+--
+
+COPY public.users (id, username, email, settings, "blackOuts") FROM stdin;
+1	sunshine	sunny.codetester@gmail.com	\N	\N
+\.
+
+
+--
+-- Name: checkins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
+--
+
+SELECT pg_catalog.setval('public.checkins_id_seq', 1, false);
+
+
+--
+-- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
+--
+
+SELECT pg_catalog.setval('public.tasks_id_seq', 2, true);
+
+
+--
+-- Name: timeblocks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
+--
+
+SELECT pg_catalog.setval('public.timeblocks_id_seq', 1, false);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+
+
+--
+-- Name: checkins checkins_pkey; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.checkins
+    ADD CONSTRAINT checkins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
 --
 
 ALTER TABLE ONLY public.tasks
     ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: timeblocks timeblocks_pkey; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.timeblocks
+    ADD CONSTRAINT timeblocks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: timeblocks taskId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.timeblocks
+    ADD CONSTRAINT "taskId" FOREIGN KEY ("taskId") REFERENCES public.tasks(id);
+
+
+--
+-- Name: tasks userId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT "userId" FOREIGN KEY ("userId") REFERENCES public.users(id);
+
+
+--
+-- Name: timeblocks userId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.timeblocks
+    ADD CONSTRAINT "userId" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
