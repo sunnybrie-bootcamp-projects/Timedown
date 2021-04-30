@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 
+import Day from "./Day";
+
 function Calendar({ isAuthenticated, gcal }) {
   return (
     <div className="calendar">
       <p>Calendar</p>
-      {isAuthenticated ? <Events {...{ gcal }} /> : null}
+      <Day {...{ isAuthenticated, gcal }} />
     </div>
   );
 }

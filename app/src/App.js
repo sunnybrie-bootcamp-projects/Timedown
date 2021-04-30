@@ -29,9 +29,6 @@ const App = () => {
 
   React.useEffect(() => {
     getUserInfo();
-    if (currentUser !== {}) {
-      console.debug(currentUser.getName());
-    }
   }, [isAuthenticated]);
 
   return (
