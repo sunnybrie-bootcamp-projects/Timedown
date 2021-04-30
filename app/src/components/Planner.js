@@ -28,10 +28,7 @@ function Planner({ isAuthenticated, gcal }) {
   return (
     <>
       <NavBar {...{ setTab }} />
-      <div className="planner">
-        <p>Here goeth the planner!</p>
-        {getTab()}
-      </div>
+      <div className="planner">{getTab()}</div>
     </>
   );
 }

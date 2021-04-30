@@ -9,6 +9,7 @@
   top: 3em;
   left: 2em;
   margin: auto;
+  padding: 1.5em;
   min-height: 80vh;
   width: 60vw;
 
@@ -18,6 +19,7 @@
 .calendar {
   display: block;
   margin: auto;
+  padding: 1em;
   min-height: 30em;
   width: 80%;
 
@@ -37,10 +39,10 @@
 .timeLine {
   display: block;
   position: absolute;
-  left: 10%;
+  left: 4em;
   margin: auto;
-  min-height: 100%;
-  max-width: 10%;
+  height: 75%;
+  max-width: 4em;
 
   background-color: #242424;
   color: antiquewhite;
