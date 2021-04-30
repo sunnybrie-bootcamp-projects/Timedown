@@ -1,3 +1,4 @@
+//Credit: https://github.com/Kubessandra/react-google-calendar-api
 const Config = require("../apiGoogleconfig.json");
 class ApiCalendar {
   constructor() {
