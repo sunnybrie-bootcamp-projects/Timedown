@@ -5,8 +5,8 @@ import * as apiClient from "../apiClient";
 function TaskBoard() {
   const [tasksList, setTasksList] = useState("");
 
-  function getTasksInfo() {
-    let data = JSON.stringify(apiClient.getTasks());
+  async function getTasksInfo() {
+    let data = JSON.stringify(await apiClient.getTasks());
 
     setTasksList(data);
   }
