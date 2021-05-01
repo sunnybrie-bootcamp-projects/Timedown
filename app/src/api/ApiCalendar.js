@@ -1,5 +1,15 @@
 //Credit: https://github.com/Kubessandra/react-google-calendar-api
-const Config = require("../apiGoogleconfig.json");
+const CLIENT_ID = process.env.CLIENT_ID;
+const API_KEY = process.env.API_KEY;
+const Config = {
+  clientId: CLIENT_ID,
+  apiKey: API_KEY,
+  scope: "profile https://www.googleapis.com/auth/calendar",
+  discoveryDocs: [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+  ],
+};
+
 class ApiCalendar {
   constructor() {
     this.sign = false;
