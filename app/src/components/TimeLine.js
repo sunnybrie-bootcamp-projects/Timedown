@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-function TimeLine({ isAuthenticated, gcal, beginTime, endTime }) {
-  var startTime = new Date(
-    "Mon May 03 2021 08:00:00 GMT-0700 (Pacific Daylight Time)",
-  );
-  var endTime = new Date().setHours(startTime.getHours() + 12);
-  var totalHours = 12;
-  var dayMeasurements = {
-    gridTemplateRows: timeToRows(totalHours),
-  };
-  var currentTimeSpot = `${getCurrentTime()}`;
+function TimeLine({ isAuthenticated, dayStart, totalHours }) {
+  const [timelineRender, setTimelineRender] = useState({});
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [indicatorRender, setIndicatorRender] = useState({});
 
   function timeToRows(total) {
     let template = [];
@@ -17,22 +11,31 @@ function TimeLine({ isAuthenticated, gcal, beginTime, endTime }) {
     for (let i = 0; i < total; i += 0.5) {
       template.push(`${size}%`);
     }
-    return template.join(" ");
+    setTimelineRender({
+      ...timelineRender,
+      gridTemplateRows: template.join(" "),
+    });
   }
 
-  function getCurrentTime() {
-    return new Date().getHours() - startTime.getHours();
+  function placeCurrentTime() {
+    //console.debug({ dayStart }); //TEST
+    let row = currentTime.getHours() - dayStart.getHours();
+    setIndicatorRender({ ...indicatorRender, gridRow: row });
   }
 
   //setInterval(tick({ setCurrentTime }), 1000);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (isAuthenticated) {
+      timeToRows(totalHours);
+      placeCurrentTime();
+    }
+  }, []);
 
   return (
-    <div className="timeLine" style={dayMeasurements}>
-      <div className="timeSpot" style={{ gridRow: currentTimeSpot }}>
-        >
-      </div>
+    <div className="timeLine" style={timelineRender}>
+      {}
+      <div className="timeSpot" style={{ indicatorRender }}></div>
     </div>
   );
 }

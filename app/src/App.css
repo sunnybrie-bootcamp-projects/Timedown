@@ -41,7 +41,7 @@
   right: 0px;
   min-height: 90%;
   height: auto;
-  min-width: 60%;
+  min-width: 90%;
   width: auto;
 
   grid-template-columns: auto auto auto;
@@ -57,14 +57,12 @@
   display: block;
   box-sizing: border-box;
   max-height: 100%;
+  padding: 0;
 
   background-color: darkcyan;
   color: white;
 
   border-radius: 0.5em 0.5em 0.5em;
-
-  font-size: 0.5em;
-  line-height: 0.5em;
 }
 
 .timeLine {
@@ -73,7 +71,7 @@
   position: absolute;
   min-height: 90%;
   height: auto;
-  min-width: 2em;
+  min-width: 5%;
   width: auto;
 
   grid-template-columns: auto;
@@ -89,6 +87,7 @@
 .timeSpot {
   display: block;
   background-color: brown;
+  clip-path: polygon(0 1%, 100% 50%, 0% 100%, 12% 51%);
 }
 
 .detailsBoard {

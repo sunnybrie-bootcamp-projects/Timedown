@@ -2,12 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import TimeBlock from "./TimeBlock.js";
 
-function Day({ isAuthenticated, gcal }) {
-  var startTime = new Date(
-    "Mon May 03 2021 08:00:00 GMT-0700 (Pacific Daylight Time)",
-  );
-  var endTime = new Date().setHours(startTime.getHours() + 12);
-  var totalHours = 12;
+function Day({ isAuthenticated, gcal, dayStart, dayEnd, totalHours }) {
+  //inline styling for day based on user settings
   var dayMeasurements = {
     gridTemplateRows: timeToRows(totalHours),
   };
@@ -22,54 +18,42 @@ function Day({ isAuthenticated, gcal }) {
   }
 
   //Parameters for getting the day's events
-  var queryParams = {
-    timeMin: startTime,
-    timeMax: endTime,
+  const [queryOptions, setQueryOptions] = useState({
+    calendarId: "primary",
+    orderBy: "startTime",
+    timeMin: new Date(),
+    timeMax: new Date(),
     timeZone: "America/Los_Angeles",
-    items: [{ id: "primary" }],
-  };
+    showDeleted: false,
+    singleEvents: true,
+  });
 
   //Event Queries
   const [events, setEvents] = React.useState([]);
 
   function getEvents() {
-    gcal.listUpcomingEvents(10).then(({ result: { items } }) => {
-      setEvents(items);
-    });
+    gcal
+      .listEvents(queryOptions, queryOptions.calendarId)
+      .then(({ result }: any) => {
+        console.log(result.items);
+        setEvents(result.items);
+      });
   }
-
-  const [freeSpaces, setFreeSpaces] = React.useState([]);
-
-  // function getFreeTime() {
-  //   // gcal.gapi.client.calendar.freebusy
-  //   //   .query(queryParams)
-  //   //   .then(({ result: { items } }) => {
-  //   //     setFreeSpaces(items);
-  //   //     console.log(items);
-  //   //   });
-
-  //   let spaces = [];
-
-  //   events.forEach((event, index) => {
-  //     spaces.push({
-  //       summary: "Free Time",
-  //       start: event.end.dateTime,
-  //       end: events[index + 1].start.dateTime,
-  //     });
-  //   });
-
-  //   setFreeSpaces(spaces);
-  // }
 
   React.useEffect(() => {
     if (isAuthenticated) {
       getEvents();
-      //getFreeTime();
     }
   }, [isAuthenticated]);
 
   //Component load-in
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setQueryOptions({ ...queryOptions, timeMax: dayEnd, timeMin: dayStart });
+
+    if (isAuthenticated) {
+      getEvents();
+    }
+  }, []);
 
   return (
     <div className="day" style={dayMeasurements}>
@@ -83,7 +67,7 @@ function Day({ isAuthenticated, gcal }) {
             start={event.start.dateTime}
             end={event.end.dateTime}
             summary={event.summary}
-            dayStart={startTime}
+            dayStart={dayStart}
           />
         ))
       )}
@@ -91,7 +75,7 @@ function Day({ isAuthenticated, gcal }) {
   );
 }
 
-// const Events = ({ gcal, queryParams }) => {
+// const Events = ({ gcal, queryOptions }) => {
 //   const [events, setEvents] = React.useState([]);
 
 //   React.useEffect(() => {
