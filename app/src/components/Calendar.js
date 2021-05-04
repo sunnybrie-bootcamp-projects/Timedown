@@ -7,7 +7,9 @@ function Calendar({ isAuthenticated, gcal }) {
   const [dayStart, setDayStart] = useState(new Date());
   const [dayEnd, setDayEnd] = useState(new Date());
   const [totalHours, setTotalHours] = useState(24);
+  const [timeRows, setTimeRows] = useState("");
 
+  //sets Date states for rendering
   function setTimeRanges() {
     //Dummy data for rendering purposes, will be replaced with functions that read
     //from the user's settings and render the hours where the user is awake.
@@ -20,18 +22,34 @@ function Calendar({ isAuthenticated, gcal }) {
     setDayEnd(end);
 
     let total = new Date(dayEnd.valueOf() - dayStart.valueOf());
-    console.debug({ total }); //TEST
+    //console.debug({ total }); //TEST
     setTotalHours(total.getHours());
+  }
+
+  //sets number of rows for inline-styling
+  function timeToRows(total) {
+    let template = [];
+    let size = 100 / (total * 2);
+    for (let i = 0; i < total; i += 0.5) {
+      template.push(`${size}%`);
+    }
+    setTimeRows(template.join(" "));
   }
 
   useEffect(() => {
     setTimeRanges();
   }, []);
 
+  useEffect(() => {
+    timeToRows(totalHours);
+  }, [totalHours]);
+
   return (
     <div className="calendar">
-      <TimeLine {...{ isAuthenticated, totalHours, dayStart }} />
-      <Day {...{ isAuthenticated, gcal, dayStart, dayEnd, totalHours }} />
+      <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
+      <Day
+        {...{ timeRows, isAuthenticated, gcal, dayStart, dayEnd, totalHours }}
+      />
     </div>
   );
 }

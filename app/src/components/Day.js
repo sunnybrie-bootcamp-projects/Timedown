@@ -2,21 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import TimeBlock from "./TimeBlock.js";
 
-function Day({ isAuthenticated, gcal, dayStart, dayEnd, totalHours }) {
-  //inline styling for day based on user settings
-  var dayMeasurements = {
-    gridTemplateRows: timeToRows(totalHours),
-  };
-
-  function timeToRows(total) {
-    let template = [];
-    let size = 100 / (total * 2);
-    for (let i = 0; i < total; i += 0.5) {
-      template.push(`${size}%`);
-    }
-    return template.join(" ");
-  }
-
+function Day({
+  timeRows,
+  isAuthenticated,
+  gcal,
+  dayStart,
+  dayEnd,
+  totalHours,
+}) {
   //Parameters for getting the day's events
   const [queryOptions, setQueryOptions] = useState({
     calendarId: "primary",
@@ -40,23 +33,25 @@ function Day({ isAuthenticated, gcal, dayStart, dayEnd, totalHours }) {
       });
   }
 
-  React.useEffect(() => {
-    if (isAuthenticated) {
-      getEvents();
-    }
-  }, [isAuthenticated]);
-
-  //Component load-in
+  //Component load-in...
   useEffect(() => {
-    setQueryOptions({ ...queryOptions, timeMax: dayEnd, timeMin: dayStart });
-
+    setQueryOptions({
+      ...queryOptions,
+      timeMax: dayEnd.toISOString(),
+      timeMin: dayStart.toISOString(),
+    });
+  }, []);
+  //After day's parameters are set...
+  useEffect(() => {
     if (isAuthenticated) {
       getEvents();
     }
-  }, []);
+  }, [queryOptions]);
+
+  useEffect(() => {}, []);
 
   return (
-    <div className="day" style={dayMeasurements}>
+    <div className="day" style={{ gridTemplateRows: timeRows }}>
       {events.length === 0 ? (
         <p>You have no events for this day.</p>
       ) : (
