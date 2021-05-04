@@ -13,43 +13,86 @@
   min-height: 80vh;
   width: 60vw;
 
-  background-color: aquamarine;
+  background-color: cadetblue;
+
+  border-radius: 1em 1em 1em;
 }
 
 .calendar {
   display: block;
-  margin: auto;
-  padding: 1em;
-  min-height: 30em;
-  width: 80%;
+  box-sizing: border-box;
+  position: absolute;
+  margin: 0;
+  padding: 0.5em;
+  min-width: 90%;
+  width: auto;
+  min-height: 95%;
+  height: auto;
 
   background-color: floralwhite;
+
+  border-radius: 1em 1em 1em;
 }
 
 .day {
-  display: block;
+  display: grid;
+  box-sizing: border-box;
   position: absolute;
-  margin: auto 12.5%;
-  min-height: 100%;
-  max-width: 70%;
+  right: 0px;
+  min-height: 90%;
+  height: auto;
+  min-width: 60%;
+  width: auto;
 
-  overflow: auto;
+  grid-template-columns: auto auto auto;
+  grid-gap: 0.125em;
+  grid-column: 2;
+
+  background-color: darkslategray;
+
+  border-radius: 1em 1em 1em;
+}
+
+.event {
+  display: block;
+  box-sizing: border-box;
+  max-height: 100%;
+
+  background-color: darkcyan;
+  color: white;
+
+  border-radius: 0.5em 0.5em 0.5em;
+
+  font-size: 0.5em;
+  line-height: 0.5em;
 }
 
 .timeLine {
-  display: block;
+  display: grid;
+  box-sizing: border-box;
   position: absolute;
-  left: 4em;
-  margin: auto;
-  height: 75%;
-  max-width: 4em;
+  min-height: 90%;
+  height: auto;
+  min-width: 2em;
+  width: auto;
 
-  background-color: #242424;
+  grid-template-columns: auto;
+  grid-gap: 0.125em;
+  grid-column: 1;
+
+  background-color: darkslategrey;
   color: antiquewhite;
+
+  border-radius: 1em 1em 1em;
+}
+
+.timeSpot {
+  display: block;
+  background-color: brown;
 }
 
 .detailsBoard {
-  display: block;
+  display: none;
   position: absolute;
   top: 3em;
   right: 2em;
