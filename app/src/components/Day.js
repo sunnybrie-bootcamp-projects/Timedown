@@ -11,15 +11,27 @@ function Day({
   totalHours,
 }) {
   //Parameters for getting the day's events
-  const [queryOptions, setQueryOptions] = useState({
+  // const [queryOptions, setQueryOptions] = useState({
+  //   calendarId: "primary",
+  //   orderBy: "startTime",
+  //   timeMin: new Date(),
+  //   timeMax: new Date(),
+  //   timeZone: "America/Los_Angeles",
+  //   showDeleted: false,
+  //   singleEvents: true,
+  // });
+
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
+  const queryOptions = {
     calendarId: "primary",
     orderBy: "startTime",
-    timeMin: new Date(),
-    timeMax: new Date(),
+    timeMin: min,
+    timeMax: max,
     timeZone: "America/Los_Angeles",
     showDeleted: false,
     singleEvents: true,
-  });
+  };
 
   //Event Queries
   const [events, setEvents] = React.useState([]);
@@ -35,20 +47,23 @@ function Day({
 
   //Component load-in...
   useEffect(() => {
-    setQueryOptions({
-      ...queryOptions,
-      timeMax: dayEnd.toISOString(),
-      timeMin: dayStart.toISOString(),
-    });
-  }, []);
+    // setQueryOptions({
+    //   ...queryOptions,
+    //   timeMax: dayEnd.toISOString(),
+    //   timeMin: dayStart.toISOString(),
+    // });
+    setMin(dayStart.toISOString());
+    setMax(dayEnd.toISOString());
+  });
+
   //After day's parameters are set...
   useEffect(() => {
     if (isAuthenticated) {
       getEvents();
     }
-  }, [queryOptions]);
+  }, [min, max, isAuthenticated]);
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   return (
     <div className="day" style={{ gridTemplateRows: timeRows }}>

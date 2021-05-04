@@ -16,7 +16,7 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
     if (isAuthenticated) {
       placeCurrentTime();
     }
-  }, []);
+  });
 
   return (
     <div className="timeLine" style={{ gridTemplateRows: timeRows }}>
