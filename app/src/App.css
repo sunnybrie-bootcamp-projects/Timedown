@@ -46,8 +46,9 @@
   width: auto;
 
   grid-template-columns: auto auto auto;
-  grid-gap: 0.125em;
   grid-column: 2;
+  justify-content: center;
+  align-content: center;
 
   background-color: darkslategray;
 
@@ -62,6 +63,7 @@
 
   background-color: darkcyan;
   color: white;
+  border: 1px solid white;
 
   border-radius: 0.5em 0.5em 0.5em;
 }
@@ -78,10 +80,12 @@
   grid-template-columns: 1fr 1fr;
   grid-column: 1;
   justify-content: center;
-  align-content: center;
+  align-content: space-evenly;
 
   background-color: darkslategrey;
   color: antiquewhite;
+
+  text-align: right;
 
   border-radius: 1em 1em 1em;
 }
@@ -92,12 +96,6 @@
   max-height: 100%;
   max-width: 100%;
   margin: auto;
-
-  border-color: black;
-  border-width: 1px;
-  border-style: dotted;
-
-  line-height: 0em;
 }
 
 .timeIndicator {
