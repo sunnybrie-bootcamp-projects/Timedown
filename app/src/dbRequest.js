@@ -1,3 +1,5 @@
+//Task Requests
+
 export const getTasks = async () => {
   const response = await fetch("/api/tasks");
   return response.json();
@@ -13,3 +15,13 @@ export const addTask = async (name) => {
   });
   return response.json();
 };
+
+//User Account Requests
+export const getUser = async (email) => {
+  const response = await fetch("/api/users?email=$1", [email]);
+  return response.json();
+};
+
+//TimeBlock Requests
+
+//Check-In Requests

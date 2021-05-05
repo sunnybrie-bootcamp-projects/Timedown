@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import * as apiClient from "../apiClient";
+import * as dbRequest from "../dbRequest";
 
 function TaskBoard() {
   const [tasksList, setTasksList] = useState("");
 
   async function getTasksInfo() {
-    let data = JSON.stringify(await apiClient.getTasks());
+    let data = JSON.stringify(await dbRequest.getTasks());
 
     setTasksList(data);
   }

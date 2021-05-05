@@ -22,6 +22,24 @@ tasks.post("/", async (request, response) => {
 
 app.use("/api/tasks", tasks);
 
+//Users
+const users = express.Router();
+
+users.get("/", async (request, response) => {
+  const { email } = request.query.email;
+  const user = await db.getUser(email);
+  response.json(user);
+});
+
+users.use(express.json());
+users.post("/", async (request, response) => {
+  const { name } = request.body;
+  const task = await db.addTask(name);
+  response.status(201).json(task);
+});
+
+app.use("/api/users", users);
+
 process.env?.SERVE_REACT?.toLowerCase() === "true" &&
   app.use(
     express.static("/app", {
@@ -39,4 +57,3 @@ app.get("/api/ping", (request, response) =>
 app.listen(port, () => {
   console.info(`Example server listening at http://localhost:${port}`);
 });
-
