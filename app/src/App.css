@@ -74,14 +74,29 @@
   min-width: 5%;
   width: auto;
 
-  grid-template-columns: auto;
+  grid-template-columns: auto auto;
   grid-gap: 0.125em;
   grid-column: 1;
+  vertical-align: middle;
 
   background-color: darkslategrey;
   color: antiquewhite;
 
   border-radius: 1em 1em 1em;
+}
+
+.timeNotch {
+  display: block;
+  box-sizing: border-box;
+  max-height: 100%;
+  max-width: 100%;
+
+  background-color: black;
+
+  font-size: 0.75em;
+  line-height: 0em;
+
+  overflow-y: hidden;
 }
 
 .timeSpot {

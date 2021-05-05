@@ -21,9 +21,9 @@ function Calendar({ isAuthenticated, gcal }) {
     setDayStart(start);
     setDayEnd(end);
 
-    let total = new Date(dayEnd.valueOf() - dayStart.valueOf());
-    //console.debug({ total }); //TEST
-    setTotalHours(total.getHours());
+    let total = end.getHours() - start.getHours();
+    console.debug({ total }); //TEST
+    setTotalHours(total);
   }
 
   //sets number of rows for inline-styling
