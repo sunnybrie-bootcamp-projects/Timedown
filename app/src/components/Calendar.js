@@ -22,7 +22,7 @@ function Calendar({ isAuthenticated, gcal }) {
     setDayEnd(end);
 
     let total = end.getHours() - start.getHours();
-    console.debug({ total }); //TEST
+    // console.debug({ total }); //TEST
     setTotalHours(total);
   }
 

@@ -59,7 +59,7 @@ function TimeIndicator({ dayStart }) {
         ? (currTime.getHours() - dayStart.getHours()) * 2 + 2
         : (currTime.getHours() - dayStart.getHours()) * 2 + 1;
 
-    console.debug({ row }); //TEST
+    // console.debug({ row }); //TEST
     setIndicatorRender(`${row}`);
   }
 
