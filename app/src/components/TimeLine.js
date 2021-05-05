@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [indicatorRender, setIndicatorRender] = useState("");
-  const [times, setTimes] = useState([]);
 
+  //Returns an array of time objects at half-hour increments with row location
+  //based on dayStart starting hour and totalHours
   function getTimes() {
-    console.debug(new Date(dayStart).getHours()); //TEST)
     let timesToRender = [];
     for (let i = 0; i <= totalHours; i += 0.5) {
       let timeString = `${new Date(dayStart).getHours() + Math.floor(i)}`;
@@ -18,12 +17,13 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
       timesToRender.push({ timeString, timeLineLocation });
     }
 
-    setTimes(timesToRender);
+    return timesToRender;
   }
 
   function placeCurrentTime() {
     //console.debug({ dayStart }); //TEST
-    let row = currentTime.getHours() - dayStart.getHours();
+    let currTime = new Date();
+    let row = (currTime.getHours() - dayStart.getHours()) * 2 + 1;
     setIndicatorRender(`${row}`);
   }
 
@@ -39,7 +39,7 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
 
   return (
     <div className="timeLine" style={{ gridTemplateRows: timeRows }}>
-      {times.map((time) => {
+      {getTimes().map((time) => {
         return (
           <div
             key={time.timeString}
