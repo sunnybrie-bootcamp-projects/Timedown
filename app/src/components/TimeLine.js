@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
-  const [indicatorRender, setIndicatorRender] = useState("");
-
   //Returns an array of time objects at half-hour increments with row location
   //based on dayStart starting hour and totalHours
   function getTimes() {
@@ -20,46 +18,61 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
     return timesToRender;
   }
 
-  function placeCurrentTime() {
-    //console.debug({ dayStart }); //TEST
-    let currTime = new Date();
-    let row = (currTime.getHours() - dayStart.getHours()) * 2 + 1;
-    setIndicatorRender(`${row}`);
-  }
-
-  //setInterval(tick({ setCurrentTime }), 1000);
-
   useEffect(() => {
     getTimes();
   }, []);
 
-  useEffect(() => {
-    placeCurrentTime();
-  });
-
   return (
     <div className="timeLine" style={{ gridTemplateRows: timeRows }}>
-      {getTimes().map((time) => {
-        return (
-          <div
-            key={time.timeString}
-            className="timeNotch"
-            style={{ gridColumn: "1", gridRow: time.timeLineLocation }}
-          >
-            {time.timeString}
-          </div>
-        );
+      {getTimes().map((time, index) => {
+        return <TimeNotch key={`TimeNotch-${index}`} {...{ time }} />;
       })}
-      <div
-        className="timeSpot"
-        style={{ gridRow: indicatorRender, gridColumn: "2" }}
-      ></div>
+      <TimeIndicator {...{ dayStart }} />
     </div>
   );
 }
 
-function tick({ setCurrentTime }) {
-  setCurrentTime(new Date().toLocaleTimeString());
+function TimeNotch({ time }) {
+  return (
+    <div
+      key={time.timeString}
+      className="timeNotch"
+      style={{ gridColumn: "1", gridRow: time.timeLineLocation }}
+    >
+      {time.timeString}
+    </div>
+  );
+}
+
+function TimeIndicator({ dayStart }) {
+  const [indicatorRender, setIndicatorRender] = useState("");
+
+  function findCurrentTime() {
+    // console.log("findCurrentTime"); //TEST
+    // console.debug({ dayStart }); //TEST
+    let currTime = new Date();
+
+    // console.debug({ currTime });
+
+    let row =
+      currTime.getMinutes() >= 30
+        ? (currTime.getHours() - dayStart.getHours()) * 2 + 2
+        : (currTime.getHours() - dayStart.getHours()) * 2 + 1;
+
+    console.debug({ row }); //TEST
+    setIndicatorRender(`${row}`);
+  }
+
+  useEffect(() => {
+    findCurrentTime();
+  });
+
+  return (
+    <div
+      className="timeIndicator"
+      style={{ gridRow: indicatorRender, gridColumn: "2" }}
+    ></div>
+  );
 }
 
 export default TimeLine;

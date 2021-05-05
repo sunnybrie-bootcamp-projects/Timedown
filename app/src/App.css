@@ -91,6 +91,7 @@
   box-sizing: border-box;
   max-height: 100%;
   max-width: 100%;
+  margin: auto;
 
   border-color: black;
   border-width: 1px;
@@ -99,7 +100,7 @@
   line-height: 0em;
 }
 
-.timeSpot {
+.timeIndicator {
   display: block;
   background-color: brown;
   clip-path: polygon(0 1%, 100% 50%, 0% 100%, 12% 51%);
