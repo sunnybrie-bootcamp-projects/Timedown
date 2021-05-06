@@ -25,17 +25,11 @@ app.use("/api/tasks", tasks);
 //Users
 const users = express.Router();
 
-users.get("/", async (request, response) => {
-  const email = request.query.email;
-  const user = await db.getUser(email);
-  response.json(user.rows[0]);
-});
-
 users.use(express.json());
 users.post("/", async (request, response) => {
-  const { name } = request.body;
-  const task = await db.addTask(name);
-  response.status(201).json(task);
+  const { email } = request.body;
+  const user = await db.getUser(email);
+  response.status(201).json(user);
 });
 
 app.use("/api/users", users);

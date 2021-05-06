@@ -33,12 +33,10 @@ export const addTask = async (name) =>
     ])
   )[0];
 
-export const getUser = async (email) =>
-  await db.any("SELECT * FROM users WHERE email = $1", [email]);
+export const getUser = async (email) => {
+  console.debug({ email }); //test
+  let user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
+  console.debug({ user }); //Test
 
-export const addUser = async (name) =>
-  (
-    await db.any("INSERT INTO tasks(name) VALUES($1) RETURNING id, name", [
-      name,
-    ])
-  )[0];
+  return user;
+};

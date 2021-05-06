@@ -20,7 +20,7 @@ const App = () => {
         if (isAuthenticated) {
           var googleUserInfo = await gcal.getBasicUserProfile();
           setGoogleAccount(googleUserInfo);
-          console.debug(googleUserInfo);
+          //console.debug(googleUserInfo);
         }
         break;
       case "timedown":
@@ -29,7 +29,7 @@ const App = () => {
             googleAccount.getEmail(),
           );
           setTimedownAccount(timedownUserInfo);
-          console.debug(timedownUserInfo);
+          //console.debug(timedownUserInfo);
         }
         break;
       default:

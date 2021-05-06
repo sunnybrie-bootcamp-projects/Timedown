@@ -18,7 +18,13 @@ export const addTask = async (name) => {
 
 //User Account Requests
 export const getUser = async (email) => {
-  const response = await fetch(`/api/users?email="${email}"`);
+  const response = await fetch("/api/users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
   return response.json();
 };
 
