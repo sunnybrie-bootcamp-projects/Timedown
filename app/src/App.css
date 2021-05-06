@@ -104,6 +104,12 @@
   clip-path: polygon(0 1%, 100% 50%, 0% 100%, 12% 51%);
 }
 
+.task {
+  display: block;
+  box-sizing: border-box;
+  background-color: antiquewhite;
+}
+
 .detailsBoard {
   display: none;
   position: absolute;

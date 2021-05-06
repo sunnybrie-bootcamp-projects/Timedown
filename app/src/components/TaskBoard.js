@@ -21,11 +21,9 @@ function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
   return (
     <div className="taskBoard">
       <h2>Your Tasks:</h2>
-      <p>
-        {tasksList.map((task) => {
-          return <Task {...{ task }} />;
-        })}
-      </p>
+      {tasksList.map((task) => {
+        return <Task {...{ task }} />;
+      })}
     </div>
   );
 }
