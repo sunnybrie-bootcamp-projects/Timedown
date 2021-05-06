@@ -1,7 +1,13 @@
 //Task Requests
 
-export const getTasks = async () => {
-  const response = await fetch("/api/tasks");
+export const getTasks = async (user) => {
+  const response = await fetch("/api/tasks", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "timedown-user": user,
+    },
+  });
   return response.json();
 };
 

@@ -2,11 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 
 import * as dbRequest from "../dbRequest";
 
-function TaskBoard() {
+function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
   const [tasksList, setTasksList] = useState("");
 
   async function getTasksInfo() {
-    let data = JSON.stringify(await dbRequest.getTasks());
+    let data = JSON.stringify(await dbRequest.getTasks(timedownAccount.id));
 
     setTasksList(data);
   }

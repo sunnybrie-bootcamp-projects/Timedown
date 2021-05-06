@@ -24,7 +24,14 @@ function initDb() {
   return pgp()(connection);
 }
 
-export const getTasks = async () => await db.any("SELECT * FROM tasks");
+export const getTasks = async (user) => {
+  let userId = parseInt(user);
+  const tasks = await db.any(`SELECT * FROM tasks WHERE "userId" = $1`, [
+    userId,
+  ]);
+  console.log({ tasks }); //TEST
+  return tasks;
+};
 
 export const addTask = async (name) =>
   (
@@ -34,9 +41,7 @@ export const addTask = async (name) =>
   )[0];
 
 export const getUser = async (email) => {
-  console.debug({ email }); //test
   let user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
-  console.debug({ user }); //Test
 
-  return user;
+  return user[0];
 };

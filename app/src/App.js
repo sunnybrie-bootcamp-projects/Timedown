@@ -58,7 +58,7 @@ const App = () => {
         <Login {...{ isAuthenticated, gcal }} />
       </div>
 
-      <Planner {...{ isAuthenticated, gcal }} />
+      <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
       <DetailsBoard />
     </main>
   );
