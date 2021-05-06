@@ -26,9 +26,9 @@ app.use("/api/tasks", tasks);
 const users = express.Router();
 
 users.get("/", async (request, response) => {
-  const { email } = request.query.email;
+  const email = request.query.email;
   const user = await db.getUser(email);
-  response.json(user);
+  response.json(user.rows[0]);
 });
 
 users.use(express.json());
