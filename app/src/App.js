@@ -1,55 +1,45 @@
+import "./App.css";
+
 import * as React from "react";
 
-import * as apiClient from "./apiClient";
+import Account from "./Account.js";
+import gcal from "./api/ApiCalendar";
+import DetailsBoard from "./components/DetailsBoard.js";
+import Login from "./components/Login";
+import Planner from "./components/Planner.js";
 
 const App = () => {
-  const [tasks, setTasks] = React.useState([]);
+  const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
+  const [currentUser, setCurrentUser] = React.useState({});
 
-  const loadTasks = async () => setTasks(await apiClient.getTasks());
+  async function getUserInfo() {
+    if (isAuthenticated) {
+      var userInfo = await gcal.getBasicUserProfile();
+      setCurrentUser(userInfo);
+      console.debug(userInfo);
+    }
+  }
 
   React.useEffect(() => {
-    loadTasks();
+    gcal.onLoad(() => {
+      setIsAuthenticated(gcal.gapi.auth2.getAuthInstance().isSignedIn.get());
+      gcal.listenSign((sign) => setIsAuthenticated(sign));
+    });
   }, []);
+
+  React.useEffect(() => {
+    getUserInfo();
+  }, [isAuthenticated]);
 
   return (
     <main className="App">
-      <h1>Here it is!</h1>
-      <TaskList tasks={tasks} />
-      <AddTask loadTasks={loadTasks} />
+      <div id="login">
+        <Login {...{ isAuthenticated, gcal }} />
+      </div>
+
+      <Planner {...{ isAuthenticated, gcal }} />
+      <DetailsBoard />
     </main>
-  );
-};
-
-const TaskList = ({ tasks }) => (
-  <ul>
-    {tasks.map(({ id, name }) => (
-      <li key={id}>{name}</li>
-    ))}
-  </ul>
-);
-
-const AddTask = ({ loadTasks }) => {
-  const [task, setTask] = React.useState("");
-
-  const canAdd = task !== "";
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (canAdd) {
-      await apiClient.addTask(task);
-      loadTasks();
-      setTask("");
-    }
-  };
-
-  return (
-    <form onSubmit={onSubmit}>
-      <label>
-        New task:{" "}
-        <input onChange={(e) => setTask(e.currentTarget.value)} value={task} />
-      </label>
-      <button disabled={!canAdd}>Add</button>
-    </form>
   );
 };
 

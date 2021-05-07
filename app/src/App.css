@@ -1,0 +1,61 @@
+#login {
+  position: absolute;
+  right: 1em;
+}
+
+.planner {
+  display: block;
+  position: absolute;
+  top: 3em;
+  left: 2em;
+  margin: auto;
+  padding: 1.5em;
+  min-height: 80vh;
+  width: 60vw;
+
+  background-color: aquamarine;
+}
+
+.calendar {
+  display: block;
+  margin: auto;
+  padding: 1em;
+  min-height: 30em;
+  width: 80%;
+
+  background-color: floralwhite;
+}
+
+.day {
+  display: block;
+  position: absolute;
+  margin: auto 12.5%;
+  min-height: 100%;
+  max-width: 70%;
+
+  overflow: auto;
+}
+
+.timeLine {
+  display: block;
+  position: absolute;
+  left: 4em;
+  margin: auto;
+  height: 75%;
+  max-width: 4em;
+
+  background-color: #242424;
+  color: antiquewhite;
+}
+
+.detailsBoard {
+  display: block;
+  position: absolute;
+  top: 3em;
+  right: 2em;
+  margin: auto;
+  width: 30%;
+  min-height: 80vh;
+
+  background-color: lightcoral;
+}
