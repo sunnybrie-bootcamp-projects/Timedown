@@ -154,11 +154,11 @@ body::-webkit-scrollbar-thumb {
   min-width: 20%;
   width: auto;
 
-  grid-template-columns: 2fr 1fr;
-  column-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0em;
   grid-column: 1;
   justify-content: center;
-  align-content: space-evenly;
+  align-content: space-between;
 
   background-color: #e8c468;
   box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
@@ -171,25 +171,29 @@ body::-webkit-scrollbar-thumb {
   border-radius: 1em 1em 1em;
 }
 
-.timeLine > * {
-  border-top: 1px solid floralwhite;
-}
-
 .timeNotch {
   display: block;
   box-sizing: border-box;
+  margin: auto;
+  min-height: 1em;
   max-height: 100%;
   max-width: 100%;
   width: 100%;
-  margin: auto;
+
+  border-top: 1px solid floralwhite;
+}
+
+.nullTime {
+  color: rgba(232, 196, 104, 0);
 }
 
 .timeIndicator {
   display: block;
-  box-sizing: ;
+  box-sizing: border-box;
   position: relative;
   right: -1em;
   height: 100%;
+  width: 100%;
 
   border-style: none;
   filter: drop-shadow(0.125em 0.125em 0.125em rgba(39, 71, 84, 0.9));

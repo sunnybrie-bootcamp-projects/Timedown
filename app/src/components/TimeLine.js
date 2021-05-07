@@ -27,30 +27,32 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
       {getTimes().map((time, index) => {
         return <TimeNotch key={`TimeNotch-${index}`} {...{ time }} />;
       })}
+
+      {getTimes().map((time, index) => {
+        if (index === 0) {
+          return <TimeIndicator {...{ dayStart }} />;
+        }
+        return <TimeNotch key={`TimeNotch-${index}-0`} time={null} />;
+      })}
     </div>
   );
 }
-
-// {
-//   getTimes().map((time, index) => {
-//     if (index === 0) {
-//       return <TimeIndicator {...{ dayStart }} />;
-//     }
-//     return <TimeNotch key={`TimeNotch-${index}-0`} time={null} />;
-//   });
-// }
 
 function TimeNotch({ time }) {
   return (
     <div
       key={time === null ? "blank" : time.timeString}
-      className="timeNotch"
+      className={time === null ? "timeNotch null" : "timeNotch"}
       style={{
         gridColumn: time === null ? "2" : "1",
         gridRow: time === null ? "auto" : time.timeLineLocation,
       }}
     >
-      {time ? time.timeString : " "}
+      {time ? (
+        <span>{time.timeString}</span>
+      ) : (
+        <span className="nullTime">space</span>
+      )}
     </div>
   );
 }
