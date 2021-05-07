@@ -4,15 +4,13 @@ function NavBar({ isAuthenticated, gcal, setTab, tab }) {
   return (
     <div className="navBar">
       <button
-        id={tab === "calendar" ? "toggled" : "notToggled"}
-        className="navTab"
+        className={tab === "calendar" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("calendar")}
       >
         Calendar
       </button>
       <button
-        id={tab === "taskboard" ? "toggled" : "notToggled"}
-        className="navTab"
+        className={tab === "taskboard" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("taskboard")}
       >
         Taskboard

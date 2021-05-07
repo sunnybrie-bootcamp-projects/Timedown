@@ -47,6 +47,7 @@ function TimeNotch({ time }) {
 function TimeIndicator({ dayStart }) {
   const [indicatorRender, setIndicatorRender] = useState("");
 
+  //finds row placement for current time
   function findCurrentTime() {
     // console.log("findCurrentTime"); //TEST
     // console.debug({ dayStart }); //TEST
@@ -63,6 +64,18 @@ function TimeIndicator({ dayStart }) {
     setIndicatorRender(`${row}`);
   }
 
+  function getCurrentTime() {
+    let currTime = new Date();
+    let hour =
+      currTime.getHours() <= 12
+        ? currTime.getHours()
+        : currTime.getHours() - 12;
+    let minute = currTime.getMinutes();
+    let amPM = currTime.getHours() <= 11 ? "am" : "pm";
+
+    return `${hour}:${minute}${amPM}`;
+  }
+
   useEffect(() => {
     findCurrentTime();
   });
@@ -71,7 +84,9 @@ function TimeIndicator({ dayStart }) {
     <div
       className="timeIndicator"
       style={{ gridRow: indicatorRender, gridColumn: "2" }}
-    ></div>
+    >
+      {getCurrentTime()}
+    </div>
   );
 }
 
