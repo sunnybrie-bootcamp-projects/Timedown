@@ -27,19 +27,30 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
       {getTimes().map((time, index) => {
         return <TimeNotch key={`TimeNotch-${index}`} {...{ time }} />;
       })}
-      <TimeIndicator {...{ dayStart }} />
     </div>
   );
 }
 
+// {
+//   getTimes().map((time, index) => {
+//     if (index === 0) {
+//       return <TimeIndicator {...{ dayStart }} />;
+//     }
+//     return <TimeNotch key={`TimeNotch-${index}-0`} time={null} />;
+//   });
+// }
+
 function TimeNotch({ time }) {
   return (
     <div
-      key={time.timeString}
+      key={time === null ? "blank" : time.timeString}
       className="timeNotch"
-      style={{ gridColumn: "1", gridRow: time.timeLineLocation }}
+      style={{
+        gridColumn: time === null ? "2" : "1",
+        gridRow: time === null ? "auto" : time.timeLineLocation,
+      }}
     >
-      {time.timeString}
+      {time ? time.timeString : " "}
     </div>
   );
 }
@@ -70,7 +81,10 @@ function TimeIndicator({ dayStart }) {
       currTime.getHours() <= 12
         ? currTime.getHours()
         : currTime.getHours() - 12;
-    let minute = currTime.getMinutes();
+    let minute =
+      currTime.getMinutes() < 10
+        ? `0${currTime.getMinutes()}`
+        : currTime.getMinutes();
     let amPM = currTime.getHours() <= 11 ? "am" : "pm";
 
     return `${hour}:${minute}${amPM}`;
@@ -85,7 +99,8 @@ function TimeIndicator({ dayStart }) {
       className="timeIndicator"
       style={{ gridRow: indicatorRender, gridColumn: "2" }}
     >
-      {getCurrentTime()}
+      <div className="timePointer"></div>
+      <span class="currentTime">{getCurrentTime()}</span>
     </div>
   );
 }

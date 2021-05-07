@@ -46,6 +46,12 @@ function Calendar({ isAuthenticated, gcal }) {
 
   return (
     <div className="calendar">
+      <h3
+        className="calHeader"
+        style={{ gridRow: "1", gridColumn: "1 / span 2" }}
+      >
+        Today
+      </h3>
       <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
       <Day
         {...{ timeRows, isAuthenticated, gcal, dayStart, dayEnd, totalHours }}

@@ -33,7 +33,23 @@
 }
 
 body {
-  background-color: #2b9e91;
+  background-color: #90d1ca;
+}
+
+body::-webkit-scrollbar {
+  width: 1em;
+
+  background-color: #262626;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 1rem 1rem 1rem;
+
+  background-color: rgba(44, 241, 204, 0.4);
 }
 
 /* MAIN APP COMPONENTS */
@@ -54,6 +70,7 @@ body {
   width: 45em;
 
   background-color: floralwhite;
+  filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
 
   border: 2px solid #f5a462;
 
@@ -94,41 +111,59 @@ body {
   z-index: 2;
 }
 
+.navTab.notToggled {
+  background-color: antiquewhite;
+  filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
+}
+
 /* CALENDAR COMPONENTS */
 .calendar {
   display: grid;
   box-sizing: border-box;
-  position: absolute;
-  margin: 0% auto;
+  position: relative;
+  margin: auto;
   padding: 0.5em;
-  height: 95%;
+  height: 100%;
   width: 95%;
 
   grid-template-columns: 1fr 4fr;
-  justify-content: space-evenly;
-
-  background-color: #e8c468;
+  grid-template-rows: 1fr 14fr;
+  grid-gap: 1em;
 
   border-radius: 1em 1em 1em;
+}
+
+.calHeader {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  margin: auto;
+
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: #2b9e91;
 }
 
 .timeLine {
   display: grid;
   box-sizing: border-box;
-  position: absolute;
+  position: relative;
+  padding: 1em 0em;
   min-height: 90%;
-  height: 100%;
-  min-width: 10%;
+  height: 95%;
+  min-width: 20%;
   width: auto;
 
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
+  column-gap: 1em;
   grid-column: 1;
   justify-content: center;
   align-content: space-evenly;
 
-  color: floralwhite;
-  box-shadow: #274754 0.5em 0.5em 0.5em;
+  background-color: #e8c468;
+  box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
 
+  color: floralwhite;
   text-align: right;
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
@@ -136,51 +171,119 @@ body {
   border-radius: 1em 1em 1em;
 }
 
+.timeLine > * {
+  border-top: 1px solid floralwhite;
+}
+
 .timeNotch {
   display: block;
   box-sizing: border-box;
   max-height: 100%;
   max-width: 100%;
+  width: 100%;
   margin: auto;
 }
 
 .timeIndicator {
   display: block;
+  box-sizing: ;
+  position: relative;
+  right: -1em;
+  height: 100%;
+
+  border-style: none;
+  filter: drop-shadow(0.125em 0.125em 0.125em rgba(39, 71, 84, 0.9));
+
+  overflow: visible;
+}
+
+.timePointer {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
   background-color: #e86f51;
   clip-path: polygon(0 1%, 100% 50%, 0% 100%, 12% 51%);
+}
+
+.currentTime {
+  position: relative;
+  bottom: 1em;
+  right: 0.75em;
+  z-index: 2;
+
+  line-height: 0em;
+  font-weight: bolder;
+  text-shadow: 0.125em 0.125em 0.25em rgb(163, 54, 27);
 }
 
 .day {
   display: grid;
   box-sizing: border-box;
-  position: absolute;
+  position: relative;
   right: 0px;
+  padding: 1em;
   min-height: 90%;
-  height: 100%;
+  height: 95%;
   min-width: 90%;
   width: auto;
 
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   grid-column: 2;
-  justify-content: center;
+  justify-content: left;
   align-content: center;
 
-  background-color: darkslategray;
+  background-color: #e8c468;
+  box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
 
   border-radius: 1em 1em 1em;
 }
 
 .event {
   display: block;
+  position: relative;
   box-sizing: border-box;
+  margin: auto;
+  padding: 0.125em;
   max-height: 100%;
-  padding: 0;
+  max-width: 100%;
+  height: 100%;
+  width: 100%;
 
-  background-color: darkcyan;
-  color: white;
-  border: 1px solid white;
-
+  background: linear-gradient(to bottom, #90d1ca, #2b9e91);
   border-radius: 0.5em 0.5em 0.5em;
+  box-shadow: 0.25em 0.25em 0.25em rgba(39, 71, 84, 0.5);
+
+  color: white;
+
+  overflow-y: scroll;
+}
+
+.event p {
+  position: relative;
+  margin: auto;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.0625em;
+  vertical-align: middle;
+}
+
+.event::-webkit-scrollbar {
+  width: 0.25em;
+
+  background-color: rgba(43, 158, 145, 0);
+}
+
+.event::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+}
+
+.event::-webkit-scrollbar-thumb {
+  position: relative;
+  border-radius: 1rem 1rem 1rem;
+
+  background-color: rgba(43, 158, 145, 0);
+  border: 1px solid floralwhite;
 }
 
 /* TASKBOARD COMPONENTS */

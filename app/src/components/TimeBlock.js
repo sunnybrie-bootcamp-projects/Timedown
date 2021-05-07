@@ -11,7 +11,7 @@ const TimeBlock = ({ start, end, summary, dayStart }) => {
     //console.debug({ end }); //test
     var blockEnd = (new Date(end).getHours() - dayStart.getHours()) * 2;
     //console.debug({ blockEnd });
-    blockEnd = blockEnd % 1 !== 0 ? blockEnd + 1 : blockEnd;
+    blockEnd = blockEnd % 1 !== 0 ? blockEnd + 2 : blockEnd + 1;
     //console.debug({ blockEnd });
 
     return `${blockStart} / ${blockEnd}`;
@@ -19,7 +19,7 @@ const TimeBlock = ({ start, end, summary, dayStart }) => {
 
   var eventMeasurements = {
     gridRow: getGridPlacement(),
-    gridColumn: "span 1",
+    gridColumn: "auto / span 1",
   };
 
   return (
