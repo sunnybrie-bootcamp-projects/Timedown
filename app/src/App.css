@@ -6,7 +6,7 @@
 .planner {
   display: block;
   position: absolute;
-  top: 3em;
+  top: 4em;
   left: 2em;
   margin: auto;
   padding: 1.5em;
@@ -15,7 +15,37 @@
 
   background-color: cadetblue;
 
-  border-radius: 1em 1em 1em;
+  border-top-right-radius: 1em 1em;
+  border-bottom-left-radius: 1em 1em;
+  border-bottom-right-radius: 1em 1em;
+}
+
+.navBar {
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  top: 1em;
+  left: 2em;
+  width: auto;
+  height: 3em;
+
+  background-color: aqua;
+}
+
+.navTab {
+  display: block;
+  float: left;
+  box-sizing: border-box;
+  height: 100%;
+  width: 200px;
+
+  background-color: cadetblue;
+  border: 1px solid darkslategray;
+  border-width: 2px 2px 0px 2px;
+  border-top-left-radius: 0.75em 0.75em;
+  border-top-right-radius: 0.75em 0.75em;
+
+  color: antiquewhite;
 }
 
 .calendar {
