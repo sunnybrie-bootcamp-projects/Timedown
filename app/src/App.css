@@ -1,3 +1,41 @@
+/* Color Theme Swatches in Hex */
+.fontColor-navy {
+  color: #274754;
+}
+.fontColor-green {
+  color: #2b9e91;
+}
+.fontColor-yellow {
+  color: #e8c468;
+}
+.fontColor-orange {
+  color: #f5a462;
+}
+.fontColor-redorange {
+  color: #e86f51;
+}
+
+/* Color Theme Swatches in RGBA */
+.bgColor-navy {
+  color: rgba(39, 71, 84, 1);
+}
+.bgColor-green {
+  color: rgba(43, 158, 145, 1);
+}
+.bgColor-yellow {
+  color: rgba(232, 196, 104, 1);
+}
+.bgColor-orange {
+  color: rgba(245, 164, 98, 1);
+}
+.bgColor-redorange {
+  color: rgba(232, 111, 81, 1);
+}
+
+body {
+  background-color: #2b9e91;
+}
+
 #login {
   position: absolute;
   right: 1em;
@@ -13,7 +51,9 @@
   height: 50em;
   width: 45em;
 
-  background-color: cadetblue;
+  background-color: antiquewhite;
+
+  border: 2px solid #f5a462;
 
   border-top-right-radius: 1em 1em;
   border-bottom-left-radius: 1em 1em;
@@ -24,12 +64,11 @@
   display: block;
   box-sizing: border-box;
   position: absolute;
-  top: 1em;
+  z-index: 2;
+  top: 1.125em;
   left: 2em;
   width: auto;
   height: 3em;
-
-  background-color: aqua;
 }
 
 .navTab {
@@ -39,13 +78,13 @@
   height: 100%;
   width: 200px;
 
-  background-color: cadetblue;
-  border: 1px solid darkslategray;
+  background-color: antiquewhite;
+  border: 1px solid #f5a462;
   border-width: 2px 2px 0px 2px;
   border-top-left-radius: 0.75em 0.75em;
   border-top-right-radius: 0.75em 0.75em;
 
-  color: antiquewhite;
+  color: #e86f51;
 }
 
 .calendar {

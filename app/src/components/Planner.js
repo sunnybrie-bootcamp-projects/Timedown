@@ -27,7 +27,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
 
   return (
     <>
-      <NavBar {...{ setTab }} />
+      <NavBar {...{ setTab, tab }} />
       <div className="planner">{getTab()}</div>
     </>
   );

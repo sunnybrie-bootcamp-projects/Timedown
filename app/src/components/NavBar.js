@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 
-function NavBar({ isAuthenticated, gcal, setTab }) {
+function NavBar({ isAuthenticated, gcal, setTab, tab }) {
   return (
     <div className="navBar">
-      <button className="navTab" onClick={() => setTab("calendar")}>
+      <button
+        id={tab === "calendar" ? "toggled" : "notToggled"}
+        className="navTab"
+        onClick={() => setTab("calendar")}
+      >
         Calendar
       </button>
-      <button className="navTab" onClick={() => setTab("taskboard")}>
+      <button
+        id={tab === "taskboard" ? "toggled" : "notToggled"}
+        className="navTab"
+        onClick={() => setTab("taskboard")}
+      >
         Taskboard
       </button>
     </div>
