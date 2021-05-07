@@ -29,7 +29,7 @@ CREATE TABLE public.checkins (
 );
 
 
-ALTER TABLE public.checkins OWNER TO tpl5_2021h1;
+ALTER TABLE public.checkins OWNER TO postgres;
 
 --
 -- Name: checkins_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -44,7 +44,7 @@ CREATE SEQUENCE public.checkins_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.checkins_id_seq OWNER TO tpl5_2021h1;
+ALTER TABLE public.checkins_id_seq OWNER TO postgres;
 
 --
 -- Name: checkins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -63,11 +63,12 @@ CREATE TABLE public.tasks (
     "dueDate" timestamp with time zone,
     "estTime" text,
     summary text,
-    description text
+    description text,
+    created timestamp without time zone DEFAULT '2021-05-05 19:52:37.442996'::timestamp without time zone
 );
 
 
-ALTER TABLE public.tasks OWNER TO tpl5_2021h1;
+ALTER TABLE public.tasks OWNER TO postgres;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -82,7 +83,7 @@ CREATE SEQUENCE public.tasks_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.tasks_id_seq OWNER TO tpl5_2021h1;
+ALTER TABLE public.tasks_id_seq OWNER TO postgres;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -104,7 +105,7 @@ CREATE TABLE public.timeblocks (
 );
 
 
-ALTER TABLE public.timeblocks OWNER TO tpl5_2021h1;
+ALTER TABLE public.timeblocks OWNER TO postgres;
 
 --
 -- Name: timeblocks_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -119,7 +120,7 @@ CREATE SEQUENCE public.timeblocks_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.timeblocks_id_seq OWNER TO tpl5_2021h1;
+ALTER TABLE public.timeblocks_id_seq OWNER TO postgres;
 
 --
 -- Name: timeblocks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -141,7 +142,7 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO tpl5_2021h1;
+ALTER TABLE public.users OWNER TO postgres;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -156,7 +157,7 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO tpl5_2021h1;
+ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -205,9 +206,9 @@ COPY public.checkins (id) FROM stdin;
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
 --
 
-COPY public.tasks (id, "userId", "dueDate", "estTime", summary, description) FROM stdin;
-1	1	2021-06-06 00:00:00-07	60 hours	First Draft	First draft of my book.
-2	1	2021-05-30 00:00:00-07	30 hours	Brand Stylebook	description here
+COPY public.tasks (id, "userId", "dueDate", "estTime", summary, description, created) FROM stdin;
+1	1	2021-06-06 00:00:00-07	60 hours	First Draft	First draft of my book.	2021-05-05 19:52:37.442996
+2	1	2021-05-30 00:00:00-07	30 hours	Brand Stylebook	description here	2021-05-05 19:52:37.442996
 \.
 
 
@@ -224,7 +225,8 @@ COPY public.timeblocks (id, "taskId", "userId", start, "end") FROM stdin;
 --
 
 COPY public.users (id, username, email, settings, "blackOuts") FROM stdin;
-1	sunshine	sunny.codetester@gmail.com	\N	\N
+1	sunsaplenty	sunny.codetester@gmail.com	\N	\N
+2	brieanburrito	brienna.klassen@gmail.com	\N	\N
 \.
 
 

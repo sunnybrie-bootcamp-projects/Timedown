@@ -1,3 +1,43 @@
+/* Color Theme Swatches in Hex */
+.fontColor-navy {
+  color: #274754;
+}
+.fontColor-green {
+  color: #2b9e91;
+}
+.fontColor-yellow {
+  color: #e8c468;
+}
+.fontColor-orange {
+  color: #f5a462;
+}
+.fontColor-redorange {
+  color: #e86f51;
+}
+
+/* Color Theme Swatches in RGBA */
+.bgColor-navy {
+  color: rgba(39, 71, 84, 1);
+}
+.bgColor-green {
+  color: rgba(43, 158, 145, 1);
+}
+.bgColor-yellow {
+  color: rgba(232, 196, 104, 1);
+}
+.bgColor-orange {
+  color: rgba(245, 164, 98, 1);
+}
+.bgColor-redorange {
+  color: rgba(232, 111, 81, 1);
+}
+
+body {
+  background-color: #2b9e91;
+}
+
+/* MAIN APP COMPONENTS */
+
 #login {
   position: absolute;
   right: 1em;
@@ -6,50 +46,153 @@
 .planner {
   display: block;
   position: absolute;
-  top: 3em;
+  top: 4em;
   left: 2em;
   margin: auto;
   padding: 1.5em;
-  min-height: 80vh;
-  width: 60vw;
-
-  background-color: aquamarine;
-}
-
-.calendar {
-  display: block;
-  margin: auto;
-  padding: 1em;
-  min-height: 30em;
-  width: 80%;
+  height: 50em;
+  width: 45em;
 
   background-color: floralwhite;
+
+  border: 2px solid #f5a462;
+
+  border-top-right-radius: 1em 1em;
+  border-bottom-left-radius: 1em 1em;
+  border-bottom-right-radius: 1em 1em;
 }
 
-.day {
+.navBar {
   display: block;
+  box-sizing: border-box;
   position: absolute;
-  margin: auto 12.5%;
-  min-height: 100%;
-  max-width: 70%;
+  top: 1.125em;
+  left: 2em;
+  width: auto;
+  height: 3em;
+}
 
-  overflow: auto;
+.navTab {
+  display: block;
+  position: relative;
+  float: left;
+  box-sizing: border-box;
+  height: 100%;
+  width: 200px;
+
+  background-color: floralwhite;
+  border: 1px solid #f5a462;
+  border-width: 2px 2px 0px 2px;
+  border-top-left-radius: 0.75em 0.75em;
+  border-top-right-radius: 0.75em 0.75em;
+
+  font-size: 1.5em;
+  color: #e86f51;
+}
+
+.navTab.toggled {
+  z-index: 2;
+}
+
+/* CALENDAR COMPONENTS */
+.calendar {
+  display: grid;
+  box-sizing: border-box;
+  position: absolute;
+  margin: 0% auto;
+  padding: 0.5em;
+  height: 95%;
+  width: 95%;
+
+  grid-template-columns: 1fr 4fr;
+  justify-content: space-evenly;
+
+  background-color: #e8c468;
+
+  border-radius: 1em 1em 1em;
 }
 
 .timeLine {
-  display: block;
+  display: grid;
+  box-sizing: border-box;
   position: absolute;
-  left: 4em;
-  margin: auto;
-  height: 75%;
-  max-width: 4em;
+  min-height: 90%;
+  height: 100%;
+  min-width: 10%;
+  width: auto;
 
-  background-color: #242424;
-  color: antiquewhite;
+  grid-template-columns: 1fr 1fr;
+  grid-column: 1;
+  justify-content: center;
+  align-content: space-evenly;
+
+  color: floralwhite;
+  box-shadow: #274754 0.5em 0.5em 0.5em;
+
+  text-align: right;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+
+  border-radius: 1em 1em 1em;
+}
+
+.timeNotch {
+  display: block;
+  box-sizing: border-box;
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
+}
+
+.timeIndicator {
+  display: block;
+  background-color: #e86f51;
+  clip-path: polygon(0 1%, 100% 50%, 0% 100%, 12% 51%);
+}
+
+.day {
+  display: grid;
+  box-sizing: border-box;
+  position: absolute;
+  right: 0px;
+  min-height: 90%;
+  height: 100%;
+  min-width: 90%;
+  width: auto;
+
+  grid-template-columns: auto auto auto;
+  grid-column: 2;
+  justify-content: center;
+  align-content: center;
+
+  background-color: darkslategray;
+
+  border-radius: 1em 1em 1em;
+}
+
+.event {
+  display: block;
+  box-sizing: border-box;
+  max-height: 100%;
+  padding: 0;
+
+  background-color: darkcyan;
+  color: white;
+  border: 1px solid white;
+
+  border-radius: 0.5em 0.5em 0.5em;
+}
+
+/* TASKBOARD COMPONENTS */
+
+.task {
+  display: block;
+  box-sizing: border-box;
+  background-color: floralwhite;
 }
 
 .detailsBoard {
-  display: block;
+  display: none;
   position: absolute;
   top: 3em;
   right: 2em;

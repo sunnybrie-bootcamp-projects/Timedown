@@ -9,7 +9,9 @@ const port = process.env.PORT || 4000;
 const tasks = express.Router();
 
 tasks.get("/", async (request, response) => {
-  const tasks = await db.getTasks();
+  console.debug(request.headers); //TEST
+  const timedownUser = request.header("timedown-user");
+  const tasks = await db.getTasks(timedownUser);
   response.json(tasks);
 });
 
@@ -21,6 +23,18 @@ tasks.post("/", async (request, response) => {
 });
 
 app.use("/api/tasks", tasks);
+
+//Users
+const users = express.Router();
+
+users.use(express.json());
+users.post("/", async (request, response) => {
+  const { email } = request.body;
+  const user = await db.getUser(email);
+  response.status(201).json(user);
+});
+
+app.use("/api/users", users);
 
 process.env?.SERVE_REACT?.toLowerCase() === "true" &&
   app.use(
@@ -39,4 +53,3 @@ app.get("/api/ping", (request, response) =>
 app.listen(port, () => {
   console.info(`Example server listening at http://localhost:${port}`);
 });
-

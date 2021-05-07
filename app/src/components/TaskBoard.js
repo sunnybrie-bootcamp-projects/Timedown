@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import * as apiClient from "../apiClient";
+import * as dbRequest from "../dbRequest";
 
-function TaskBoard() {
-  const [tasksList, setTasksList] = useState("");
+import Task from "./Task.js";
+
+function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
+  const [tasksList, setTasksList] = useState([]);
 
   async function getTasksInfo() {
-    let data = JSON.stringify(await apiClient.getTasks());
+    let data = JSON.stringify(await dbRequest.getTasks(timedownAccount.id));
+    let tasks = JSON.parse(data);
 
-    setTasksList(data);
+    setTasksList(tasks);
   }
 
   useEffect(() => {
@@ -18,7 +21,9 @@ function TaskBoard() {
   return (
     <div className="taskBoard">
       <h2>Your Tasks:</h2>
-      <p>{tasksList}</p>
+      {tasksList.map((task) => {
+        return <Task {...{ task }} />;
+      })}
     </div>
   );
 }

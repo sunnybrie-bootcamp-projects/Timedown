@@ -42,6 +42,8 @@
     "@testing-library/user-event": "^13.0.2",
     "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^4.7.0"
   }
 }

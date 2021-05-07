@@ -7,16 +7,33 @@ import gcal from "./api/ApiCalendar";
 import DetailsBoard from "./components/DetailsBoard.js";
 import Login from "./components/Login";
 import Planner from "./components/Planner.js";
+import * as dbRequest from "./dbRequest";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
-  const [currentUser, setCurrentUser] = React.useState({});
+  const [googleAccount, setGoogleAccount] = React.useState({});
+  const [timedownAccount, setTimedownAccount] = React.useState({});
 
-  async function getUserInfo() {
-    if (isAuthenticated) {
-      var userInfo = await gcal.getBasicUserProfile();
-      setCurrentUser(userInfo);
-      console.debug(userInfo);
+  async function getUserInfo(account) {
+    switch (account) {
+      case "google":
+        if (isAuthenticated) {
+          var googleUserInfo = await gcal.getBasicUserProfile();
+          setGoogleAccount(googleUserInfo);
+          //console.debug(googleUserInfo);
+        }
+        break;
+      case "timedown":
+        if (isAuthenticated) {
+          var timedownUserInfo = await dbRequest.getUser(
+            googleAccount.getEmail(),
+          );
+          setTimedownAccount(timedownUserInfo);
+          //console.debug(timedownUserInfo);
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -28,8 +45,12 @@ const App = () => {
   }, []);
 
   React.useEffect(() => {
-    getUserInfo();
+    getUserInfo("google");
   }, [isAuthenticated]);
+
+  React.useEffect(() => {
+    getUserInfo("timedown");
+  }, [googleAccount]);
 
   return (
     <main className="App">
@@ -37,7 +58,7 @@ const App = () => {
         <Login {...{ isAuthenticated, gcal }} />
       </div>
 
-      <Planner {...{ isAuthenticated, gcal }} />
+      <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
       <DetailsBoard />
     </main>
   );
