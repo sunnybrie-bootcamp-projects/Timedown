@@ -17,8 +17,8 @@ tasks.get("/", async (request, response) => {
 
 tasks.use(express.json());
 tasks.post("/", async (request, response) => {
-  const { name } = request.body;
-  const task = await db.addTask(name);
+  const { summary } = request.body;
+  const task = await db.addTask(summary);
   response.status(201).json(task);
 });
 
