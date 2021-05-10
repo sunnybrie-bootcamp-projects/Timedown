@@ -11,7 +11,6 @@ function Task({ task, setDetails, setAction }) {
   return (
     <div className="task">
       <h3>{task.summary}</h3>
-      <p>{task.description}</p>
       <button className="detailsButton" onClick={() => seeDetails()}>
         {" "}
         See Details

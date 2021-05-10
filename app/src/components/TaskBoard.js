@@ -21,6 +21,10 @@ function TaskBoard({
     setTasksList(tasks);
   }
 
+  function taskAction(action) {
+    setAction(action);
+  }
+
   useEffect(() => {
     getTasksInfo();
   }, []);
@@ -28,7 +32,7 @@ function TaskBoard({
   return (
     <div className="taskBoard">
       <h2>Your Tasks:</h2>
-      <button onClick={setAction("addTask")}>Add New Task</button>
+      <button onClick={() => taskAction("addTask")}>Add New Task</button>
       {tasksList.map((task, index) => {
         return <Task key={index} {...{ task, setDetails, setAction }} />;
       })}
