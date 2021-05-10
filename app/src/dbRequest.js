@@ -11,13 +11,19 @@ export const getTasks = async (user) => {
   return response.json();
 };
 
-export const addTask = async (summary) => {
+export const addTask = async (
+  userId,
+  dueDate,
+  estTime,
+  summary,
+  description,
+) => {
   const response = await fetch("/api/tasks", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ summary }),
+    body: JSON.stringify({ userId, dueDate, estTime, summary, description }),
   });
   return response.json();
 };

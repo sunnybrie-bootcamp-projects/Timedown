@@ -33,13 +33,21 @@ export const getTasks = async (user) => {
   return tasks;
 };
 
-export const addTask = async (summary) =>
-  (
-    await db.any(
-      "INSERT INTO tasks(summary) VALUES($1) RETURNING id, summary",
-      [summary],
-    )
-  )[0];
+export const addTask = async (
+  userId,
+  dueDate,
+  estTime,
+  summary,
+  description,
+) => {
+  let newTask = await db.any(
+    `INSERT INTO tasks("userId", "dueDate", "estTime", "summary", "description")
+VALUES($1, $2, $3, $4, $5) RETURNING id, summary`,
+    [userId, dueDate, estTime, summary, description],
+  );
+
+  console.log(newTask);
+};
 
 export const getUser = async (email) => {
   let user = await db.any("SELECT * FROM users WHERE email = $1", [email]);

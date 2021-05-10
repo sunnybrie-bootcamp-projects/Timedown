@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import * as dbRequest from "../dbRequest";
 
 import Task from "./Task.js";
+import TaskAddForm from "./TaskAddForm";
 
 function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
   const [tasksList, setTasksList] = useState([]);
@@ -24,6 +25,7 @@ function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
       {tasksList.map((task) => {
         return <Task {...{ task }} />;
       })}
+      <TaskAddForm {...{ getTasksInfo, timedownAccount }} />
     </div>
   );
 }

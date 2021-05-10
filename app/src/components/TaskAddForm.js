@@ -13,7 +13,7 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case "editSummary":
-      return { ...state, Summary: action.value };
+      return { ...state, summary: action.value };
 
     case "editDescription":
       return { ...state, description: action.value };
@@ -32,17 +32,21 @@ function reducer(state, action) {
 }
 
 //ADD FORM, CHILD OF EVENTBOARD
-function TaskAddForm(props) {
+function TaskAddForm({ getTasksInfo, timedownAccount }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  //const [numSeen, plusMinus] = React.useState([""]);
-
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
       const body = state;
       console.log("Attempting to post...", JSON.stringify(body)); // TEST
 
-      const response = await dbRequest.addTask(state.summary);
+      const response = await dbRequest.addTask(
+        timedownAccount.id,
+        state.dueDate,
+        state.estTime,
+        state.summary,
+        state.description,
+      );
       response.catch((e) => {
         console.log(`Task POST request didn't send...`); //TEST
       });
@@ -51,10 +55,8 @@ function TaskAddForm(props) {
       console.log(`Server Response`, update); //TEST
       window.alert("Task submitted!");
 
-      //props.fetchData();
+      getTasksInfo();
       dispatch({ type: "wipe", value: { initialState } });
-
-      window.estTime = "/";
     } catch (err) {
       console.error(err.message);
     }
@@ -69,95 +71,58 @@ function TaskAddForm(props) {
         onSubmit={onSubmitForm}
       >
         <div className="topper">
-          <h2 className="tableTitle">Report New Sighting</h2>
+          <h2 className="tableTitle">Add New Task</h2>
         </div>
-        <label for="in-Date">Date Seen:</label>
-        <input
-          id="in-Date"
-          type="datetime-local"
-          value={state.date}
-          onChange={(e) => {
-            dispatch({ type: "editDate", value: e.target.value });
-          }}
-        />
-        {numSeen.map((value, index) => {
-          return (
-            <>
-              <label key={index + 30} for="in-Name">
-                Name:
-              </label>
-              <input
-                key={index + 31}
-                id="in-Name"
-                type="text"
-                value={state.summary[index]}
-                onChange={(e) => {
-                  dispatch({
-                    type: "editName",
-                    value: numSeen.map((n, i) => {
-                      if (i === index) {
-                        return e.target.value;
-                      }
+        <label for="in-Summary">
+          Summary:
+          <input
+            id="in-Summary"
+            type="text"
+            value={state.summary}
+            onChange={(e) => {
+              dispatch({ type: "editSummary", value: e.target.value });
+            }}
+          />
+        </label>
 
-                      return state.summary[i];
-                    }),
-                    index: e.target.index,
-                  });
-                }}
-              />
-            </>
-          );
-        })}
+        <label for="in-Description">
+          Description:
+          <input
+            id="in-Description"
+            value={state.description}
+            type="text"
+            rows="10"
+            cols="30"
+            onChange={(e) => {
+              dispatch({ type: "editDescription", value: e.target.value });
+            }}
+          />
+        </label>
 
-        <button onClick={() => plusMinus(numSeen.concat([""]))}>+</button>
-        {numSeen.length > 1 ? (
-          <button
-            onClick={() =>
-              plusMinus(() => {
-                numSeen.splice(numSeen.length - 2, 1);
-                return numSeen;
-              })
-            }
-          >
-            -
-          </button>
-        ) : (
-          <> </>
-        )}
+        <label for="in-EstTime">
+          Estimated Time Needed:
+          <input
+            id="in-EstTime"
+            value={state.estTime}
+            onChange={(e) => {
+              dispatch({ type: "editEstTime", value: e.target.value });
+            }}
+          />
+        </label>
 
-        <label for="in-Health"> Appeared Healthy? </label>
-        <div
-          id="in-Health"
-          onChange={(e) => {
-            dispatch({ type: "editHealth", value: e.target.value });
-          }}
-        >
-          <input type="radio" value={true} summary="gender" /> Yes
-          <input type="radio" value={false} summary="gender" /> No
-        </div>
+        <label for="in-DueDate">
+          Task Due Date:
+          <input
+            id="in-DueDate"
+            type="datetime-local"
+            value={state.dueDate}
+            onChange={(e) => {
+              dispatch({ type: "editDueDate", value: e.target.value });
+            }}
+          />
+        </label>
 
-        <label for="in-Location">Location of Sighting:</label>
-        <input
-          id="in-Location"
-          rows="10"
-          cols="30"
-          value={state.desc}
-          onChange={(e) => {
-            dispatch({ type: "editLocation", value: e.target.value });
-          }}
-        />
-
-        <label for="in-Email">Your Email:</label>
-        <input
-          id="in-Email"
-          type="text"
-          value={state.Email}
-          onChange={(e) => {
-            dispatch({ type: "editEmail", value: e.target.value });
-          }}
-        />
-
-        <input id="submitSighting" type="submit" />
+        <input id="submitTask" type="submit" />
       </form>
     </>
   );
