@@ -30,7 +30,7 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
 
       {getTimes().map((time, index) => {
         if (index === 0) {
-          return <TimeIndicator {...{ dayStart }} />;
+          return <TimeIndicator key={"current-time"} {...{ dayStart }} />;
         }
         return <TimeNotch key={`TimeNotch-${index}-0`} time={null} />;
       })}
@@ -102,7 +102,7 @@ function TimeIndicator({ dayStart }) {
       style={{ gridRow: indicatorRender, gridColumn: "2" }}
     >
       <div className="timePointer"></div>
-      <span class="currentTime">{getCurrentTime()}</span>
+      <span className="currentTime">{getCurrentTime()}</span>
     </div>
   );
 }
