@@ -32,7 +32,7 @@ function reducer(state, action) {
 }
 
 //ADD FORM, CHILD OF EVENTBOARD
-function TaskAddForm({ getTasksInfo, timedownAccount }) {
+function TaskAddForm({ setTasksList, timedownAccount }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -47,15 +47,14 @@ function TaskAddForm({ getTasksInfo, timedownAccount }) {
         state.summary,
         state.description,
       );
-      response.catch((e) => {
-        console.log(`Task POST request didn't send...`); //TEST
-      });
 
-      const update = await response.json();
-      console.log(`Server Response`, update); //TEST
+      const update = JSON.stringify(response);
       window.alert("Task submitted!");
 
-      getTasksInfo();
+      const data = JSON.parse(update);
+
+      setTasksList(data);
+
       dispatch({ type: "wipe", value: { initialState } });
     } catch (err) {
       console.error(err.message);
@@ -73,7 +72,7 @@ function TaskAddForm({ getTasksInfo, timedownAccount }) {
         <div className="topper">
           <h2 className="tableTitle">Add New Task</h2>
         </div>
-        <label for="in-Summary">
+        <label htmlFor="in-Summary">
           Summary:
           <input
             id="in-Summary"
@@ -85,7 +84,7 @@ function TaskAddForm({ getTasksInfo, timedownAccount }) {
           />
         </label>
 
-        <label for="in-Description">
+        <label htmlFor="in-Description">
           Description:
           <input
             id="in-Description"
@@ -99,7 +98,7 @@ function TaskAddForm({ getTasksInfo, timedownAccount }) {
           />
         </label>
 
-        <label for="in-EstTime">
+        <label htmlFor="in-EstTime">
           Estimated Time Needed:
           <input
             id="in-EstTime"
@@ -110,7 +109,7 @@ function TaskAddForm({ getTasksInfo, timedownAccount }) {
           />
         </label>
 
-        <label for="in-DueDate">
+        <label htmlFor="in-DueDate">
           Task Due Date:
           <input
             id="in-DueDate"

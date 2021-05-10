@@ -22,10 +22,13 @@ function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
   return (
     <div className="taskBoard">
       <h2>Your Tasks:</h2>
-      {tasksList.map((task) => {
-        return <Task {...{ task }} />;
+      {tasksList.map((task, index) => {
+        return <Task key={index} {...{ task }} />;
       })}
-      <TaskAddForm {...{ getTasksInfo, timedownAccount }} />
+      <TaskAddForm
+        setTasksList={(e) => setTasksList(e)}
+        {...{ timedownAccount }}
+      />
     </div>
   );
 }

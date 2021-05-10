@@ -25,7 +25,8 @@ export const addTask = async (
     },
     body: JSON.stringify({ userId, dueDate, estTime, summary, description }),
   });
-  return response.json();
+
+  return getTasks(userId);
 };
 
 //User Account Requests

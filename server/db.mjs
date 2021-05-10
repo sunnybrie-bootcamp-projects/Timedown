@@ -46,7 +46,8 @@ VALUES($1, $2, $3, $4, $5) RETURNING id, summary`,
     [userId, dueDate, estTime, summary, description],
   );
 
-  console.log(newTask);
+  console.log({ newTask });
+  return newTask;
 };
 
 export const getUser = async (email) => {
