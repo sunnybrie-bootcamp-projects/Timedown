@@ -54,12 +54,19 @@ const App = () => {
 
   return (
     <main className="App">
-      <div id="login">
-        <Login {...{ isAuthenticated, gcal }} />
-      </div>
-
-      <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
-      <DetailsBoard />
+      {isAuthenticated ? (
+        <>
+          <div id="login">
+            <Login {...{ isAuthenticated, gcal }} />
+          </div>
+          <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
+          <DetailsBoard />
+        </>
+      ) : (
+        <div id="login">
+          <Login {...{ isAuthenticated, gcal }} />
+        </div>
+      )}
     </main>
   );
 };

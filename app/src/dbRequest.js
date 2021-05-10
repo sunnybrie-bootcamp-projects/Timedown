@@ -30,7 +30,7 @@ export const addTask = async (
 };
 
 //User Account Requests
-export const getUser = async (email) => {
+export const getUser = async (email, registered) => {
   const response = await fetch("/api/users", {
     method: "POST",
     headers: {

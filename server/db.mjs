@@ -51,7 +51,14 @@ VALUES($1, $2, $3, $4, $5) RETURNING id, summary`,
 };
 
 export const getUser = async (email) => {
-  let user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
+  const user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
+  if (!user[0]) {
+    user = await db.any(
+      `INSERT INTO users("email")
+VALUES($1) RETURNING *`,
+      [email],
+    );
+  }
 
   return user[0];
 };

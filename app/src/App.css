@@ -299,13 +299,13 @@ body::-webkit-scrollbar-thumb {
 }
 
 .detailsBoard {
-  display: none;
+  display: block;
   position: absolute;
   top: 3em;
   right: 2em;
   margin: auto;
-  width: 30%;
+  width: 25%;
   min-height: 80vh;
 
-  background-color: lightcoral;
+  background-color: floralwhite;
 }
