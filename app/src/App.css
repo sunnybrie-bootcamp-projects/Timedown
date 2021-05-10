@@ -295,8 +295,25 @@ body::-webkit-scrollbar-thumb {
 .task {
   display: block;
   box-sizing: border-box;
-  background-color: floralwhite;
+  margin: auto;
+  padding: 0.5em;
+
+  border-radius: 1em 1em 1em;
+  box-shadow: 0.25em 0.25em 0.25em #274754;
+  background-color: #2b9e91;
+
+  color: floralwhite;
 }
+
+.task button {
+  float: right;
+}
+
+.deleteButton {
+  color: red;
+}
+
+/* DETAILS BOARD */
 
 .detailsBoard {
   display: block;

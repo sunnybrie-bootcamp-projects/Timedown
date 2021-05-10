@@ -6,6 +6,7 @@ import * as db from "./db.mjs";
 const app = express();
 const port = process.env.PORT || 4000;
 
+//Task routes
 const tasks = express.Router();
 
 tasks.get("/", async (request, response) => {
@@ -21,10 +22,15 @@ tasks.post("/", async (request, response) => {
   const task = await db.addTask(userId, dueDate, estTime, summary, description);
   response.status(201).json(task);
 });
+tasks.post("/delete", async (request, response) => {
+  const { id } = request.body;
+  const deletedTask = await db.deleteTask(id);
+  response.status(201).json(deletedTask);
+});
 
 app.use("/api/tasks", tasks);
 
-//Users
+//User Routes
 const users = express.Router();
 
 users.use(express.json());

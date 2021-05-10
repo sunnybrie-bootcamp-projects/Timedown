@@ -24,6 +24,7 @@ function initDb() {
   return pgp()(connection);
 }
 
+//TASK QUERIES
 export const getTasks = async (user) => {
   let userId = parseInt(user);
   const tasks = await db.any(`SELECT * FROM tasks WHERE "userId" = $1`, [
@@ -46,10 +47,20 @@ VALUES($1, $2, $3, $4, $5) RETURNING id, summary`,
     [userId, dueDate, estTime, summary, description],
   );
 
-  console.log({ newTask });
   return newTask;
 };
 
+export const deleteTask = async (id) => {
+  let deletedTask = await db.any(
+    `DELETE FROM tasks WHERE id = $1 RETURNING id, summary`,
+    [id],
+  );
+
+  console.log({ deletedTask });
+  return deletedTask;
+};
+
+//USER QUERIES
 export const getUser = async (email) => {
   const user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
   if (user.length < 1) {

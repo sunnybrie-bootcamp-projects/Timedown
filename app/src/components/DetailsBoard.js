@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import * as dbRequest from "../dbRequest";
+
 import TaskAddForm from "./TaskAddForm";
 
 function DetailsBoard({
@@ -10,6 +12,8 @@ function DetailsBoard({
   setDetails,
   setTasksList,
 }) {
+  //Determines what to render based on the "action" state
+  //Read details, edit, delete, or add new task
   function getDetails() {
     let infoToRender;
     switch (action) {
@@ -21,6 +25,30 @@ function DetailsBoard({
           />
         );
         break;
+      case "deleteTask":
+        infoToRender = (
+          <>
+            <p>Are you sure you want to delete this task?</p>
+            <p>{details.summary}</p>
+            <button
+              className="cancelButton"
+              onClick={() => {
+                setAction("readTask");
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="deleteButton"
+              onClick={() => {
+                confirmDelete();
+              }}
+            >
+              DELETE
+            </button>
+          </>
+        );
+        break;
       case "readTask":
         infoToRender = <h3>{details.summary}</h3>;
         break;
@@ -29,6 +57,12 @@ function DetailsBoard({
     }
 
     return infoToRender;
+  }
+
+  //Upon confirmation
+  async function confirmDelete() {
+    let deletedTask = await dbRequest.deleteTask(details.id);
+    window.alert("Task deleted.", deletedTask);
   }
 
   return (
