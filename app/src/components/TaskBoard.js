@@ -11,9 +11,9 @@ function TaskBoard({
   timedownAccount,
   setDetails,
   setAction,
+  setTasksList,
+  tasksList,
 }) {
-  const [tasksList, setTasksList] = useState([]);
-
   async function getTasksInfo() {
     let data = JSON.stringify(await dbRequest.getTasks(timedownAccount.id));
     let tasks = JSON.parse(data);
@@ -28,13 +28,10 @@ function TaskBoard({
   return (
     <div className="taskBoard">
       <h2>Your Tasks:</h2>
+      <button onClick={setAction("addTask")}>Add New Task</button>
       {tasksList.map((task, index) => {
         return <Task key={index} {...{ task, setDetails, setAction }} />;
       })}
-      <TaskAddForm
-        setTasksList={(e) => setTasksList(e)}
-        {...{ timedownAccount }}
-      />
     </div>
   );
 }

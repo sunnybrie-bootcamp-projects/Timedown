@@ -6,9 +6,10 @@ import NavBar from "./NavBar.js";
 import TaskBoard from "./TaskBoard.js";
 
 function Planner({ isAuthenticated, gcal, timedownAccount }) {
-  const [tab, setTab] = useState("calendar");
-  const [details, setDetails] = useState({});
-  const [action, setAction] = useState("");
+  const [tab, setTab] = useState("calendar"); //sets what tab is rendered
+  const [tasksList, setTasksList] = useState([]); //Lists of Timedown User's tasks
+  const [action, setAction] = useState(""); //Determines what Details Board will render, if anything
+  const [details, setDetails] = useState({}); //Information for Details Board to display
 
   function getTab() {
     let visible;
@@ -23,6 +24,8 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
               isAuthenticated,
               gcal,
               timedownAccount,
+              tasksList,
+              setTasksList,
               setDetails,
               setAction,
             }}
@@ -42,7 +45,16 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
     <>
       <NavBar {...{ setTab, tab }} />
       <div className="planner">{getTab()}</div>
-      <DetailsBoard {...{ action, setDetails, details }} />
+      <DetailsBoard
+        {...{
+          timedownAccount,
+          setAction,
+          action,
+          setDetails,
+          details,
+          setTasksList,
+        }}
+      />
     </>
   );
 }
