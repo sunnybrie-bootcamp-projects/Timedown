@@ -317,12 +317,23 @@ body::-webkit-scrollbar-thumb {
 
 .detailsBoard {
   display: block;
+  box-sizing: border-box;
   position: absolute;
-  top: 3em;
-  right: 2em;
+  top: 5em;
+  right: 4em;
   margin: auto;
+  padding: 0.5em;
   width: 25%;
   min-height: 80vh;
 
   background-color: floralwhite;
+  box-shadow: 0.5em 0.75em 0.5em rgba(39, 71, 84, 0.75);
+  border-radius: 1em 1em 1em;
+}
+
+.exitButton {
+  float: right;
+}
+
+.taskInfo {
 }

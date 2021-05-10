@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import * as dbRequest from "../dbRequest";
+
 import Calendar from "./Calendar.js";
 import DetailsBoard from "./DetailsBoard.js";
 import NavBar from "./NavBar.js";
@@ -11,6 +13,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
   const [action, setAction] = useState(""); //Determines what Details Board will render, if anything
   const [details, setDetails] = useState({}); //Information for Details Board to display
 
+  //Determines what to render based on tab state
   function getTab() {
     let visible;
     switch (tab) {
@@ -24,6 +27,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
               isAuthenticated,
               gcal,
               timedownAccount,
+              getTasksInfo,
               tasksList,
               setTasksList,
               setDetails,
@@ -37,6 +41,14 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
     }
 
     return visible;
+  }
+
+  //Fetches user's tasks
+  async function getTasksInfo() {
+    let data = JSON.stringify(await dbRequest.getTasks(timedownAccount.id));
+    let tasks = JSON.parse(data);
+
+    setTasksList(tasks);
   }
 
   useEffect(() => {}, [tab]);
@@ -53,6 +65,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
           setDetails,
           details,
           setTasksList,
+          getTasksInfo,
         }}
       />
     </>

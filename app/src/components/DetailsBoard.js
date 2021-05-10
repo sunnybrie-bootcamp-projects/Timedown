@@ -11,6 +11,7 @@ function DetailsBoard({
   setAction,
   setDetails,
   setTasksList,
+  getTasksInfo,
 }) {
   //Determines what to render based on the "action" state
   //Read details, edit, delete, or add new task
@@ -50,7 +51,7 @@ function DetailsBoard({
         );
         break;
       case "readTask":
-        infoToRender = <h3>{details.summary}</h3>;
+        infoToRender = <TaskInfo {...{ details }} />;
         break;
       default:
         break;
@@ -59,9 +60,11 @@ function DetailsBoard({
     return infoToRender;
   }
 
-  //Upon confirmation
+  //Deletes task and refreshes task list
   async function confirmDelete() {
     let deletedTask = await dbRequest.deleteTask(details.id);
+    getTasksInfo();
+    setAction("");
     window.alert("Task deleted.", deletedTask);
   }
 
@@ -82,6 +85,18 @@ function DetailsBoard({
       </button>
       <h2>Details Board</h2>
       {getDetails()}
+    </div>
+  );
+}
+
+function TaskInfo({ details }) {
+  return (
+    <div className="taskInfo">
+      <h2>{details.summary}</h2>
+      <p className="taskDesc">{details.description}</p>
+      <p className="taskDueDate">
+        {new Date(details.dueDate).toLocaleString()}
+      </p>
     </div>
   );
 }

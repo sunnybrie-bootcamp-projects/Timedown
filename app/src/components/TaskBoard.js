@@ -13,14 +13,8 @@ function TaskBoard({
   setAction,
   setTasksList,
   tasksList,
+  getTasksInfo,
 }) {
-  async function getTasksInfo() {
-    let data = JSON.stringify(await dbRequest.getTasks(timedownAccount.id));
-    let tasks = JSON.parse(data);
-
-    setTasksList(tasks);
-  }
-
   function taskAction(action) {
     setAction(action);
   }
