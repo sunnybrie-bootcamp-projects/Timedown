@@ -4,30 +4,54 @@ import Day from "./Day";
 import TimeLine from "./TimeLine";
 
 function Calendar({ isAuthenticated, gcal }) {
+  const [dayStart, setDayStart] = useState(new Date());
+  const [dayEnd, setDayEnd] = useState(new Date());
+  const [totalHours, setTotalHours] = useState(24);
+  const [timeRows, setTimeRows] = useState("");
+
+  //sets Date states for rendering
+  function setTimeRanges() {
+    //Dummy data for rendering purposes, will be replaced with functions that read
+    //from the user's settings and render the hours where the user is awake.
+    let start = new Date();
+    start.setHours(9, 0, 0, 0);
+    let end = new Date();
+    end.setHours(21, 0, 0, 0);
+
+    setDayStart(start);
+    setDayEnd(end);
+
+    let total = end.getHours() - start.getHours();
+    console.debug({ total }); //TEST
+    setTotalHours(total);
+  }
+
+  //sets number of rows for inline-styling
+  function timeToRows(total) {
+    let template = [];
+    let size = 100 / (total * 2);
+    for (let i = 0; i < total; i += 0.5) {
+      template.push(`${size}%`);
+    }
+    setTimeRows(template.join(" "));
+  }
+
+  useEffect(() => {
+    setTimeRanges();
+  }, []);
+
+  useEffect(() => {
+    timeToRows(totalHours);
+  }, [totalHours]);
+
   return (
     <div className="calendar">
-      <TimeLine />
-      <Day {...{ isAuthenticated, gcal }} />
+      <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
+      <Day
+        {...{ timeRows, isAuthenticated, gcal, dayStart, dayEnd, totalHours }}
+      />
     </div>
   );
 }
-
-const Events = ({ gcal }) => {
-  const [events, setEvents] = React.useState([]);
-
-  React.useEffect(() => {
-    gcal
-      .listUpcomingEvents(10)
-      .then(({ result: { items } }) => setEvents(items));
-  }, []);
-
-  return events.length === 0 ? null : (
-    <ul>
-      {events.map((event) => (
-        <li key={event.id}>{event.summary}</li>
-      ))}
-    </ul>
-  );
-};
 
 export default Calendar;
