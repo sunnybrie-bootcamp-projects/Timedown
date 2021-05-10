@@ -12,8 +12,6 @@ const Config = {
   ],
 };
 
-console.log(Config); //TEST
-
 class ApiCalendar {
   constructor() {
     this.sign = false;

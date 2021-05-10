@@ -4,7 +4,6 @@ import * as React from "react";
 
 import Account from "./Account.js";
 import gcal from "./api/ApiCalendar";
-import DetailsBoard from "./components/DetailsBoard.js";
 import Login from "./components/Login";
 import Planner from "./components/Planner.js";
 import * as dbRequest from "./dbRequest";
@@ -60,7 +59,6 @@ const App = () => {
             <Login {...{ isAuthenticated, gcal }} />
           </div>
           <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
-          <DetailsBoard />
         </>
       ) : (
         <div id="login">

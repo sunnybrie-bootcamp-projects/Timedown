@@ -5,7 +5,7 @@ import * as dbRequest from "../dbRequest";
 import Task from "./Task.js";
 import TaskAddForm from "./TaskAddForm";
 
-function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
+function TaskBoard({ isAuthenticated, gcal, timedownAccount, setTaskInFocus }) {
   const [tasksList, setTasksList] = useState([]);
 
   async function getTasksInfo() {
@@ -23,7 +23,7 @@ function TaskBoard({ isAuthenticated, gcal, timedownAccount }) {
     <div className="taskBoard">
       <h2>Your Tasks:</h2>
       {tasksList.map((task, index) => {
-        return <Task key={index} {...{ task }} />;
+        return <Task key={index} {...{ task, setTaskInFocus }} />;
       })}
       <TaskAddForm
         setTasksList={(e) => setTasksList(e)}
