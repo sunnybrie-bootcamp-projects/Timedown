@@ -7,8 +7,8 @@ import TaskBoard from "./TaskBoard.js";
 
 function Planner({ isAuthenticated, gcal, timedownAccount }) {
   const [tab, setTab] = useState("calendar");
-  const [taskInFocus, setTaskInFocus] = useState({});
-  const [action, setAction] = useState("addTask");
+  const [details, setDetails] = useState({});
+  const [action, setAction] = useState("");
 
   function getTab() {
     let visible;
@@ -19,8 +19,13 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
       case "taskboard":
         visible = (
           <TaskBoard
-            setTaskInFocus={(t) => setTaskInFocus(t)}
-            {...{ isAuthenticated, gcal, timedownAccount }}
+            {...{
+              isAuthenticated,
+              gcal,
+              timedownAccount,
+              setDetails,
+              setAction,
+            }}
           />
         );
         break;
@@ -37,7 +42,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
     <>
       <NavBar {...{ setTab, tab }} />
       <div className="planner">{getTab()}</div>
-      <DetailsBoard {...{ action, setTaskInFocus, taskInFocus }} />
+      <DetailsBoard {...{ action, setDetails, details }} />
     </>
   );
 }
