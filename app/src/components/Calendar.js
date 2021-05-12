@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 import Day from "./Day";
+import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
 function Calendar({ isAuthenticated, gcal }) {
+  const [calView, setCalView] = useState("1day");
   const [dayStart, setDayStart] = useState(new Date());
   const [dayEnd, setDayEnd] = useState(new Date());
   const [totalHours, setTotalHours] = useState(24);
@@ -11,8 +13,6 @@ function Calendar({ isAuthenticated, gcal }) {
 
   //sets Date states for rendering
   function setTimeRanges() {
-    //Dummy data for rendering purposes, will be replaced with functions that read
-    //from the user's settings and render the hours where the user is awake.
     let start = new Date();
     start.setHours(9, 0, 0, 0);
     let end = new Date();
@@ -46,12 +46,7 @@ function Calendar({ isAuthenticated, gcal }) {
 
   return (
     <div className="calendar">
-      <h3
-        className="calHeader"
-        style={{ gridRow: "1", gridColumn: "1 / span 2" }}
-      >
-        Today
-      </h3>
+      <CalendarNavBar {...{ calView, setCalView }} />
       <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
       <Day
         {...{ timeRows, isAuthenticated, gcal, dayStart, dayEnd, totalHours }}
