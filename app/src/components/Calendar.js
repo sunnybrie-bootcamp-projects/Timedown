@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import dayjs from "dayjs";
+
 import Day from "./Day";
 import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
@@ -36,6 +38,53 @@ function Calendar({ isAuthenticated, gcal }) {
     setTimeRows(template.join(" "));
   }
 
+  function getView() {
+    switch (calView) {
+      case "1day":
+        return (
+          <Day
+            {...{
+              timeRows,
+              isAuthenticated,
+              gcal,
+              dayStart,
+              dayEnd,
+              totalHours,
+            }}
+          />
+        );
+        break;
+      case "3day":
+        let dates = [];
+        for (let i = 0; i < 3; i++) {
+          let newStart = dayjs(dayStart).add(i, "day");
+          let newEnd = dayjs(dayEnd).add(i, "day");
+          dates.push({ dayStart: newStart, dayEnd: newEnd });
+        }
+
+        return (
+          <div className="threedayview">
+            {dates.map((day) => {
+              return (
+                <Day
+                  {...{
+                    timeRows,
+                    isAuthenticated,
+                    gcal,
+                    ...day,
+                    totalHours,
+                  }}
+                />
+              );
+            })}
+          </div>
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
   useEffect(() => {
     setTimeRanges();
   }, []);
@@ -48,9 +97,7 @@ function Calendar({ isAuthenticated, gcal }) {
     <div className="calendar">
       <CalendarNavBar {...{ calView, setCalView }} />
       <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
-      <Day
-        {...{ timeRows, isAuthenticated, gcal, dayStart, dayEnd, totalHours }}
-      />
+      {getView()}
     </div>
   );
 }
