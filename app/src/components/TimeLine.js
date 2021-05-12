@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 
+import dayjs from "dayjs";
+
 function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
   //Returns an array of time objects at half-hour increments with row location
   //based on dayStart starting hour and totalHours
   function getTimes() {
     let timesToRender = [];
     for (let i = 0; i <= totalHours; i += 0.5) {
-      let timeString = `${new Date(dayStart).getHours() + Math.floor(i)}`;
+      let timeString = `${dayjs(dayStart).hour() + Math.floor(i)}`;
       if (i % 1 !== 0) {
         timeString += ":30";
       }
@@ -64,30 +66,25 @@ function TimeIndicator({ dayStart }) {
   function findCurrentTime() {
     // console.log("findCurrentTime"); //TEST
     // console.debug({ dayStart }); //TEST
-    let currTime = new Date();
+    let currTime = dayjs();
 
     // console.debug({ currTime });
 
     let row =
-      currTime.getMinutes() >= 30
-        ? (currTime.getHours() - dayStart.getHours()) * 2 + 2
-        : (currTime.getHours() - dayStart.getHours()) * 2 + 1;
+      currTime.minute() >= 30
+        ? (currTime.hour() - dayjs(dayStart).hour()) * 2 + 2
+        : (currTime.hour() - dayjs(dayStart).hour()) * 2 + 1;
 
     // console.debug({ row }); //TEST
     setIndicatorRender(`${row}`);
   }
 
   function getCurrentTime() {
-    let currTime = new Date();
-    let hour =
-      currTime.getHours() <= 12
-        ? currTime.getHours()
-        : currTime.getHours() - 12;
+    let currTime = dayjs();
+    let hour = currTime.hour() <= 12 ? currTime.hour() : currTime.hour() - 12;
     let minute =
-      currTime.getMinutes() < 10
-        ? `0${currTime.getMinutes()}`
-        : currTime.getMinutes();
-    let amPM = currTime.getHours() <= 11 ? "am" : "pm";
+      currTime.minute() < 10 ? `0${currTime.minute()}` : currTime.minute();
+    let amPM = currTime.hour() <= 11 ? "am" : "pm";
 
     return `${hour}:${minute}${amPM}`;
   }

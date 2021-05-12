@@ -295,7 +295,7 @@ button.next {
   max-width: 100%;
 
   grid-template-columns: auto auto;
-  grid-column: auto / span 1;
+  grid-column: 2 / span 1;
   justify-content: left;
   align-content: center;
 
@@ -303,13 +303,6 @@ button.next {
   box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
 
   border-radius: 1em 1em 1em;
-}
-
-.threedayview {
-  display: grid;
-  box-sizing: border-box;
-  grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 0.5em;
 }
 
 .event {

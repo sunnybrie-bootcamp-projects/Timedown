@@ -10,21 +10,21 @@ function Calendar({ isAuthenticated, gcal }) {
   const [calView, setCalView] = useState("1day");
   const [dayStart, setDayStart] = useState(new Date());
   const [dayEnd, setDayEnd] = useState(new Date());
-  const [dates, setDates] = useState([]);
+  const [dates, setDates] = useState([
+    { dayStart: dayjs().hour(0), dayEnd: dayjs().hour(23) },
+  ]);
   const [totalHours, setTotalHours] = useState(24);
   const [timeRows, setTimeRows] = useState("");
 
   //sets Date states for rendering
   function setTimeRanges() {
-    let start = new Date();
-    start.setHours(9, 0, 0, 0);
-    let end = new Date();
-    end.setHours(21, 0, 0, 0);
+    let start = dayjs().hour(9);
+    let end = dayjs().hour(21);
 
     setDayStart(start);
     setDayEnd(end);
 
-    let total = end.getHours() - start.getHours();
+    let total = end.hour() - start.hour();
     // console.debug({ total }); //TEST
     setTotalHours(total);
   }
@@ -44,7 +44,7 @@ function Calendar({ isAuthenticated, gcal }) {
     for (let i = 0; i < num; i++) {
       let newStart = dayjs(dayStart).add(i, "day");
       let newEnd = dayjs(dayEnd).add(i, "day");
-      dates.push({ dayStart: newStart, dayEnd: newEnd });
+      newDates.push({ dayStart: newStart, dayEnd: newEnd });
     }
     console.debug(newDates);
     setDates(newDates);
@@ -67,7 +67,6 @@ function Calendar({ isAuthenticated, gcal }) {
 
   useEffect(() => {
     setTimeRanges();
-    getDates(1);
     getView();
   }, []);
 
