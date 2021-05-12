@@ -69,7 +69,7 @@ export const getUser = async (email) => {
 FROM users
 JOIN settings
   ON users."id" = settings."userId"
-WHERE users.email = '$1'`,
+WHERE users.email = $1`,
     [email],
   );
   if (account.length < 1) {
@@ -91,7 +91,7 @@ VALUES($1) RETURNING *`,
 FROM users
 JOIN settings
   ON users."id" = settings."userId"
-WHERE users.email = '$1'`,
+WHERE users.email = $1`,
       [email],
     );
   }
