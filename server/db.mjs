@@ -62,8 +62,6 @@ export const deleteTask = async (id) => {
 
 //USER QUERIES
 export const getUser = async (email) => {
-  console.debug("db/getUser()");
-  console.debug(email);
   const account = await db.any(
     `SELECT * 
 FROM users
@@ -82,9 +80,6 @@ VALUES($1) RETURNING *`,
       `INSERT INTO settings("userId") VALUES($1) RETURNING *`,
       [user[0].id],
     );
-
-    console.debug(user);
-    console.debug(settings);
 
     account = await db.any(
       `SELECT * 

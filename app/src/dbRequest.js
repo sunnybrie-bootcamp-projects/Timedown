@@ -42,8 +42,6 @@ export const deleteTask = async (id) => {
 
 //User Account Requests
 export const getUser = async (email) => {
-  console.debug("apiClient/getUser()");
-  console.debug({ email });
   const response = await fetch("/api/users", {
     method: "POST",
     headers: {
@@ -52,7 +50,6 @@ export const getUser = async (email) => {
     body: JSON.stringify({ email }),
   });
 
-  console.debug(response);
   return response.json();
 };
 

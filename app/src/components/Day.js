@@ -76,8 +76,8 @@ function Day({
           <TimeBlock
             className="event"
             key={event.id}
-            start={event.start.dateTime}
-            end={event.end.dateTime}
+            start={dayjs(event.start.dateTime)}
+            end={dayjs(event.end.dateTime)}
             summary={event.summary}
             dayStart={dayStart}
           />

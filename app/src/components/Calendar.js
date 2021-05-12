@@ -6,27 +6,29 @@ import Day from "./Day";
 import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
-function Calendar({ isAuthenticated, gcal }) {
+function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   const [calView, setCalView] = useState("1day");
-  const [dayStart, setDayStart] = useState(new Date());
-  const [dayEnd, setDayEnd] = useState(new Date());
+  const [dayStart, setDayStart] = useState(dayjs());
+  const [dayEnd, setDayEnd] = useState(dayjs());
   const [dates, setDates] = useState([
-    { dayStart: dayjs().hour(0), dayEnd: dayjs().hour(23) },
+    { dayStart: dayjs().hour(0), dayEnd: dayjs().hour(20) },
   ]);
   const [totalHours, setTotalHours] = useState(24);
   const [timeRows, setTimeRows] = useState("");
 
   //sets Date states for rendering
   function setTimeRanges() {
-    let start = dayjs().hour(9);
-    let end = dayjs().hour(21);
+    if (timedownAccount.sleepTime) {
+      let start = dayjs().hour(timedownAccount.sleepTime.start.hours);
+      let end = dayjs().hour(timedownAccount.sleepTime.end.hours);
 
-    setDayStart(start);
-    setDayEnd(end);
+      setDayStart(start);
+      setDayEnd(end);
 
-    let total = end.hour() - start.hour();
-    // console.debug({ total }); //TEST
-    setTotalHours(total);
+      let total = dayjs(end).hour() - dayjs(start).hour();
+      // console.debug({ total }); //TEST
+      setTotalHours(total);
+    }
   }
 
   //sets number of rows for inline-styling
@@ -68,7 +70,7 @@ function Calendar({ isAuthenticated, gcal }) {
   useEffect(() => {
     setTimeRanges();
     getView();
-  }, []);
+  }, [timedownAccount.sleepTime]);
 
   useEffect(() => {
     timeToRows(totalHours);
@@ -100,6 +102,7 @@ function Calendar({ isAuthenticated, gcal }) {
               isAuthenticated,
               gcal,
               ...day,
+              dayStart,
               totalHours,
             }}
           />

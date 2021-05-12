@@ -3,26 +3,27 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 const TimeBlock = ({ start, end, summary, dayStart }) => {
+  const [gridRow, setGridRow] = useState("auto");
+  const [gridColumn, setGridColumn] = useState("auto / span 1");
+
   function getGridPlacement() {
-    //console.debug({ start }); //test
-    var blockStart = (dayjs(start).hour() - dayjs(dayStart).hour()) * 2;
-    //console.debug({ blockStart });
-    blockStart = blockStart % 1 !== 0 ? blockStart + 2 : blockStart + 1;
-    //console.debug({ blockStart });
+    var blockStart = (start.get("hour") - dayStart.get("hour")) * 2;
+    blockStart = blockStart < 0 ? 0 : blockStart;
 
-    //console.debug({ end }); //test
-    var blockEnd = (dayjs(end).hour() - dayjs(dayStart).hour()) * 2;
-    //console.debug({ blockEnd });
-    blockEnd = blockEnd % 1 !== 0 ? blockEnd + 2 : blockEnd + 1;
-    //console.debug({ blockEnd });
+    var blockEnd = (end.get("hour") - dayStart.get("hour")) * 2;
+    blockEnd = blockEnd < 0 ? 0 : blockEnd;
 
-    return `${blockStart} / ${blockEnd}`;
+    setGridRow(`${blockStart} / ${blockEnd}`);
   }
 
   var eventMeasurements = {
-    gridRow: getGridPlacement(),
-    gridColumn: "auto / span 1",
+    gridRow: gridRow,
+    gridColumn: gridColumn,
   };
+
+  useEffect(() => {
+    getGridPlacement();
+  }, []);
 
   return (
     <div className="event" style={eventMeasurements}>
