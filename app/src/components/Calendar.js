@@ -10,6 +10,7 @@ function Calendar({ isAuthenticated, gcal }) {
   const [calView, setCalView] = useState("1day");
   const [dayStart, setDayStart] = useState(new Date());
   const [dayEnd, setDayEnd] = useState(new Date());
+  const [dates, setDates] = useState([]);
   const [totalHours, setTotalHours] = useState(24);
   const [timeRows, setTimeRows] = useState("");
 
@@ -38,48 +39,27 @@ function Calendar({ isAuthenticated, gcal }) {
     setTimeRows(template.join(" "));
   }
 
+  function getDates(num) {
+    let newDates = [];
+    for (let i = 0; i < num; i++) {
+      let newStart = dayjs(dayStart).add(i, "day");
+      let newEnd = dayjs(dayEnd).add(i, "day");
+      dates.push({ dayStart: newStart, dayEnd: newEnd });
+    }
+    console.debug(newDates);
+    setDates(newDates);
+  }
+
   function getView() {
     switch (calView) {
       case "1day":
-        return (
-          <Day
-            {...{
-              timeRows,
-              isAuthenticated,
-              gcal,
-              dayStart,
-              dayEnd,
-              totalHours,
-            }}
-          />
-        );
+        getDates(1);
         break;
       case "3day":
-        let dates = [];
-        for (let i = 0; i < 3; i++) {
-          let newStart = dayjs(dayStart).add(i, "day");
-          let newEnd = dayjs(dayEnd).add(i, "day");
-          dates.push({ dayStart: newStart, dayEnd: newEnd });
-        }
-
-        return (
-          <div className="threedayview">
-            {dates.map((day) => {
-              return (
-                <Day
-                  {...{
-                    timeRows,
-                    isAuthenticated,
-                    gcal,
-                    ...day,
-                    totalHours,
-                  }}
-                />
-              );
-            })}
-          </div>
-        );
+        getDates(3);
         break;
+      case "week":
+        getDates(7);
       default:
         break;
     }
@@ -87,17 +67,45 @@ function Calendar({ isAuthenticated, gcal }) {
 
   useEffect(() => {
     setTimeRanges();
+    getDates(1);
+    getView();
   }, []);
 
   useEffect(() => {
     timeToRows(totalHours);
   }, [totalHours]);
 
+  useEffect(() => {
+    getView();
+  }, [calView]);
+
   return (
-    <div className="calendar">
+    <div
+      className="calendar"
+      style={{
+        gridAutoColumns:
+          "1fr" +
+          dates.map(() => {
+            " 2fr";
+          }),
+      }}
+    >
       <CalendarNavBar {...{ calView, setCalView }} />
       <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
-      {getView()}
+      {dates.map((day) => {
+        return (
+          <Day
+            key={dayjs(day).date()}
+            {...{
+              timeRows,
+              isAuthenticated,
+              gcal,
+              ...day,
+              totalHours,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
