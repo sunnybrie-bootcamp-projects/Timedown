@@ -13,8 +13,6 @@ function Calendar({ isAuthenticated, gcal }) {
 
   //sets Date states for rendering
   function setTimeRanges() {
-    //Dummy data for rendering purposes, will be replaced with functions that read
-    //from the user's settings and render the hours where the user is awake.
     let start = new Date();
     start.setHours(9, 0, 0, 0);
     let end = new Date();

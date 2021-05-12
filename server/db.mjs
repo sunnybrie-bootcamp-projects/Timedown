@@ -62,11 +62,29 @@ export const deleteTask = async (id) => {
 
 //USER QUERIES
 export const getUser = async (email) => {
-  const user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
+  const user = await db.any(
+    `SELECT * 
+FROM users
+JOIN settings
+  ON users."id" = settings."userId"
+WHERE users.email = '$1'`,
+    [email],
+  );
   if (user.length < 1) {
     user = await db.any(
       `INSERT INTO users("email")
 VALUES($1) RETURNING *`,
+      [email],
+    );
+    settings = await db.any(`INSERT INTO settings("userId") VALUES($1)`, [
+      user[0].id,
+    ]);
+    const user = await db.any(
+      `SELECT * 
+FROM users
+JOIN settings
+  ON users."id" = settings."userId"
+WHERE users.email = '$1'`,
       [email],
     );
   }
