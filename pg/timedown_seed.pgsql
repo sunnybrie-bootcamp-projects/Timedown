@@ -54,6 +54,24 @@ ALTER SEQUENCE public.checkins_id_seq OWNED BY public.checkins.id;
 
 
 --
+-- Name: settings; Type: TABLE; Schema: public; Owner: tpl5_2021h1
+--
+
+CREATE TABLE public.settings (
+    "userId" integer NOT NULL,
+    "pushNotifications" boolean DEFAULT false,
+    "emailNotifications" boolean DEFAULT false,
+    "addToGoogleCal" boolean DEFAULT false,
+    "sleepTime" jsonb DEFAULT '{"end": null, "start": null, "timeZone": null}'::jsonb,
+    "weeklyBlackOuts" jsonb DEFAULT '{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}'::jsonb,
+    "miscBlackOuts" jsonb DEFAULT '[{"end": null, "start": null, "timeZone": null}]'::jsonb,
+    "eventBuffer" jsonb DEFAULT '{"hours": null, "minutes": null}'::jsonb
+);
+
+
+ALTER TABLE public.settings OWNER TO postgres;
+
+--
 -- Name: tasks; Type: TABLE; Schema: public; Owner: tpl5_2021h1
 --
 
@@ -61,7 +79,7 @@ CREATE TABLE public.tasks (
     id integer NOT NULL,
     "userId" integer,
     "dueDate" timestamp with time zone,
-    "estTime" text,
+    "estTime" jsonb,
     summary text,
     description text,
     created timestamp without time zone DEFAULT '2021-05-05 19:52:37.442996'::timestamp without time zone
@@ -136,9 +154,7 @@ ALTER SEQUENCE public.timeblocks_id_seq OWNED BY public.timeblocks.id;
 CREATE TABLE public.users (
     id integer NOT NULL,
     username text,
-    email text,
-    settings text,
-    "blackOuts" text
+    email text
 );
 
 
@@ -203,12 +219,25 @@ COPY public.checkins (id) FROM stdin;
 
 
 --
+-- Data for Name: settings; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
+--
+
+COPY public.settings ("userId", "pushNotifications", "emailNotifications", "addToGoogleCal", "sleepTime", "weeklyBlackOuts", "miscBlackOuts", "eventBuffer") FROM stdin;
+1	f	f	f	{"end": "22:00:00", "start": "08:00:00", "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": 0, "minutes": 15}
+2	f	f	f	{"end": "21:00:00", "start": "09:00:00", "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": null, "minutes": 15}
+\.
+
+
+--
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
 --
 
 COPY public.tasks (id, "userId", "dueDate", "estTime", summary, description, created) FROM stdin;
-1	1	2021-06-06 00:00:00-07	60 hours	First Draft	First draft of my book.	2021-05-05 19:52:37.442996
-2	1	2021-05-30 00:00:00-07	30 hours	Brand Stylebook	description here	2021-05-05 19:52:37.442996
+2	1	2021-05-30 00:00:00-07	{"hours": 40}	Oxygen Hero Illustrations	You must create five illustrations for the product packaging that show the company's team. They would prefer a more abstract art style, and would like you to use the brand color, which is grey. Take into account the client's preferences and values.	2021-05-05 19:52:37.442996
+1	1	2021-06-06 00:00:00-07	{"hours": 60}	Oxynello Package Design	You must create packaging for the company's main product. They want you to use interesting materials, and make sure you include a description of the product. They would prefer a extravagant design, and would like you to use the brand color, which is black. Take into account the client's preferences and values.	2021-05-05 19:52:37.442996
+5	1	2021-05-21 00:00:00-07	{"hours": 15, "minutes": 30}	Bronze Capella	We make textbooks for learning writing. We stand out because of our new technologies. Our target audience is kids. We want to convey a sense of importance, while at the same time being kind. You must create two illustrations for the company website that convey the company's values. They would prefer a traditional art style, and would like you to use the brand color, which is green. Take into account the client's preferences and values.	2021-05-05 19:52:37.442996
+6	1	2021-05-28 00:00:00-07	{"hours": 20}	Essay: The Impact of Entertainment	Write an 8,000-word essay from the prompt "The Impact of Entertainment." For English class.	2021-05-05 19:52:37.442996
+7	2	2021-05-21 00:00:00-07	{"hours": 40}	Finish App	Finish Timedown app in time to present.	2021-05-05 19:52:37.442996
 \.
 
 
@@ -224,9 +253,9 @@ COPY public.timeblocks (id, "taskId", "userId", start, "end") FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
 --
 
-COPY public.users (id, username, email, settings, "blackOuts") FROM stdin;
-1	sunsaplenty	sunny.codetester@gmail.com	\N	\N
-2	brieanburrito	brienna.klassen@gmail.com	\N	\N
+COPY public.users (id, username, email) FROM stdin;
+1	sunsaplenty	sunny.codetester@gmail.com
+2	brieanburrito	brienna.klassen@gmail.com
 \.
 
 
@@ -241,7 +270,7 @@ SELECT pg_catalog.setval('public.checkins_id_seq', 1, false);
 -- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
 --
 
-SELECT pg_catalog.setval('public.tasks_id_seq', 2, true);
+SELECT pg_catalog.setval('public.tasks_id_seq', 8, true);
 
 
 --
@@ -264,6 +293,14 @@ SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 ALTER TABLE ONLY public.checkins
     ADD CONSTRAINT checkins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: settings settings_pkey; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.settings
+    ADD CONSTRAINT settings_pkey PRIMARY KEY ("userId");
 
 
 --
@@ -311,6 +348,14 @@ ALTER TABLE ONLY public.tasks
 --
 
 ALTER TABLE ONLY public.timeblocks
+    ADD CONSTRAINT "userId" FOREIGN KEY ("userId") REFERENCES public.users(id);
+
+
+--
+-- Name: settings userId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.settings
     ADD CONSTRAINT "userId" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
