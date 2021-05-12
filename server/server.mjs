@@ -35,8 +35,12 @@ const users = express.Router();
 
 users.use(express.json());
 users.post("/", async (request, response) => {
-  const { email, registered } = request.body;
+  console.debug("server/users.post");
+  console.debug(request.body);
+  const { email } = request.body;
   const user = await db.getUser(email);
+  console.debug({ email });
+  console.debug({ user });
   response.status(201).json(user);
 });
 
