@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 //Credit: https://github.com/Kubessandra/react-google-calendar-api
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const API_KEY = process.env.REACT_APP_API_KEY;

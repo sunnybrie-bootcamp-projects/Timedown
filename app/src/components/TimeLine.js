@@ -27,7 +27,13 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
       {getTimes().map((time, index) => {
         return <TimeNotch key={`TimeNotch-${index}`} {...{ time }} />;
       })}
-      <TimeIndicator {...{ dayStart }} />
+
+      {getTimes().map((time, index) => {
+        if (index === 0) {
+          return <TimeIndicator key={"current-time"} {...{ dayStart }} />;
+        }
+        return <TimeNotch key={`TimeNotch-${index}-0`} time={null} />;
+      })}
     </div>
   );
 }
@@ -35,11 +41,18 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
 function TimeNotch({ time }) {
   return (
     <div
-      key={time.timeString}
-      className="timeNotch"
-      style={{ gridColumn: "1", gridRow: time.timeLineLocation }}
+      key={time === null ? "blank" : time.timeString}
+      className={time === null ? "timeNotch null" : "timeNotch"}
+      style={{
+        gridColumn: time === null ? "2" : "1",
+        gridRow: time === null ? "auto" : time.timeLineLocation,
+      }}
     >
-      {time.timeString}
+      {time ? (
+        <span>{time.timeString}</span>
+      ) : (
+        <span className="nullTime">space</span>
+      )}
     </div>
   );
 }
@@ -47,6 +60,7 @@ function TimeNotch({ time }) {
 function TimeIndicator({ dayStart }) {
   const [indicatorRender, setIndicatorRender] = useState("");
 
+  //finds row placement for current time
   function findCurrentTime() {
     // console.log("findCurrentTime"); //TEST
     // console.debug({ dayStart }); //TEST
@@ -59,8 +73,23 @@ function TimeIndicator({ dayStart }) {
         ? (currTime.getHours() - dayStart.getHours()) * 2 + 2
         : (currTime.getHours() - dayStart.getHours()) * 2 + 1;
 
-    console.debug({ row }); //TEST
+    // console.debug({ row }); //TEST
     setIndicatorRender(`${row}`);
+  }
+
+  function getCurrentTime() {
+    let currTime = new Date();
+    let hour =
+      currTime.getHours() <= 12
+        ? currTime.getHours()
+        : currTime.getHours() - 12;
+    let minute =
+      currTime.getMinutes() < 10
+        ? `0${currTime.getMinutes()}`
+        : currTime.getMinutes();
+    let amPM = currTime.getHours() <= 11 ? "am" : "pm";
+
+    return `${hour}:${minute}${amPM}`;
   }
 
   useEffect(() => {
@@ -71,7 +100,10 @@ function TimeIndicator({ dayStart }) {
     <div
       className="timeIndicator"
       style={{ gridRow: indicatorRender, gridColumn: "2" }}
-    ></div>
+    >
+      <div className="timePointer"></div>
+      <span className="currentTime">{getCurrentTime()}</span>
+    </div>
   );
 }
 

@@ -6,21 +6,41 @@ import * as db from "./db.mjs";
 const app = express();
 const port = process.env.PORT || 4000;
 
+//Task routes
 const tasks = express.Router();
 
 tasks.get("/", async (request, response) => {
-  const tasks = await db.getTasks();
+  console.debug(request.headers); //TEST
+  const timedownUser = request.header("timedown-user");
+  const tasks = await db.getTasks(timedownUser);
   response.json(tasks);
 });
 
 tasks.use(express.json());
 tasks.post("/", async (request, response) => {
-  const { name } = request.body;
-  const task = await db.addTask(name);
+  const { userId, dueDate, estTime, summary, description } = request.body;
+  const task = await db.addTask(userId, dueDate, estTime, summary, description);
   response.status(201).json(task);
+});
+tasks.post("/delete", async (request, response) => {
+  const { id } = request.body;
+  const deletedTask = await db.deleteTask(id);
+  response.status(201).json(deletedTask);
 });
 
 app.use("/api/tasks", tasks);
+
+//User Routes
+const users = express.Router();
+
+users.use(express.json());
+users.post("/", async (request, response) => {
+  const { email, registered } = request.body;
+  const user = await db.getUser(email);
+  response.status(201).json(user);
+});
+
+app.use("/api/users", users);
 
 process.env?.SERVE_REACT?.toLowerCase() === "true" &&
   app.use(
@@ -39,4 +59,3 @@ app.get("/api/ping", (request, response) =>
 app.listen(port, () => {
   console.info(`Example server listening at http://localhost:${port}`);
 });
-

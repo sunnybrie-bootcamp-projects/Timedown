@@ -3,15 +3,6 @@ import pgp from "pg-promise";
 
 const db = initDb();
 
-export const getTasks = async () => await db.any("SELECT * FROM tasks");
-
-export const addTask = async (name) =>
-  (
-    await db.any("INSERT INTO tasks(name) VALUES($1) RETURNING id, name", [
-      name,
-    ])
-  )[0];
-
 function initDb() {
   let connection;
 
@@ -32,3 +23,53 @@ function initDb() {
 
   return pgp()(connection);
 }
+
+//TASK QUERIES
+export const getTasks = async (user) => {
+  let userId = parseInt(user);
+  const tasks = await db.any(`SELECT * FROM tasks WHERE "userId" = $1`, [
+    userId,
+  ]);
+  console.log({ tasks }); //TEST
+  return tasks;
+};
+
+export const addTask = async (
+  userId,
+  dueDate,
+  estTime,
+  summary,
+  description,
+) => {
+  let newTask = await db.any(
+    `INSERT INTO tasks("userId", "dueDate", "estTime", "summary", "description")
+VALUES($1, $2, $3, $4, $5) RETURNING id, summary`,
+    [userId, dueDate, estTime, summary, description],
+  );
+
+  return newTask;
+};
+
+export const deleteTask = async (id) => {
+  let deletedTask = await db.any(
+    `DELETE FROM tasks WHERE id = $1 RETURNING id, summary`,
+    [id],
+  );
+
+  console.log({ deletedTask });
+  return deletedTask;
+};
+
+//USER QUERIES
+export const getUser = async (email) => {
+  const user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
+  if (user.length < 1) {
+    user = await db.any(
+      `INSERT INTO users("email")
+VALUES($1) RETURNING *`,
+      [email],
+    );
+  }
+
+  return user[0];
+};

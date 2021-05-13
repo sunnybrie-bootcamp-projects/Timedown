@@ -40,7 +40,7 @@ function Day({
     gcal
       .listEvents(queryOptions, queryOptions.calendarId)
       .then(({ result }: any) => {
-        console.log(result.items);
+        //console.log(result.items);
         setEvents(result.items);
       });
   }

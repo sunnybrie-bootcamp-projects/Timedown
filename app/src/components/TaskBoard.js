@@ -1,14 +1,22 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import * as apiClient from "../apiClient";
+import * as dbRequest from "../dbRequest";
 
-function TaskBoard() {
-  const [tasksList, setTasksList] = useState("");
+import Task from "./Task.js";
+import TaskAddForm from "./TaskAddForm";
 
-  async function getTasksInfo() {
-    let data = JSON.stringify(await apiClient.getTasks());
-
-    setTasksList(data);
+function TaskBoard({
+  isAuthenticated,
+  gcal,
+  timedownAccount,
+  setDetails,
+  setAction,
+  setTasksList,
+  tasksList,
+  getTasksInfo,
+}) {
+  function taskAction(action) {
+    setAction(action);
   }
 
   useEffect(() => {
@@ -18,7 +26,10 @@ function TaskBoard() {
   return (
     <div className="taskBoard">
       <h2>Your Tasks:</h2>
-      <p>{tasksList}</p>
+      <button onClick={() => taskAction("addTask")}>Add New Task</button>
+      {tasksList.map((task, index) => {
+        return <Task key={index} {...{ task, setDetails, setAction }} />;
+      })}
     </div>
   );
 }
