@@ -53,13 +53,17 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
     setDates(newDates);
 
     let newDayColumns =
-      dates.length <= 1
+      newDates.length === 1
         ? "1fr 4fr"
-        : dates
-            .map((date, index) => {
-              return index === 0 ? "1fr 2fr" : " 2fr";
-            })
-            .join("");
+        : "1fr".concat(
+            newDates
+              .map((date, index) => {
+                return " 2fr";
+              })
+              .join(""),
+          );
+
+    console.debug("setting columns...", newDayColumns);
 
     setDayColumns(newDayColumns);
   }

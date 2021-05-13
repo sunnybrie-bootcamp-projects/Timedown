@@ -25,6 +25,24 @@ export const CalendarNavBar = ({
   calView,
   setCalView,
 }) => {
+  const [gridColumn, setGridColumn] = useState("2 / auto");
+
+  useEffect(() => {
+    switch (calView) {
+      case "1day":
+        setGridColumn("2 / span 1");
+        break;
+      case "3day":
+        setGridColumn("2 / span 3");
+        break;
+      case "week":
+        setGridColumn("2 / span 7");
+        break;
+      default:
+        break;
+    }
+  }, [calView]);
+
   return (
     <>
       <div
@@ -59,7 +77,7 @@ export const CalendarNavBar = ({
       </div>
       <div
         className="day navBar"
-        style={{ gridRow: "1", gridColumn: "2 / auto" }}
+        style={{ gridRow: "1", gridColumn: gridColumn }}
       >
         <button className="prev">prev</button>
         <span className="navTitle">Today</span>
