@@ -243,7 +243,7 @@ button.next {
   border-top: 1px solid ghostwhite;
 }
 
-.nullTime {
+.hidden {
   color: rgba(232, 196, 104, 0);
 }
 

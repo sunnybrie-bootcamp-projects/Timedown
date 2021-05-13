@@ -8,13 +8,13 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
   function getTimes() {
     let timesToRender = [];
     for (let i = 0; i <= totalHours; i += 0.5) {
-      let timeString = `${dayjs(dayStart).hour() + Math.floor(i)}`;
-      if (i % 1 !== 0) {
-        timeString += ":30";
-      }
-      let timeLineLocation = `${i * 2 + 1}`;
+      let value = dayjs(dayStart).add(Math.floor(i), "hour"); //creates dayjs object, determines hour
+      let minute = i % 1 === 0 ? 0 : 30; //determines minute
+      value = value.set("minute", minute); //sets minute
 
-      timesToRender.push({ timeString, timeLineLocation });
+      let timeLineLocation = `${i * 2 + 1}`; //determines row to render on
+
+      timesToRender.push({ value, timeLineLocation }); //pushes as object
     }
 
     return timesToRender;
@@ -27,15 +27,9 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
   return (
     <div className="timeLine" style={{ gridTemplateRows: timeRows }}>
       {getTimes().map((time, index) => {
-        return <TimeNotch key={`TimeNotch-${index}`} {...{ time }} />;
+        return <TimeNotch key={`TN${index}`} {...{ time }} />;
       })}
-
-      {getTimes().map((time, index) => {
-        if (index === 0) {
-          return <TimeIndicator key={"current-time"} {...{ dayStart }} />;
-        }
-        return <TimeNotch key={`TimeNotch-${index}-0`} time={null} />;
-      })}
+      <TimeIndicator key={"TI"} {...{ dayStart }} />
     </div>
   );
 }
@@ -43,50 +37,29 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
 function TimeNotch({ time }) {
   return (
     <div
-      key={time === null ? "blank" : time.timeString}
-      className={time === null ? "timeNotch null" : "timeNotch"}
+      key={time.value.format("hh:mma")}
+      className="timeNotch"
       style={{
-        gridColumn: time === null ? "2" : "1",
-        gridRow: time === null ? "auto" : time.timeLineLocation,
+        gridColumn: "1 / span 2",
+        gridRow: time.timeLineLocation,
       }}
     >
-      {time ? (
-        <span>{time.timeString}</span>
-      ) : (
-        <span className="nullTime">space</span>
-      )}
+      <span>{`${time.value.format("hh:mma")}`}</span>
     </div>
   );
 }
 
 function TimeIndicator({ dayStart }) {
   const [indicatorRender, setIndicatorRender] = useState("");
-
+  const [currentTime, setCurrentTime] = useState(dayjs());
   //finds row placement for current time
   function findCurrentTime() {
-    // console.log("findCurrentTime"); //TEST
-    // console.debug({ dayStart }); //TEST
-    let currTime = dayjs();
-
-    // console.debug({ currTime });
-
     let row =
-      currTime.minute() >= 30
-        ? (currTime.hour() - dayjs(dayStart).hour()) * 2 + 2
-        : (currTime.hour() - dayjs(dayStart).hour()) * 2 + 1;
+      currentTime.minute() >= 30
+        ? (currentTime.hour() - dayjs(dayStart).hour()) * 2 + 2
+        : (currentTime.hour() - dayjs(dayStart).hour()) * 2 + 1;
 
-    // console.debug({ row }); //TEST
     setIndicatorRender(`${row}`);
-  }
-
-  function getCurrentTime() {
-    let currTime = dayjs();
-    let hour = currTime.hour() <= 12 ? currTime.hour() : currTime.hour() - 12;
-    let minute =
-      currTime.minute() < 10 ? `0${currTime.minute()}` : currTime.minute();
-    let amPM = currTime.hour() <= 11 ? "am" : "pm";
-
-    return `${hour}:${minute}${amPM}`;
   }
 
   useEffect(() => {
@@ -99,7 +72,7 @@ function TimeIndicator({ dayStart }) {
       style={{ gridRow: indicatorRender, gridColumn: "2" }}
     >
       <div className="timePointer"></div>
-      <span className="currentTime">{getCurrentTime()}</span>
+      <span className="currentTime">{currentTime.format("hh:mma")}</span>
     </div>
   );
 }
