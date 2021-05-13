@@ -13,6 +13,7 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   const [dates, setDates] = useState([
     { dayStart: dayjs().hour(0), dayEnd: dayjs().hour(20) },
   ]);
+  const [dayColumns, setDayColumns] = useState("1fr 4fr");
   const [totalHours, setTotalHours] = useState(24);
   const [timeRows, setTimeRows] = useState("");
 
@@ -50,6 +51,17 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
     }
     console.debug(newDates);
     setDates(newDates);
+
+    let newDayColumns =
+      dates.length <= 1
+        ? "1fr 4fr"
+        : dates
+            .map((date, index) => {
+              return index === 0 ? "1fr 2fr" : " 2fr";
+            })
+            .join("");
+
+    setDayColumns(newDayColumns);
   }
 
   function getView() {
@@ -78,26 +90,22 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
 
   useEffect(() => {
     getView();
-  }, [calView]);
+  }, [calView, dayColumns]);
 
   return (
     <div
       className="calendar"
       style={{
-        gridAutoColumns:
-          "1fr" +
-          dates.map(() => {
-            " 2fr";
-          }),
+        gridTemplateColumns: dayColumns,
       }}
     >
       <CalendarNavBar {...{ calView, setCalView }} />
       <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
-      {dates.map((day) => {
+      {dates.map((day, index) => {
         return (
           <Day
-            key={dayjs(day).date()}
             {...{
+              index,
               timeRows,
               isAuthenticated,
               gcal,

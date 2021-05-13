@@ -126,9 +126,8 @@ body::-webkit-scrollbar-thumb {
   height: 100%;
   width: 95%;
 
-  grid-template-columns: 1fr 4fr;
   grid-template-rows: 1fr 14fr;
-  grid-gap: 1em;
+  column-gap: 1em;
 
   border-radius: 1em 1em 1em;
 }
@@ -252,6 +251,7 @@ button.next {
   display: block;
   box-sizing: border-box;
   position: relative;
+  z-index: 10;
   right: -1em;
   height: 100%;
   width: 100%;
@@ -292,10 +292,10 @@ button.next {
   padding: 1em;
   min-height: 90%;
   height: 95%;
-  max-width: 100%;
+  width: auto;
 
   grid-template-columns: auto auto;
-  grid-column: 2 / span 1;
+  grid-row: 2 / span 1;
   justify-content: left;
   align-content: center;
 

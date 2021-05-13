@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import TimeBlock from "./TimeBlock.js";
 
 function Day({
+  index,
   timeRows,
   isAuthenticated,
   gcal,
@@ -68,7 +69,14 @@ function Day({
   // useEffect(() => {}, []);
 
   return (
-    <div className="day" style={{ gridTemplateRows: timeRows }}>
+    <div
+      className="day"
+      style={{
+        gridTemplateRows: timeRows,
+        gridColumn: `${index + 2} / span 1`,
+        gridRow: "2 / span 1",
+      }}
+    >
       {events.length === 0 ? (
         <p>You have no events for this day.</p>
       ) : (
