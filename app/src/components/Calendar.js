@@ -7,19 +7,20 @@ import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
 function Calendar({ isAuthenticated, gcal, timedownAccount }) {
+  const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
   //Starting hour for day rendering
-  const [dayStart, setDayStart] = useState(dayjs());
+  const [dayStart, setDayStart] = useState(dayjs().hour(0));
   //Ending hour for day rendering
-  const [dayEnd, setDayEnd] = useState(dayjs());
+  const [dayEnd, setDayEnd] = useState(dayjs().hour(23));
   //Total hours rendered in a day
   const [totalHours, setTotalHours] = useState(24);
   //Days to be displayed in calendar
-  const [dates, setDates] = useState([
-    { dayStart: dayjs().hour(0), dayEnd: dayjs().hour(23) },
+  const [days, setDays] = useState([
+    { start: dayjs().hour(0), end: dayjs().hour(23) },
   ]);
-  // Adjust dates state when user clicks "previous" or "next" in navigation
+  // Adjust days state when user clicks "previous" or "next" in navigation
   const [dateNavigation, setDateNavigation] = useState(0);
   //Sets Calendar's columns based on calView
   const [dayColumns, setDayColumns] = useState("1fr 4fr");
@@ -44,23 +45,29 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   //generates string for timeRows state
   function timeToRows(total) {
     let template = [];
-    let size = 100 / (total * 2);
-    for (let i = 0; i < total; i += 0.5) {
+    let size = 100 / (total * 4);
+    for (let i = 0; i < total; i += 0.25) {
       template.push(`${size}%`);
     }
     setTimeRows(template.join(" "));
   }
 
-  //gets the dates to render based on calView uption, sets dates state
+  //gets the days to render based on calView uption, sets days state
   function getDates(num) {
     let newDates = [];
     for (let i = 0; i < num; i++) {
-      let newStart = dayjs(dayStart).add(i + dateNavigation, "day");
+      let newStart = dayjs();
+      newStart = newStart.hour(dayStart.hour()); //set starting time
+      newStart = newStart.add(i + dateNavigation, "day"); //set day
+
       let newEnd = dayjs(dayEnd).add(i + dateNavigation, "day");
-      newDates.push({ dayStart: newStart, dayEnd: newEnd });
+      newEnd = newEnd.hour(dayEnd.hour()); //set starting time
+      newEnd = newEnd.add(i + dateNavigation, "day"); //set day
+
+      newDates.push({ start: newStart, end: newEnd });
     }
     console.debug(newDates);
-    setDates(newDates);
+    setDays(newDates);
 
     let newDayColumns =
       newDates.length === 1
@@ -78,7 +85,7 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
     setDayColumns(newDayColumns);
   }
 
-  //reads calView and updates states
+  //reads calView and updays states
   function getView() {
     switch (calView) {
       case "1day":
@@ -99,6 +106,7 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   useEffect(() => {
     setTimeRanges();
     getView();
+    setIsReady(true);
   }, [timedownAccount.sleepTime]);
 
   useEffect(() => {
@@ -120,17 +128,17 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
         {...{ calView, setCalView, dateNavigation, setDateNavigation }}
       />
       <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
-      {dates.map((day, index) => {
+      {days.map((day, index) => {
         return (
           <Day
+            key={`D${index}`}
             {...{
               index,
               timeRows,
               isAuthenticated,
               gcal,
-              ...day,
+              day,
               dayStart,
-              totalHours,
             }}
           />
         );

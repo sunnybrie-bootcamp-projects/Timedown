@@ -7,11 +7,11 @@ const TimeBlock = ({ start, end, summary, dayStart }) => {
   const [gridColumn, setGridColumn] = useState("auto / span 1");
 
   function getGridPlacement() {
-    var blockStart = (start.get("hour") - dayStart.get("hour")) * 2;
-    blockStart = blockStart < 0 ? 0 : blockStart;
+    var blockStart = (start.hour() - dayStart.hour()) * 2;
+    blockStart = blockStart <= 0 ? 1 : blockStart;
 
-    var blockEnd = (end.get("hour") - dayStart.get("hour")) * 2;
-    blockEnd = blockEnd < 0 ? 0 : blockEnd;
+    var blockEnd = (end.hour() - dayStart.hour()) * 2;
+    blockEnd = blockEnd <= 0 ? 1 : blockEnd;
 
     setGridRow(`${blockStart} / ${blockEnd}`);
   }

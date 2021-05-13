@@ -4,15 +4,7 @@ import dayjs from "dayjs";
 
 import TimeBlock from "./TimeBlock.js";
 
-function Day({
-  index,
-  timeRows,
-  isAuthenticated,
-  gcal,
-  dayStart,
-  dayEnd,
-  totalHours,
-}) {
+function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -36,7 +28,7 @@ function Day({
     singleEvents: true,
   };
 
-  //Event Queries
+  //Google Calendar Events
   const [events, setEvents] = React.useState([]);
 
   function getEvents() {
@@ -55,8 +47,8 @@ function Day({
     //   timeMax: dayEnd.toISOString(),
     //   timeMin: dayStart.toISOString(),
     // });
-    setMin(dayStart.toISOString());
-    setMax(dayEnd.toISOString());
+    setMin(dayjs(day.start).toISOString());
+    setMax(dayjs(day.end).toISOString());
   });
 
   //After day's parameters are set...
@@ -83,7 +75,7 @@ function Day({
         events.map((event) => (
           <TimeBlock
             className="event"
-            key={event.id}
+            key={`TB${event.id}`}
             start={dayjs(event.start.dateTime)}
             end={dayjs(event.end.dateTime)}
             summary={event.summary}
