@@ -9,6 +9,7 @@ function TaskBoard({
   isAuthenticated,
   gcal,
   timedownAccount,
+  tab,
   setDetails,
   setAction,
   setTasksList,
@@ -24,7 +25,10 @@ function TaskBoard({
   }, []);
 
   return (
-    <div className="taskBoard">
+    <div
+      className="taskBoard"
+      style={{ display: tab === "taskboard" ? "block" : "none" }}
+    >
       <h2>Your Tasks:</h2>
       <button onClick={() => taskAction("addTask")}>Add New Task</button>
       {tasksList.map((task, index) => {

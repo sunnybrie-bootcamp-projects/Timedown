@@ -6,7 +6,7 @@ import Day from "./Day";
 import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
-function Calendar({ isAuthenticated, gcal, timedownAccount }) {
+function Calendar({ isAuthenticated, gcal, timedownAccount, tab }) {
   const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
@@ -121,6 +121,7 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
     <div
       className="calendar"
       style={{
+        display: tab === "calendar" ? "grid" : "none",
         gridTemplateColumns: dayColumns,
       }}
     >
