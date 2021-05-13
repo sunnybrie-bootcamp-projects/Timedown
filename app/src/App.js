@@ -51,22 +51,34 @@ const App = () => {
     getUserInfo("timedown");
   }, [googleAccount]);
 
+  if (isAuthenticated) {
+    return <UserDashboard {...{ isAuthenticated, gcal, timedownAccount }} />;
+  }
+
+  return <FooBar {...{ isAuthenticated, gcal }} />;
+};
+
+function UserDashboard({ isAuthenticated, gcal, timedownAccount }) {
   return (
     <main className="App">
-      {isAuthenticated ? (
-        <>
-          <div id="login">
-            <Login {...{ isAuthenticated, gcal }} />
-          </div>
-          <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
-        </>
-      ) : (
+      <>
         <div id="login">
           <Login {...{ isAuthenticated, gcal }} />
         </div>
-      )}
+        <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
+      </>
     </main>
   );
-};
+}
+
+function FooBar({ isAuthenticated, gcal }) {
+  return (
+    <main className="App">
+      <div id="login">
+        <Login {...{ isAuthenticated, gcal }} />
+      </div>
+    </main>
+  );
+}
 
 export default App;

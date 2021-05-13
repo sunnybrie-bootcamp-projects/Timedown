@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+//MAIN APP NAV BAR
 function NavBar({ isAuthenticated, gcal, setTab, tab }) {
   return (
     <div className="navBar">
@@ -19,13 +20,32 @@ function NavBar({ isAuthenticated, gcal, setTab, tab }) {
   );
 }
 
+//CALENDAR NAV BAR
 export const CalendarNavBar = ({
   isAuthenticated,
   gcal,
   calView,
   setCalView,
+  dateNavigation,
+  setDateNavigation,
 }) => {
   const [gridColumn, setGridColumn] = useState("2 / auto");
+
+  //when user clicks "prev" or "next", tells dateNavigation how much to adjust the dates state by based on calView
+  function prevNext(navNum) {
+    switch (calView) {
+      case "1day":
+        setDateNavigation(dateNavigation + 1 * navNum);
+        break;
+      case "3day":
+        setDateNavigation(dateNavigation + 3 * navNum);
+        break;
+      case "week":
+        setDateNavigation(dateNavigation + 7 * navNum);
+      default:
+        break;
+    }
+  }
 
   useEffect(() => {
     switch (calView) {
@@ -79,9 +99,13 @@ export const CalendarNavBar = ({
         className="day navBar"
         style={{ gridRow: "1", gridColumn: gridColumn }}
       >
-        <button className="prev">prev</button>
+        <button className="prev" onClick={() => prevNext(-1)}>
+          prev
+        </button>
         <span className="navTitle">Today</span>
-        <button className="next">next</button>
+        <button className="next" onClick={() => prevNext(1)}>
+          next
+        </button>
       </div>
     </>
   );
