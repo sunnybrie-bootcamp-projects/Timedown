@@ -6,7 +6,7 @@ import Day from "./Day";
 import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
-function Calendar({ isAuthenticated, gcal, timedownAccount }) {
+function Calendar({ isAuthenticated, gcal, user }) {
   const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
@@ -29,11 +29,11 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
 
   //sets dayStart, dayEnd, and totalHours states for rendering
   function setTimeRanges() {
-    if (timedownAccount.sleepTime) {
+    if (user.timedown.sleepTime) {
       let start = dayjs();
-      start = start.hour(timedownAccount.sleepTime.start.hours);
+      start = start.hour(user.timedown.sleepTime.start.hours);
       let end = dayjs();
-      end = end.hour(timedownAccount.sleepTime.end.hours);
+      end = end.hour(user.timedown.sleepTime.end.hours);
 
       setDayStart(start);
       setDayEnd(end);
@@ -109,7 +109,7 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
     setTimeRanges();
     getView();
     setIsReady(true);
-  }, [timedownAccount.sleepTime]);
+  }, [user]);
 
   useEffect(() => {
     timeToRows(totalHours);

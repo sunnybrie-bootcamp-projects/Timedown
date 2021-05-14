@@ -8,7 +8,7 @@ import TaskAddForm from "./TaskAddForm";
 function TaskBoard({
   isAuthenticated,
   gcal,
-  timedownAccount,
+  user,
   setDetails,
   setAction,
   setTasksList,

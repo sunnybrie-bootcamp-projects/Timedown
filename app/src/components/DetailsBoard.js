@@ -7,7 +7,7 @@ import * as dbRequest from "../dbRequest";
 import TaskAddForm from "./TaskAddForm";
 
 function DetailsBoard({
-  timedownAccount,
+  user,
   gcal,
   action,
   details,
@@ -25,10 +25,7 @@ function DetailsBoard({
     switch (action) {
       case "addTask":
         infoToRender = (
-          <TaskAddForm
-            setTasksList={(e) => setTasksList(e)}
-            {...{ timedownAccount }}
-          />
+          <TaskAddForm setTasksList={(e) => setTasksList(e)} {...{ user }} />
         );
         break;
       case "deleteTask":

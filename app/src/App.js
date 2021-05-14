@@ -4,30 +4,29 @@ import * as React from "react";
 
 import Account from "./Account.js";
 import gcal from "./api/ApiCalendar";
-import Login from "./components/Login";
 import Planner from "./components/Planner.js";
 import * as dbRequest from "./dbRequest";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
-  const [googleAccount, setGoogleAccount] = React.useState({});
-  const [timedownAccount, setTimedownAccount] = React.useState({});
+  const [user, setUser] = React.useState({});
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   async function getUserInfo(account) {
     switch (account) {
       case "google":
         if (isAuthenticated) {
           var googleUserInfo = await gcal.getBasicUserProfile();
-          setGoogleAccount(googleUserInfo);
+          setUser({ ...user, google: googleUserInfo });
           //console.debug(googleUserInfo);
         }
         break;
       case "timedown":
-        if (isAuthenticated) {
+        if (isAuthenticated && user.google) {
           var timedownUserInfo = await dbRequest.getUser(
-            googleAccount.getEmail(),
+            user.google.getEmail(),
           );
-          setTimedownAccount(timedownUserInfo);
+          setUser({ ...user, timedown: timedownUserInfo });
           //console.debug(timedownUserInfo);
         }
         break;
@@ -36,6 +35,7 @@ const App = () => {
     }
   }
 
+  //Authenticate client
   React.useEffect(() => {
     gcal.onLoad(() => {
       setIsAuthenticated(gcal.gapi.auth2.getAuthInstance().isSignedIn.get());
@@ -43,35 +43,38 @@ const App = () => {
     });
   }, []);
 
+  //load google user info
   React.useEffect(() => {
     getUserInfo("google");
   }, [isAuthenticated]);
 
+  //fetch timedown account
   React.useEffect(() => {
     getUserInfo("timedown");
-  }, [googleAccount]);
+  }, [user.google]);
 
-  if (isAuthenticated) {
-    return <UserDashboard {...{ isAuthenticated, gcal, timedownAccount }} />;
+  //logged in!
+  React.useEffect(() => {
+    if (user.timedown) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, [user.timedown]);
+
+  if (loggedIn) {
+    return (
+      <UserDashboard
+        {...{
+          isAuthenticated,
+          gcal,
+          setUser,
+          user,
+        }}
+      />
+    );
   }
 
-  return <FooBar {...{ isAuthenticated, gcal }} />;
-};
-
-function UserDashboard({ isAuthenticated, gcal, timedownAccount }) {
-  return (
-    <main className="App">
-      <>
-        <div id="login">
-          <Login {...{ isAuthenticated, gcal }} />
-        </div>
-        <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
-      </>
-    </main>
-  );
-}
-
-function FooBar({ isAuthenticated, gcal }) {
   return (
     <main className="App">
       <div id="login">
@@ -79,6 +82,23 @@ function FooBar({ isAuthenticated, gcal }) {
       </div>
     </main>
   );
+};
+
+function UserDashboard({ isAuthenticated, gcal, setUser, user }) {
+  return (
+    <main className="App">
+      <>
+        <div id="login">
+          <button onClick={gcal.handleSignoutClick}>Log out</button>
+        </div>
+        <Planner {...{ isAuthenticated, gcal, user }} />
+      </>
+    </main>
+  );
 }
+
+const Login = ({ isAuthenticated, gcal }) => {
+  return <button onClick={gcal.handleAuthClick}>Log in with Google</button>;
+};
 
 export default App;

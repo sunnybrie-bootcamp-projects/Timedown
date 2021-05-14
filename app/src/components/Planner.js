@@ -7,7 +7,7 @@ import DetailsBoard from "./DetailsBoard.js";
 import NavBar from "./NavBar.js";
 import TaskBoard from "./TaskBoard.js";
 
-function Planner({ isAuthenticated, gcal, timedownAccount }) {
+function Planner({ isAuthenticated, gcal, user }) {
   //sets what tab is rendered
   const [tab, setTab] = useState("calendar");
   //Lists of Timedown User's tasks
@@ -24,7 +24,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
     let visible;
     switch (tab) {
       case "calendar":
-        visible = <Calendar {...{ isAuthenticated, gcal, timedownAccount }} />;
+        visible = <Calendar {...{ isAuthenticated, gcal, user }} />;
         break;
       case "taskboard":
         visible = (
@@ -32,7 +32,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
             {...{
               isAuthenticated,
               gcal,
-              timedownAccount,
+              user,
               getTasksInfo,
               tasksList,
               setTasksList,
@@ -51,7 +51,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
 
   //Fetches user's tasks
   async function getTasksInfo() {
-    let data = JSON.stringify(await dbRequest.getTasks(timedownAccount.id));
+    let data = JSON.stringify(await dbRequest.getTasks(user.timedown.id));
     let tasks = JSON.parse(data);
 
     setTasksList(tasks);
@@ -66,7 +66,7 @@ function Planner({ isAuthenticated, gcal, timedownAccount }) {
       <DetailsBoard
         {...{
           gcal,
-          timedownAccount,
+          user,
           setAction,
           action,
           setDetails,

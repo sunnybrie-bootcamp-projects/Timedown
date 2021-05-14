@@ -32,7 +32,7 @@ function reducer(state, action) {
 }
 
 //ADD FORM, CHILD OF EVENTBOARD
-function TaskAddForm({ setTasksList, timedownAccount }) {
+function TaskAddForm({ setTasksList, user }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -41,7 +41,7 @@ function TaskAddForm({ setTasksList, timedownAccount }) {
       console.log("Attempting to post...", JSON.stringify(body)); // TEST
 
       const response = await dbRequest.addTask(
-        timedownAccount.id,
+        user.timedown.id,
         state.dueDate,
         state.estTime,
         state.summary,
