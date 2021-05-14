@@ -362,4 +362,3 @@ ALTER TABLE ONLY public.settings
 --
 -- PostgreSQL database dump complete
 --
-
