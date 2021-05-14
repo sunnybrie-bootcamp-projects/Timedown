@@ -8,12 +8,15 @@ import TaskAddForm from "./TaskAddForm";
 
 function DetailsBoard({
   timedownAccount,
+  gcal,
   action,
   details,
   setAction,
   setDetails,
   setTasksList,
   getTasksInfo,
+  suggestions,
+  setSuggestions,
 }) {
   //Determines what to render based on the "action" state
   //Read details, edit, delete, or add new task
@@ -53,8 +56,12 @@ function DetailsBoard({
         );
         break;
       case "readTask":
-        infoToRender = <TaskInfo {...{ details }} />;
+        infoToRender = <TaskInfo {...{ setAction, details }} />;
         break;
+      case "suggestTimes":
+        infoToRender = (
+          <Calibrator {...{ details, gcal, suggestions, setSuggestions }} />
+        );
       default:
         break;
     }
@@ -91,7 +98,7 @@ function DetailsBoard({
   );
 }
 
-function TaskInfo({ details }) {
+function TaskInfo({ details, setAction }) {
   return (
     <div className="taskInfo">
       <h2>{details.summary}</h2>
@@ -99,30 +106,33 @@ function TaskInfo({ details }) {
       <p className="taskDueDate">
         {new Date(details.dueDate).toLocaleString()}
       </p>
+      <button
+        value="suggestTimes"
+        className="suggestButton"
+        onClick={(e) => setAction(e.target.value)}
+      >
+        {" "}
+        Suggest Times
+      </button>
     </div>
   );
 }
 
 export default DetailsBoard;
 
-const Calibrator = ({ gcal }) => {
+const Calibrator = ({ gcal, details, suggestions, setSuggestions }) => {
   //dummy task
-  const [testTask, setTestTask] = React.useState({
-    summary: "Do the thing",
-    estTime: { hours: 60 },
-    dueDate: new Date("5/28/2021, 10:37:00 AM"),
-  });
+  const [testTask, setTestTask] = React.useState(details);
 
-  const [currentDate, setCurrentDate] = React.useState(new Date());
+  const [currentDate, setCurrentDate] = React.useState(dayjs());
   const [timeRemaining, setTimeRemaining] = React.useState(0); //remaining time between now and duedate
   const [freeTimesRemaining, setFreeTimesRemaining] = React.useState([]); //remaining available time between now and due date
   const [totalFreeTime, setTotalFreeTime] = React.useState({}); //sum total of free times remaining
   const [taskPriority, setTaskPriority] = React.useState(0);
-  const [suggestions, setSuggestions] = React.useState([]); //suggested time blocks
 
   //time remaining
   function getRemainingTime(dueDate, currentDate) {
-    return dueDate - currentDate;
+    return dayjs(currentDate).extend(dayjs(dueDate));
   }
 
   //free time remaining
@@ -132,7 +142,7 @@ const Calibrator = ({ gcal }) => {
       .listEvents({
         calendarId: "primary",
         timeMin: currentDate.toISOString(),
-        timeMax: new Date(dueDate).toISOString(),
+        timeMax: dayjs(dueDate).toISOString(),
         showDeleted: false,
         singleEvents: true,
         orderBy: "startTime",
