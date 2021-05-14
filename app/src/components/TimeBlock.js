@@ -25,10 +25,11 @@ const TimeBlock = ({ start, end, summary, dayStart }) => {
     }
 
     var blockStart =
-      (start.hour() - dayStart) * 4 + minuteModify(start, "start");
+      (start.hour() - dayStart.hour()) * 4 + minuteModify(start, "start");
     blockStart = blockStart <= 0 ? 1 : blockStart;
 
-    var blockEnd = (end.hour() - dayStart) * 4 + minuteModify(end, "end");
+    var blockEnd =
+      (end.hour() - dayStart.hour()) * 4 + minuteModify(end, "end");
 
     setGridRow(`${blockStart} / ${blockEnd < 0 ? "span all" : blockEnd}`);
   }

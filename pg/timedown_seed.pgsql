@@ -29,7 +29,7 @@ CREATE TABLE public.checkins (
 );
 
 
-ALTER TABLE public.checkins OWNER TO postgres;
+ALTER TABLE public.checkins OWNER TO tpl5_2021h1;
 
 --
 -- Name: checkins_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -44,7 +44,7 @@ CREATE SEQUENCE public.checkins_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.checkins_id_seq OWNER TO postgres;
+ALTER TABLE public.checkins_id_seq OWNER TO tpl5_2021h1;
 
 --
 -- Name: checkins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -69,7 +69,7 @@ CREATE TABLE public.settings (
 );
 
 
-ALTER TABLE public.settings OWNER TO postgres;
+ALTER TABLE public.settings OWNER TO tpl5_2021h1;
 
 --
 -- Name: tasks; Type: TABLE; Schema: public; Owner: tpl5_2021h1
@@ -86,7 +86,7 @@ CREATE TABLE public.tasks (
 );
 
 
-ALTER TABLE public.tasks OWNER TO postgres;
+ALTER TABLE public.tasks OWNER TO tpl5_2021h1;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -101,7 +101,7 @@ CREATE SEQUENCE public.tasks_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.tasks_id_seq OWNER TO postgres;
+ALTER TABLE public.tasks_id_seq OWNER TO tpl5_2021h1;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -123,7 +123,7 @@ CREATE TABLE public.timeblocks (
 );
 
 
-ALTER TABLE public.timeblocks OWNER TO postgres;
+ALTER TABLE public.timeblocks OWNER TO tpl5_2021h1;
 
 --
 -- Name: timeblocks_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -138,7 +138,7 @@ CREATE SEQUENCE public.timeblocks_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.timeblocks_id_seq OWNER TO postgres;
+ALTER TABLE public.timeblocks_id_seq OWNER TO tpl5_2021h1;
 
 --
 -- Name: timeblocks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -158,7 +158,7 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
+ALTER TABLE public.users OWNER TO tpl5_2021h1;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: tpl5_2021h1
@@ -173,7 +173,7 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO postgres;
+ALTER TABLE public.users_id_seq OWNER TO tpl5_2021h1;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tpl5_2021h1
@@ -223,8 +223,8 @@ COPY public.checkins (id) FROM stdin;
 --
 
 COPY public.settings ("userId", "pushNotifications", "emailNotifications", "addToGoogleCal", "sleepTime", "weeklyBlackOuts", "miscBlackOuts", "eventBuffer") FROM stdin;
-1	f	f	f	{"end": {"hours":22, "minutes":0 }, "start": {"hours":8, "minutes":30 }, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": 0, "minutes": 15}
-2	f	f	f	{"end": {"hours":21, "minutes":0 }, "start": {"hours":9, "minutes":0 }, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": null, "minutes": 15}
+2	f	f	f	{"end": {"hours": 21, "minutes": 0}, "start": {"hours": 9, "minutes": 0}, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": null, "minutes": 15}
+1	f	f	f	{"end": {"hours": 22, "minutes": 0}, "start": {"hours": 8, "minutes": 30}, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": 0, "minutes": 15}
 \.
 
 
@@ -362,3 +362,4 @@ ALTER TABLE ONLY public.settings
 --
 -- PostgreSQL database dump complete
 --
+
