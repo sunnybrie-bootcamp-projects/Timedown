@@ -6,6 +6,8 @@ import * as dbRequest from "../dbRequest";
 
 import TaskAddForm from "./TaskAddForm";
 
+const AdvancedFormat = require("dayjs/plugin/relativeTime");
+
 function DetailsBoard({
   user,
   gcal,
@@ -122,14 +124,14 @@ const Calibrator = ({ gcal, details, suggestions, setSuggestions }) => {
   const [testTask, setTestTask] = React.useState(details);
 
   const [currentDate, setCurrentDate] = React.useState(dayjs());
-  const [timeRemaining, setTimeRemaining] = React.useState(0); //remaining time between now and duedate
+  const [timeRemaining, setTimeRemaining] = React.useState(""); //remaining time between now and duedate
   const [freeTimesRemaining, setFreeTimesRemaining] = React.useState([]); //remaining available time between now and due date
   const [totalFreeTime, setTotalFreeTime] = React.useState({}); //sum total of free times remaining
   const [taskPriority, setTaskPriority] = React.useState(0);
 
   //time remaining
   function getRemainingTime(dueDate, currentDate) {
-    return dayjs(currentDate).extend(dayjs(dueDate));
+    return "hi";
   }
 
   //free time remaining
@@ -261,5 +263,21 @@ const Calibrator = ({ gcal, details, suggestions, setSuggestions }) => {
     }
   }, [totalFreeTime]);
 
-  return <div className="calibrator">Calibrator</div>;
+  return (
+    <div className="calibrator">
+      <h2>Suggestions:</h2>
+      <ol>
+        {suggestions.map((time, index) => {
+          let freeTime = dayjs(freeTimesRemaining[index].start.dateTime).format(
+            "ddd, MMM D, YYYY h:mm A",
+          );
+          let duration =
+            time.totalMS >= 0
+              ? `For: ${time.hours}hrs : ${time.minutes}min`
+              : "Don't work at this time.";
+          return <li>{`When: ${freeTime} | ${duration}`}</li>;
+        })}
+      </ol>
+    </div>
+  );
 };
