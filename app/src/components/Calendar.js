@@ -11,14 +11,14 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
   //Starting hour for day rendering
-  const [dayStart, setDayStart] = useState(dayjs().hour(0));
+  const [dayStart, setDayStart] = useState(dayjs().set("hour", 0));
   //Ending hour for day rendering
-  const [dayEnd, setDayEnd] = useState(dayjs().hour(23));
+  const [dayEnd, setDayEnd] = useState(dayjs().set("hour", 23));
   //Total hours rendered in a day
   const [totalHours, setTotalHours] = useState(24);
   //Days to be displayed in calendar
   const [days, setDays] = useState([
-    { start: dayjs().hour(0), end: dayjs().hour(23) },
+    { start: dayjs().set("hour", 0), end: dayjs().set("hour", 23) },
   ]);
   // Adjust days state when user clicks "previous" or "next" in navigation
   const [dateNavigation, setDateNavigation] = useState(0);
@@ -30,8 +30,10 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   //sets dayStart, dayEnd, and totalHours states for rendering
   function setTimeRanges() {
     if (timedownAccount.sleepTime) {
-      let start = dayjs().hour(timedownAccount.sleepTime.start.hours);
-      let end = dayjs().hour(timedownAccount.sleepTime.end.hours);
+      let start = dayjs();
+      start = start.hour(timedownAccount.sleepTime.start.hours);
+      let end = dayjs();
+      end = end.hour(timedownAccount.sleepTime.end.hours);
 
       setDayStart(start);
       setDayEnd(end);
@@ -57,11 +59,11 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
     let newDates = [];
     for (let i = 0; i < num; i++) {
       let newStart = dayjs();
-      newStart = newStart.hour(dayStart.hour()); //set starting time
+      newStart = newStart.hour(dayjs(dayStart).hour()); //set starting time
       newStart = newStart.add(i + dateNavigation, "day"); //set day
 
       let newEnd = dayjs(dayEnd).add(i + dateNavigation, "day");
-      newEnd = newEnd.hour(dayEnd.hour()); //set starting time
+      newEnd = newEnd.hour(dayjs(dayEnd).hour()); //set starting time
       newEnd = newEnd.add(i + dateNavigation, "day"); //set day
 
       newDates.push({ start: newStart, end: newEnd });
