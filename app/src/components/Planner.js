@@ -19,36 +19,6 @@ function Planner({ isAuthenticated, gcal, user }) {
   //Timeblock suggestions - listed by details board and rendered as timeblocks on calendar
   const [suggestions, setSuggestions] = useState([]);
 
-  //Determines what to render based on tab state
-  function getTab() {
-    let visible;
-    switch (tab) {
-      case "calendar":
-        visible = <Calendar {...{ isAuthenticated, gcal, user }} />;
-        break;
-      case "taskboard":
-        visible = (
-          <TaskBoard
-            {...{
-              isAuthenticated,
-              gcal,
-              user,
-              getTasksInfo,
-              tasksList,
-              setTasksList,
-              setDetails,
-              setAction,
-            }}
-          />
-        );
-        break;
-      default:
-        break;
-    }
-
-    return visible;
-  }
-
   //Fetches user's tasks
   async function getTasksInfo() {
     let data = JSON.stringify(await dbRequest.getTasks(user.timedown.id));
@@ -62,7 +32,22 @@ function Planner({ isAuthenticated, gcal, user }) {
   return (
     <>
       <NavBar {...{ setTab, tab }} />
-      <div className="planner">{getTab()}</div>
+      <div className="planner">
+        <Calendar {...{ isAuthenticated, tab, gcal, user }} />
+        <TaskBoard
+          {...{
+            isAuthenticated,
+            tab,
+            gcal,
+            user,
+            getTasksInfo,
+            tasksList,
+            setTasksList,
+            setDetails,
+            setAction,
+          }}
+        />
+      </div>
       <DetailsBoard
         {...{
           gcal,

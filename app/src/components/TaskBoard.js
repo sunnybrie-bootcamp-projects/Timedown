@@ -7,6 +7,7 @@ import TaskAddForm from "./TaskAddForm";
 
 function TaskBoard({
   isAuthenticated,
+  tab,
   gcal,
   user,
   setDetails,
@@ -24,7 +25,12 @@ function TaskBoard({
   }, []);
 
   return (
-    <div className="taskBoard">
+    <div
+      className="taskBoard"
+      style={{
+        display: tab === "taskboard" ? "block" : "none",
+      }}
+    >
       <h2>Your Tasks:</h2>
       <button onClick={() => taskAction("addTask")}>Add New Task</button>
       {tasksList.map((task, index) => {
