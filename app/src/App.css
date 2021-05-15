@@ -414,7 +414,7 @@ ol {
 }
 
 .calibrator li {
-  display: grid;
+  display: grid; 
   position: relative;
   padding: 0.5em;
   margin: 0.25em auto;
