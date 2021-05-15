@@ -334,17 +334,17 @@ button.next {
   vertical-align: middle;
 }
 
-.event::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 0.25em;
 
   background-color: rgba(43, 158, 145, 0);
 }
 
-.event::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
 }
 
-.event::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   position: relative;
   border-radius: 1rem 1rem 1rem;
 
@@ -387,6 +387,7 @@ button.next {
   padding: 0.5em;
   width: 25%;
   min-height: 80vh;
+  max-height: 80vh;
 
   background-color: ghostwhite;
   box-shadow: 0.5em 0.75em 0.5em rgba(39, 71, 84, 0.75);
@@ -398,4 +399,48 @@ button.next {
 }
 
 .taskInfo {
+}
+
+.calibrator {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  max-height: 70vh;
+  padding: 0.25em;
+  overflow-y: scroll;
+}
+
+ol {
+}
+
+.calibrator li {
+  display: grid;
+  position: relative;
+  padding: 0.5em;
+  margin: 0.25em auto;
+  max-width: 90%;
+
+  grid-template-columns: auto;
+  grid-template-rows: auto auto;
+
+  color: ghostwhite;
+  background-color: #e86f51;
+  box-shadow: 0.25em 0.25em 0.25em rgb(163, 54, 27);
+  border-radius: 1em 1em 1em;
+
+  text-align: center;
+  text-shadow: 0.25em 0.25em 0.25em rgb(163, 54, 27);
+}
+
+.when {
+  font-weight: bold;
+  font-size: 1.125em;
+}
+
+.detailsBoard::-webkit-scrollbar-thumb {
+  position: relative;
+  border-radius: 1rem 1rem 1rem;
+
+  background-color: rgba(43, 158, 145, 0);
+  border: 1px solid #2b9e91;
 }

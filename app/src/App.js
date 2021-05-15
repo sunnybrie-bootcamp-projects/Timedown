@@ -70,6 +70,7 @@ const App = () => {
           gcal,
           setUser,
           user,
+          setLoggedIn,
         }}
       />
     );
@@ -84,12 +85,19 @@ const App = () => {
   );
 };
 
-function UserDashboard({ isAuthenticated, gcal, setUser, user }) {
+function UserDashboard({ isAuthenticated, gcal, setUser, user, setLoggedIn }) {
   return (
     <main className="App">
       <>
         <div id="login">
-          <button onClick={gcal.handleSignoutClick}>Log out</button>
+          <button
+            onClick={() => {
+              gcal.handleSignoutClick();
+              setLoggedIn(false);
+            }}
+          >
+            Log out
+          </button>
         </div>
         <Planner {...{ isAuthenticated, gcal, user }} />
       </>

@@ -265,7 +265,7 @@ const Calibrator = ({ gcal, details, suggestions, setSuggestions }) => {
 
   return (
     <div className="calibrator">
-      <h2>Suggestions:</h2>
+      <h4>Suggestions:</h4>
       <ol>
         {suggestions.map((time, index) => {
           let freeTime = dayjs(freeTimesRemaining[index].start.dateTime).format(
@@ -275,7 +275,12 @@ const Calibrator = ({ gcal, details, suggestions, setSuggestions }) => {
             time.totalMS >= 0
               ? `For: ${time.hours}hrs : ${time.minutes}min`
               : "Don't work at this time.";
-          return <li>{`When: ${freeTime} | ${duration}`}</li>;
+          return (
+            <li>
+              <span className="when">{`When: ${freeTime}`}</span>
+              <span className="duration">{`${duration}`}</span>
+            </li>
+          );
         })}
       </ol>
     </div>
