@@ -6,7 +6,14 @@ import * as dbRequest from "../dbRequest";
 
 import TaskAddForm from "./TaskAddForm";
 
-const AdvancedFormat = require("dayjs/plugin/relativeTime");
+//dayjs plugins
+const AdvancedFormat = require("dayjs/plugin/advancedFormat");
+const isBetween = require("dayjs/plugin/isBetween");
+const relativeTime = require("dayjs/plugin/relativeTime");
+
+dayjs.extend(relativeTime);
+dayjs.extend(AdvancedFormat);
+dayjs.extend(isBetween);
 
 function DetailsBoard({
   user,
@@ -59,7 +66,9 @@ function DetailsBoard({
         break;
       case "suggestTimes":
         infoToRender = (
-          <Calibrator {...{ details, gcal, suggestions, setSuggestions }} />
+          <Calibrator
+            {...{ user, details, gcal, suggestions, setSuggestions }}
+          />
         );
       default:
         break;
@@ -119,7 +128,7 @@ function TaskInfo({ details, setAction }) {
 
 export default DetailsBoard;
 
-const Calibrator = ({ gcal, details, suggestions, setSuggestions }) => {
+const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   //dummy task
   const [testTask, setTestTask] = React.useState(details);
 
@@ -131,7 +140,7 @@ const Calibrator = ({ gcal, details, suggestions, setSuggestions }) => {
 
   //time remaining
   function getRemainingTime(dueDate, currentDate) {
-    return "hi";
+    return dayjs(dueDate).fromNow();
   }
 
   //free time remaining
