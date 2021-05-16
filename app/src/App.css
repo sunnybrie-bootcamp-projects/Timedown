@@ -69,7 +69,7 @@ body::-webkit-scrollbar-thumb {
   height: 50em;
   width: 45em;
 
-  background-color: floralwhite;
+  background-color: ghostwhite;
   filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
 
   border: 2px solid #f5a462;
@@ -97,7 +97,7 @@ body::-webkit-scrollbar-thumb {
   height: 100%;
   width: 200px;
 
-  background-color: floralwhite;
+  background-color: ghostwhite;
   border: 1px solid #f5a462;
   border-width: 2px 2px 0px 2px;
   border-top-left-radius: 0.75em 0.75em;
@@ -112,7 +112,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .navTab.notToggled {
-  background-color: antiquewhite;
+  background-color: gainsboro;
   filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
 }
 
@@ -126,9 +126,8 @@ body::-webkit-scrollbar-thumb {
   height: 100%;
   width: 95%;
 
-  grid-template-columns: 1fr 4fr;
   grid-template-rows: 1fr 14fr;
-  grid-gap: 1em;
+  column-gap: 1em;
 
   border-radius: 1em 1em 1em;
 }
@@ -143,6 +142,67 @@ body::-webkit-scrollbar-thumb {
   text-align: center;
   color: #2b9e91;
 }
+
+.calendar .navBar {
+  display: grid;
+  box-sizing: border-box;
+  position: relative;
+  top: 0em;
+  left: 0em;
+  margin: auto;
+  padding: 0em 0.125em;
+  width: 100%;
+  height: auto;
+
+  grid-template-columns: 1fr 3fr 1fr;
+
+  background-color: #e86f51;
+  color: ghostwhite;
+
+  text-align: center;
+}
+
+.calendar .navBar button {
+  height: auto;
+  width: minMax(auto, 80%);
+}
+
+button.prev {
+  left: 0em;
+}
+
+button.next {
+  right: 0em;
+}
+
+.calendar .navTab {
+  display: block;
+  position: relative;
+  float: left;
+  box-sizing: border-box;
+  margin: 1%;
+  height: auto;
+  width: auto;
+
+  background-color: ghostwhite;
+  border: 2px solid #f5a462;
+  border-radius: 0.75em 0.75em;
+  box-shadow: 0.25em 0.25em 0.25em rgba(39, 71, 84, 0.75);
+  filter: none;
+
+  font-size: 1rem;
+  color: #e86f51;
+}
+
+.calendar .navTab.toggled {
+  z-index: 2;
+}
+
+.calendar .navTab.notToggled {
+  background-color: gainsboro;
+}
+
+/* TIMELINE */
 
 .timeLine {
   display: grid;
@@ -163,7 +223,7 @@ body::-webkit-scrollbar-thumb {
   background-color: #e8c468;
   box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
 
-  color: floralwhite;
+  color: ghostwhite;
   text-align: right;
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
@@ -180,10 +240,10 @@ body::-webkit-scrollbar-thumb {
   max-width: 100%;
   width: 100%;
 
-  border-top: 1px solid floralwhite;
+  border-top: 1px solid ghostwhite;
 }
 
-.nullTime {
+.hidden {
   color: rgba(232, 196, 104, 0);
 }
 
@@ -191,6 +251,7 @@ body::-webkit-scrollbar-thumb {
   display: block;
   box-sizing: border-box;
   position: relative;
+  z-index: 10;
   right: -1em;
   height: 100%;
   width: 100%;
@@ -221,6 +282,8 @@ body::-webkit-scrollbar-thumb {
   text-shadow: 0.125em 0.125em 0.25em rgb(163, 54, 27);
 }
 
+/* DAY + TIMEBLOCKS */
+
 .day {
   display: grid;
   box-sizing: border-box;
@@ -229,11 +292,10 @@ body::-webkit-scrollbar-thumb {
   padding: 1em;
   min-height: 90%;
   height: 95%;
-  min-width: 90%;
   width: auto;
 
   grid-template-columns: auto auto;
-  grid-column: 2;
+  grid-row: 2 / span 1;
   justify-content: left;
   align-content: center;
 
@@ -258,7 +320,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: 0.5em 0.5em 0.5em;
   box-shadow: 0.25em 0.25em 0.25em rgba(39, 71, 84, 0.5);
 
-  color: white;
+  color: ghostwhite;
 
   overflow-y: scroll;
 }
@@ -287,7 +349,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: 1rem 1rem 1rem;
 
   background-color: rgba(43, 158, 145, 0);
-  border: 1px solid floralwhite;
+  border: 1px solid ghostwhite;
 }
 
 /* TASKBOARD COMPONENTS */
@@ -302,7 +364,7 @@ body::-webkit-scrollbar-thumb {
   box-shadow: 0.25em 0.25em 0.25em #274754;
   background-color: #2b9e91;
 
-  color: floralwhite;
+  color: ghostwhite;
 }
 
 .task button {
@@ -326,7 +388,7 @@ body::-webkit-scrollbar-thumb {
   width: 25%;
   min-height: 80vh;
 
-  background-color: floralwhite;
+  background-color: ghostwhite;
   box-shadow: 0.5em 0.75em 0.5em rgba(39, 71, 84, 0.75);
   border-radius: 1em 1em 1em;
 }

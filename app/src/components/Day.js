@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 
+import dayjs from "dayjs";
+
 import TimeBlock from "./TimeBlock.js";
 
-function Day({
-  timeRows,
-  isAuthenticated,
-  gcal,
-  dayStart,
-  dayEnd,
-  totalHours,
-}) {
+function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -33,7 +28,7 @@ function Day({
     singleEvents: true,
   };
 
-  //Event Queries
+  //Google Calendar Events
   const [events, setEvents] = React.useState([]);
 
   function getEvents() {
@@ -52,8 +47,8 @@ function Day({
     //   timeMax: dayEnd.toISOString(),
     //   timeMin: dayStart.toISOString(),
     // });
-    setMin(dayStart.toISOString());
-    setMax(dayEnd.toISOString());
+    setMin(dayjs(day.start).toISOString());
+    setMax(dayjs(day.end).toISOString());
   });
 
   //After day's parameters are set...
@@ -66,16 +61,23 @@ function Day({
   // useEffect(() => {}, []);
 
   return (
-    <div className="day" style={{ gridTemplateRows: timeRows }}>
+    <div
+      className="day"
+      style={{
+        gridTemplateRows: timeRows,
+        gridColumn: `${index + 2} / span 1`,
+        gridRow: "2 / span 1",
+      }}
+    >
       {events.length === 0 ? (
         <p>You have no events for this day.</p>
       ) : (
         events.map((event) => (
           <TimeBlock
             className="event"
-            key={event.id}
-            start={event.start.dateTime}
-            end={event.end.dateTime}
+            key={`TB${event.id}`}
+            start={dayjs(event.start.dateTime)}
+            end={dayjs(event.end.dateTime)}
             summary={event.summary}
             dayStart={dayStart}
           />

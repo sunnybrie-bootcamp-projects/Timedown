@@ -41,7 +41,7 @@ export const deleteTask = async (id) => {
 };
 
 //User Account Requests
-export const getUser = async (email, registered) => {
+export const getUser = async (email) => {
   const response = await fetch("/api/users", {
     method: "POST",
     headers: {
@@ -49,6 +49,7 @@ export const getUser = async (email, registered) => {
     },
     body: JSON.stringify({ email }),
   });
+
   return response.json();
 };
 

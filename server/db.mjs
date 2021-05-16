@@ -56,20 +56,40 @@ export const deleteTask = async (id) => {
     [id],
   );
 
-  console.log({ deletedTask });
+  window.alert("Deleted Task: ", { deletedTask });
   return deletedTask;
 };
 
 //USER QUERIES
 export const getUser = async (email) => {
-  const user = await db.any("SELECT * FROM users WHERE email = $1", [email]);
-  if (user.length < 1) {
+  const account = await db.any(
+    `SELECT * 
+FROM users
+JOIN settings
+  ON users."id" = settings."userId"
+WHERE users.email = $1`,
+    [email],
+  );
+  if (account.length < 1) {
     user = await db.any(
       `INSERT INTO users("email")
 VALUES($1) RETURNING *`,
       [email],
     );
+    settings = await db.any(
+      `INSERT INTO settings("userId") VALUES($1) RETURNING *`,
+      [user[0].id],
+    );
+
+    account = await db.any(
+      `SELECT * 
+FROM users
+JOIN settings
+  ON users."id" = settings."userId"
+WHERE users.email = $1`,
+      [email],
+    );
   }
 
-  return user[0];
+  return account[0];
 };
