@@ -33,7 +33,7 @@ function Planner({ isAuthenticated, gcal, user }) {
     <>
       <NavBar {...{ setTab, tab }} />
       <div className="planner">
-        <Calendar {...{ isAuthenticated, tab, gcal, user }} />
+        <Calendar {...{ isAuthenticated, tab, gcal, user, suggestions }} />
         <TaskBoard
           {...{
             isAuthenticated,

@@ -4,7 +4,26 @@ import dayjs from "dayjs";
 
 import TimeBlock from "./TimeBlock.js";
 
-function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
+//dayjs plugins
+const AdvancedFormat = require("dayjs/plugin/advancedFormat");
+const duration = require("dayjs/plugin/duration");
+const isBetween = require("dayjs/plugin/isBetween");
+const relativeTime = require("dayjs/plugin/relativeTime");
+
+dayjs.extend(relativeTime);
+dayjs.extend(AdvancedFormat);
+dayjs.extend(duration);
+dayjs.extend(isBetween);
+
+function Day({
+  index,
+  timeRows,
+  isAuthenticated,
+  gcal,
+  day,
+  dayStart,
+  suggestions,
+}) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -18,6 +37,8 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
 
   const [min, setMin] = useState(dayjs().toISOString());
   const [max, setMax] = useState(dayjs().toISOString());
+  const [daysSuggestions, setDaysSuggestions] = useState([]);
+
   const queryOptions = {
     calendarId: "primary",
     orderBy: "startTime",
@@ -40,6 +61,18 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
       });
   }
 
+  function getDaysSuggestions() {
+    let results = [];
+
+    suggestions.forEach((suggestion) => {
+      if (dayjs(suggestion.start).isBetween(dayjs(min), dayjs(max))) {
+        results.push(suggestion);
+      }
+    });
+
+    setDaysSuggestions(results);
+  }
+
   //Component load-in...
   useEffect(() => {
     // setQueryOptions({
@@ -58,7 +91,9 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
     }
   }, [min, max, isAuthenticated]);
 
-  // useEffect(() => {}, []);
+  useEffect(() => {
+    setDaysSuggestions();
+  }, [suggestions]);
 
   return (
     <div
@@ -79,6 +114,21 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
             start={dayjs(event.start.dateTime)}
             end={dayjs(event.end.dateTime)}
             summary={event.summary}
+            dayStart={dayStart}
+          />
+        ))
+      )}
+
+      {suggestions.length === 0 ? (
+        <></>
+      ) : (
+        suggestions.map((suggestion, index) => (
+          <TimeBlock
+            className="event"
+            key={`TBS${index}`}
+            start={dayjs(suggestion.start)}
+            end={dayjs(suggestion.end)}
+            summary={""}
             dayStart={dayStart}
           />
         ))

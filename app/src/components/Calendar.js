@@ -6,7 +6,7 @@ import Day from "./Day";
 import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
-function Calendar({ isAuthenticated, tab, gcal, user }) {
+function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
   const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
@@ -140,6 +140,7 @@ function Calendar({ isAuthenticated, tab, gcal, user }) {
               gcal,
               day,
               dayStart,
+              suggestions,
             }}
           />
         );

@@ -178,10 +178,11 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
 
   //get proportion of each free time block
   function getFreeTimePercentages() {
-    let update = freeTimesRemaining.map((freetime) => {
-      freetime.freeTimePercentage =
-        parseInt(freetime.totalTime) / totalFreeTime.totalMS;
-      return freetime;
+    let update = freeTimesRemaining.map((freeTime) => {
+      freeTime.freeTimePercentage =
+        parseInt(freeTime.duration.asMilliseconds()) /
+        totalFreeTime.asMilliseconds();
+      return freeTime;
     });
 
     setFreeTimesRemaining(update);
@@ -191,16 +192,21 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
 
   //get suggested time spent working on task
   function getSuggestions() {
-    let task_hoursToMS = testTask.estTime.hours * 60 * 60 * 1000;
-    let msHours = 1000 * 60 * 60;
-    let msMinutes = 1000 * 60;
+    let { estTime } = testTask;
+    estTime = dayjs.duration({ ...estTime });
 
-    let totals = freeTimesRemaining.map((time) => {
-      let amount = time.freeTimePercentage * task_hoursToMS;
-      let hours = Math.round(amount / msHours);
-      let minutes = Math.round((amount % msHours) / msMinutes);
+    let totals = freeTimesRemaining.map((freeTime) => {
+      let amount = freeTime.freeTimePercentage * estTime.asMilliseconds();
 
-      return { totalMS: amount, hours, minutes };
+      amount = dayjs.duration(amount);
+
+      let suggestion = {
+        amount: amount,
+        start: freeTime.start,
+        end: freeTime.start.add(amount),
+      };
+
+      return suggestion;
     });
 
     setSuggestions(totals);
@@ -231,13 +237,13 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
 
   //when total free time is calculated, calculates percentages
   React.useEffect(() => {
-    // if (totalFreeTime !== {}) {
-    //   try {
-    //     getFreeTimePercentages();
-    //   } catch (err) {
-    //     console.debug("Error: ", err);
-    //   }
-    // }
+    if (totalFreeTime.asMilliseconds() !== 0) {
+      try {
+        getFreeTimePercentages();
+      } catch (err) {
+        console.debug("Error: ", err);
+      }
+    }
   }, [totalFreeTime]);
 
   return (
@@ -245,17 +251,14 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       <h4>Suggestions:</h4>
       <ol>
         {suggestions.map((time, index) => {
-          let freeTime = dayjs(freeTimesRemaining[index].start.dateTime).format(
+          let when = dayjs(freeTimesRemaining[index].start).format(
             "ddd, MMM D, YYYY h:mm A",
           );
-          let duration =
-            time.totalMS >= 0
-              ? `For: ${time.hours}hrs : ${time.minutes}min`
-              : "Don't work at this time.";
+          let howLong = time.humanize();
           return (
             <li>
-              <span className="when">{`When: ${freeTime}`}</span>
-              <span className="duration">{`${duration}`}</span>
+              <span className="when">{`When: ${when}`}</span>
+              <span className="duration">{`For: ${howLong}`}</span>
             </li>
           );
         })}
