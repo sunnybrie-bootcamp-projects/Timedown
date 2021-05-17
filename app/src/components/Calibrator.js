@@ -97,59 +97,13 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
         console.debug("ERROR: ", err);
       });
 
-    /*
-      .then(function (freeTimes) {
-        //filter windows based on user settings
-        //filter out times that don't fit in user's sleep settings
-        freeTimes = freeTimes.filter((freeTime) => {
-          let range = {
-            min: dayjs(freeTime.start)
-              .hour(awakeTime.start.hours)
-              .minute(awakeTime.start.minutes),
-            max: dayjs(freeTime.end)
-              .hour(awakeTime.end.hours)
-              .minute(awakeTime.end.minutes),
-          };
-
-          let early = dayjs(freeTime.start).isBefore(range.start);
-          let late = dayjs(freeTime.end).isAfter(range.end);
-          let outOfRange = early && late;
-
-          //if out of range, drop this time
-          //if early/late, adjust time
-          if (outOfRange) {
-            return false;
-          } else if (early) {
-            freeTime.start = range.start;
-          } else if (late) {
-            freeTime.end = range.end;
-          }
-
-          let ftDuration = dayjs.duration(
-            dayjs(freeTime.start).diff(dayjs(freeTime.end)),
-          );
-          let minDuration = dayjs.duration(eventBuffer);
-
-          if (ftDuration < minDuration) {
-            return false;
-          } else {
-            freeTime.duration = ftDuration;
-          }
-
-          return true;
-        });
-
-        return freeTimes;
-      })
-    */
-
     setFreeTimesRemaining(await timeBlocks);
   }
 
   //filters out free times based on user settings
   async function filterRemainingFreeTimes() {
     //filter out times that don't fit in user's settings
-    const filteredTimeBlocks = freeTimesRemaining.map((freeTime) => {
+    let filteredTimeBlocks = freeTimesRemaining.map((freeTime) => {
       freeTime.start = dayjs(freeTime.start);
       freeTime.end = dayjs(freeTime.end);
 
@@ -198,12 +152,12 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     });
 
     //removes time blocks that don't pass the above filter (they return null)
-    filteredTimeBlocks.filter((freeTime) => {
-      if (freeTime) {
-        return true;
+    filteredTimeBlocks = filteredTimeBlocks.filter((freeTime) => {
+      if (freeTime === null) {
+        return false;
       }
 
-      return false;
+      return true;
     });
 
     setFreeTimesRemaining(filteredTimeBlocks);
@@ -213,19 +167,13 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   function getSumFreeTime() {
     //console.debug("getSumFreeTime()"); //Test
 
-    function getMilliseconds(total, current) {
-      let addedTime = current.totalTime < 0 ? 0 : current.totalTime;
-      return total + addedTime;
-    }
+    let total = 0;
 
-    let msHours = 1000 * 60 * 60;
-    let msMinutes = 1000 * 60;
+    freeTimesRemaining.forEach((freeTime) => {
+      total += freeTime.duration.asMilliseconds();
+    });
 
-    let totalMS = freeTimesRemaining.reduce(getMilliseconds, 0);
-    let hours = totalMS / msHours;
-    let minutes = (totalMS % msHours) / msMinutes;
-
-    setTotalFreeTime({ totalMS: totalMS, hours: hours, minutes: minutes });
+    setTotalFreeTime(dayjs.duration(total));
   }
 
   //get proportion of each free time block
@@ -273,8 +221,8 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       freeTimesRemaining[freeTimesRemaining.length - 1].end
     ) {
       try {
-        //getSumFreeTime();
         filterRemainingFreeTimes();
+        getSumFreeTime();
       } catch (err) {
         console.debug("Error: ", err);
       }
