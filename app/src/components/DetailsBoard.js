@@ -8,11 +8,13 @@ import TaskAddForm from "./TaskAddForm";
 
 //dayjs plugins
 const AdvancedFormat = require("dayjs/plugin/advancedFormat");
+const duration = require("dayjs/plugin/duration");
 const isBetween = require("dayjs/plugin/isBetween");
 const relativeTime = require("dayjs/plugin/relativeTime");
 
 dayjs.extend(relativeTime);
 dayjs.extend(AdvancedFormat);
+dayjs.extend(duration);
 dayjs.extend(isBetween);
 
 function DetailsBoard({
@@ -135,8 +137,12 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   const [currentDate, setCurrentDate] = React.useState(dayjs());
   const [timeRemaining, setTimeRemaining] = React.useState(""); //remaining time between now and duedate
   const [freeTimesRemaining, setFreeTimesRemaining] = React.useState([]); //remaining available time between now and due date
-  const [totalFreeTime, setTotalFreeTime] = React.useState({}); //sum total of free times remaining
+  const [totalFreeTime, setTotalFreeTime] = React.useState(dayjs.duration(0)); //sum total of free times remaining
   const [taskPriority, setTaskPriority] = React.useState(0);
+
+  //user's settings
+  const awakeTime = user.timedown.sleepTime;
+  const eventBuffer = dayjs.duration(user.timedown.eventBuffer);
 
   //time remaining
   function getRemainingTime(dueDate, currentDate) {
@@ -145,48 +151,79 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
 
   //free time remaining
   async function getRemainingFreeTimes(dueDate, currentDate) {
-    //console.debug(`getRemainingFreeTimes(duedate, currentdate)`); //Test
-    var timeBlocks = await gcal
+    //Queries calendar for all events between now and duedate
+    let timeBlocks = await gcal
       .listEvents({
         calendarId: "primary",
-        timeMin: currentDate.toISOString(),
+        timeMin: dayjs().toISOString(),
         timeMax: dayjs(dueDate).toISOString(),
         showDeleted: false,
         singleEvents: true,
         orderBy: "startTime",
       })
       .then(function (response) {
-        var busyArr = response.result.items;
+        //All resulting events
+        let busyArr = response.result.items;
+        console.log({ busyArr });
 
-        var freeArr = [];
+        //All times between events
+        let freeArr = [];
 
-        var busyReducer = (freeTime, busyTime) => {
-          freeTime.end = busyTime.start;
-          freeArr.push({ freeTime });
+        //reduces busyArr to times in between, adds times to freeArr
+        let busyReducer = (freeTime, busyTime) => {
+          freeTime.end = dayjs(busyTime.start.dateTime);
+          console.log(freeTime);
 
-          return { start: busyTime.end };
+          freeArr.push(freeTime);
+
+          return { start: dayjs(busyTime.end.dateTime) };
         };
 
-        busyArr.reduce(busyReducer, {
-          start: {
-            dateTime: currentDate.toISOString(),
-            timeZone: "America/Los_Angeles",
-          },
+        busyArr.reduce(busyReducer, { start: dayjs() });
+
+        //filter out times that don't fit in user's sleep settings
+        freeArr = freeArr.filter((freeTime) => {
+          let range = {
+            min: dayjs(freeTime.start)
+              .hour(awakeTime.start.hours)
+              .minute(awakeTime.start.minutes),
+            max: dayjs(freeTime.end)
+              .hour(awakeTime.end.hours)
+              .minute(awakeTime.end.minutes),
+          };
+
+          let early = dayjs(freeTime.start).isBefore(range.start);
+          let late = dayjs(freeTime.end).isAfter(range.end);
+          let outOfRange = early && late;
+
+          //if out of range, drop this time
+          //if early/late, adjust time
+          if (outOfRange) {
+            return false;
+          } else if (early) {
+            freeTime.start = range.start;
+          } else if (late) {
+            freeTime.end = range.end;
+          }
+
+          let duration = dayjs.duration(
+            dayjs(freeTime.start).diff(dayjs(freeTime.end)),
+          );
+          let minDuration = dayjs.duration(eventBuffer);
+
+          if (duration < minDuration) {
+            return false;
+          } else {
+            freeTime.duration = duration;
+          }
+
+          return true;
         });
 
         if (freeArr.length > 0) {
-          return freeArr.map((freeTime, index) => {
-            var { freeTime } = freeTime;
-            var totalTime =
-              new Date(freeTime.end.dateTime).getTime() -
-              new Date(freeTime.start.dateTime).getTime();
-
-            freeTime.totalTime = totalTime;
-
-            return freeTime;
-          });
+          return freeArr;
         } else {
-          return ["No free times. :["];
+          return ["You have no free time between now and the due date."];
         }
       });
 
@@ -197,19 +234,23 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   function getSumFreeTime() {
     //console.debug("getSumFreeTime()"); //Test
 
-    function getMilliseconds(total, current) {
-      let addedTime = current.totalTime < 0 ? 0 : current.totalTime;
-      return total + addedTime;
-    }
+    // function getMilliseconds(total, current) {
+    //   let addedTime = current.totalTime < 0 ? 0 : current.totalTime;
+    //   return total + addedTime;
+    // }
 
-    let msHours = 1000 * 60 * 60;
-    let msMinutes = 1000 * 60;
+    // let msHours = 1000 * 60 * 60;
+    // let msMinutes = 1000 * 60;
 
-    let totalMS = freeTimesRemaining.reduce(getMilliseconds, 0);
-    let hours = totalMS / msHours;
-    let minutes = (totalMS % msHours) / msMinutes;
+    // let totalMS = freeTimesRemaining.reduce(getMilliseconds, 0);
+    // let hours = totalMS / msHours;
+    // let minutes = (totalMS % msHours) / msMinutes;
 
-    setTotalFreeTime({ totalMS: totalMS, hours: hours, minutes: minutes });
+    let sum = freeTimesRemaining.reduce((totalTime, additionTime) => {
+      return totalTime.duration.add(additionTime.duration);
+    }, dayjs.duration(0));
+
+    setTotalFreeTime(sum);
   }
 
   //get proportion of each free time block
@@ -277,7 +318,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       <h4>Suggestions:</h4>
       <ol>
         {suggestions.map((time, index) => {
-          let freeTime = dayjs(freeTimesRemaining[index].start.dateTime).format(
+          let freeTime = dayjs(freeTimesRemaining[index].start).format(
             "ddd, MMM D, YYYY h:mm A",
           );
           let duration =

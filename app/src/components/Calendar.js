@@ -68,7 +68,7 @@ function Calendar({ isAuthenticated, tab, gcal, user }) {
 
       newDates.push({ start: newStart, end: newEnd });
     }
-    console.debug(newDates);
+
     setDays(newDates);
 
     let newDayColumns =
@@ -81,8 +81,6 @@ function Calendar({ isAuthenticated, tab, gcal, user }) {
               })
               .join(""),
           );
-
-    console.debug("setting columns...", newDayColumns);
 
     setDayColumns(newDayColumns);
   }

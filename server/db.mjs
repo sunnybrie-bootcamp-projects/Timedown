@@ -30,7 +30,6 @@ export const getTasks = async (user) => {
   const tasks = await db.any(`SELECT * FROM tasks WHERE "userId" = $1`, [
     userId,
   ]);
-  console.log({ tasks }); //TEST
   return tasks;
 };
 

@@ -10,7 +10,6 @@ const port = process.env.PORT || 4000;
 const tasks = express.Router();
 
 tasks.get("/", async (request, response) => {
-  console.debug(request.headers); //TEST
   const timedownUser = request.header("timedown-user");
   const tasks = await db.getTasks(timedownUser);
   response.json(tasks);
