@@ -16,8 +16,8 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
   //   singleEvents: true,
   // });
 
-  const [min, setMin] = useState("");
-  const [max, setMax] = useState("");
+  const [min, setMin] = useState(dayjs().toISOString());
+  const [max, setMax] = useState(dayjs().toISOString());
   const queryOptions = {
     calendarId: "primary",
     orderBy: "startTime",
