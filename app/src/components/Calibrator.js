@@ -27,7 +27,10 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
 
   //user's settings
   const awakeTime = user.timedown.sleepTime;
-  const eventBuffer = dayjs.duration(user.timedown.eventBuffer);
+  const eventBuffer = dayjs.duration({
+    ...user.timedown.eventBuffer,
+    hours: 0,
+  });
 
   //time remaining
   function getRemainingTime(dueDate, currentDate) {
@@ -146,47 +149,62 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   }
 
   //filters out free times based on user settings
-  async function filterRemainingFreeTimes(freeTimes) {
+  async function filterRemainingFreeTimes() {
     console.debug("filtering...");
+    console.debug(freeTimesRemaining);
 
     //filter windows based on user settings
     //filter out times that don't fit in user's sleep settings
-    const filteredTimeBlocks = freeTimes.filter((freeTime) => {
+    let count = 0;
+    const filteredTimeBlocks = freeTimesRemaining.map((freeTime) => {
+      count++;
+      console.debug("ROUND ", count, ": ", freeTime);
+
+      freeTime.start = dayjs(freeTime.start);
+      freeTime.end = dayjs(freeTime.end);
+
+      if (freeTime.end.isBefore(freeTime.start)) {
+        return null;
+      }
+
       let range = {
-        min: dayjs(freeTime.start)
+        min: freeTime.start
           .hour(awakeTime.start.hours)
           .minute(awakeTime.start.minutes),
-        max: dayjs(freeTime.end)
+        max: freeTime.start
           .hour(awakeTime.end.hours)
           .minute(awakeTime.end.minutes),
       };
 
-      let early = dayjs(freeTime.start).isBefore(range.start);
-      let late = dayjs(freeTime.end).isAfter(range.end);
-      let outOfRange = early && late;
+      let early = freeTime.start.isBefore(range.min);
+      let late = freeTime.end.isAfter(range.max);
+
+      console.debug({ range }, { early }, { late });
 
       //if out of range, drop this time
       //if early/late, adjust time
-      if (outOfRange) {
-        return false;
+      if (early && late) {
+        return null;
       } else if (early) {
-        freeTime.start = range.start;
+        freeTime.start = range.min;
       } else if (late) {
-        freeTime.end = range.end;
+        freeTime.end = range.max;
       }
 
-      let ftDuration = dayjs.duration(
-        dayjs(freeTime.start).diff(dayjs(freeTime.end)),
-      );
+      let ftDuration = dayjs.duration(freeTime.start.diff(freeTime.end));
       let minDuration = dayjs.duration(eventBuffer);
 
       if (ftDuration < minDuration) {
-        return false;
+        return null;
       } else {
         freeTime.duration = ftDuration;
       }
 
-      return true;
+      return {
+        ...freeTime,
+        start: freeTime.start.toISOString(),
+        end: freeTime.end.toISOString(),
+      };
     });
 
     console.debug(typeof filteredTimeBlocks, { filteredTimeBlocks });
@@ -252,7 +270,10 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   //When length of freeTimesRemaining changes (aka they've loaded in)
   //Gets sum of all free time
   React.useEffect(() => {
-    if (freeTimesRemaining.length > 0) {
+    if (
+      freeTimesRemaining.length > 0 &&
+      freeTimesRemaining[freeTimesRemaining.length - 1].end
+    ) {
       try {
         //getSumFreeTime();
         filterRemainingFreeTimes();
