@@ -143,23 +143,13 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       })
     */
 
-    console.debug(await timeBlocks);
-
     setFreeTimesRemaining(await timeBlocks);
   }
 
   //filters out free times based on user settings
   async function filterRemainingFreeTimes() {
-    console.debug("filtering...");
-    console.debug(freeTimesRemaining);
-
-    //filter windows based on user settings
-    //filter out times that don't fit in user's sleep settings
-    let count = 0;
+    //filter out times that don't fit in user's settings
     const filteredTimeBlocks = freeTimesRemaining.map((freeTime) => {
-      count++;
-      console.debug("ROUND ", count, ": ", freeTime);
-
       freeTime.start = dayjs(freeTime.start);
       freeTime.end = dayjs(freeTime.end);
 
@@ -179,7 +169,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       let early = freeTime.start.isBefore(range.min);
       let late = freeTime.end.isAfter(range.max);
 
-      console.debug({ range }, { early }, { late });
+      //console.debug({ range }, { early }, { late });
 
       //if out of range, drop this time
       //if early/late, adjust time
@@ -191,10 +181,10 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
         freeTime.end = range.max;
       }
 
-      let ftDuration = dayjs.duration(freeTime.start.diff(freeTime.end));
-      let minDuration = dayjs.duration(eventBuffer);
+      let ftDuration = dayjs.duration(freeTime.end.diff(freeTime.start));
+      let minDuration = eventBuffer;
 
-      if (ftDuration < minDuration) {
+      if (ftDuration.asMilliseconds() < minDuration.asMilliseconds()) {
         return null;
       } else {
         freeTime.duration = ftDuration;
@@ -207,8 +197,16 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       };
     });
 
-    console.debug(typeof filteredTimeBlocks, { filteredTimeBlocks });
-    console.debug(typeof (await filteredTimeBlocks), await filteredTimeBlocks);
+    //removes time blocks that don't pass the above filter (they return null)
+    filteredTimeBlocks.filter((freeTime) => {
+      if (freeTime) {
+        return true;
+      }
+
+      return false;
+    });
+
+    setFreeTimesRemaining(filteredTimeBlocks);
   }
 
   //reduce free times to total free time
