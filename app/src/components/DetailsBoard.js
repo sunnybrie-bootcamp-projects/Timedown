@@ -161,9 +161,9 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
         singleEvents: true,
         orderBy: "startTime",
       })
-      .then(function (response) {
+      .then(async function (response) {
         //All resulting events
-        let busyArr = response.result.items;
+        const busyArr = await response.result.items;
         console.log({ busyArr });
 
         //All times between events
