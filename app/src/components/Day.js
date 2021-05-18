@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import dayjs from "dayjs";
 
@@ -15,15 +15,7 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Day({
-  index,
-  timeRows,
-  isAuthenticated,
-  gcal,
-  day,
-  dayStart,
-  suggestions,
-}) {
+function Day({ index, timeRows, gcal, day, dayStart, suggestions }) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -35,8 +27,8 @@ function Day({
   //   singleEvents: true,
   // });
 
-  const [min, setMin] = useState(dayjs().toISOString());
-  const [max, setMax] = useState(dayjs().toISOString());
+  const [min, setMin] = useState(day.start.toISOString());
+  const [max, setMax] = useState(day.end.toISOString());
   const [daysSuggestions, setDaysSuggestions] = useState([]);
 
   const queryOptions = {
@@ -63,7 +55,7 @@ function Day({
 
   function getDaysSuggestions() {
     let results = suggestions.filter((suggestion) => {
-      if (dayjs(suggestion.start).isBetween(dayjs(min), dayjs(max))) {
+      if (dayjs(suggestion.start).isBetween(day.start, day.end)) {
         return true;
       }
       return false;
@@ -74,19 +66,17 @@ function Day({
 
   //Component load-in...
   useEffect(() => {
-    setMin(dayjs(day.start).toISOString());
-    setMax(dayjs(day.end).toISOString());
-  });
+    setMin(day.start.toISOString());
+    setMax(day.end.toISOString());
+  }, []);
 
   //After day's parameters are set...
   useEffect(() => {
-    if (isAuthenticated) {
-      getEvents();
-    }
+    getEvents();
     if (suggestions.length > 0) {
       getDaysSuggestions();
     }
-  }, [min, max, isAuthenticated]);
+  }, [min, max]);
 
   useEffect(() => {
     getDaysSuggestions();

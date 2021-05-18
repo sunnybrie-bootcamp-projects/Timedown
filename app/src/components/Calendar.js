@@ -32,8 +32,11 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
     if (user.timedown.sleepTime) {
       let start = dayjs();
       start = start.hour(user.timedown.sleepTime.start.hours);
+      start = start.minute(user.timedown.sleepTime.start.minutes);
+
       let end = dayjs();
       end = end.hour(user.timedown.sleepTime.end.hours);
+      end = end.minute(user.timedown.sleepTime.end.minutes);
 
       setDayStart(start);
       setDayEnd(end);
@@ -59,13 +62,14 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
     let newDates = [];
     for (let i = 0; i < num; i++) {
       let newStart = dayjs();
-      newStart = newStart.hour(dayjs(dayStart).hour()); //set starting time
+      newStart = newStart.hour(dayStart.hour()).minute(dayStart.minute()); //set starting time
       newStart = newStart.add(i + dateNavigation, "day"); //set day
 
-      let newEnd = dayjs(dayEnd).add(i + dateNavigation, "day");
-      newEnd = newEnd.hour(dayjs(dayEnd).hour()); //set starting time
-      newEnd = newEnd.add(i + dateNavigation, "day"); //set day
-
+      let newEnd = newStart;
+      newEnd = newEnd.hour(dayEnd.hour()).minute(dayStart.minute()); //set starting time
+      if (newEnd.isBefore(newStart)) {
+        newEnd = newEnd.add(1, "day"); //set day
+      }
       newDates.push({ start: newStart, end: newEnd });
     }
 

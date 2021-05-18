@@ -316,13 +316,12 @@ button.next {
   height: 100%;
   width: 100%;
 
-  
   border-radius: 0.5em 0.5em 0.5em;
   box-shadow: 0.25em 0.25em 0.25em rgba(39, 71, 84, 0.5);
 
   color: ghostwhite;
 
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 .timeBlock p {
@@ -422,7 +421,7 @@ ol {
 }
 
 .calibrator li {
-  display: grid; 
+  display: grid;
   position: relative;
   padding: 0.5em;
   margin: 0.25em auto;
