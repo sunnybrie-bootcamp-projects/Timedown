@@ -95,10 +95,7 @@ export const CalendarNavBar = ({
           Week
         </button>
       </div>
-      <div
-        className="day navBar"
-        style={{ gridRow: "1", gridColumn: gridColumn }}
-      >
+      <div className="day navBar" style={{ gridRow: "1" }}>
         <button className="prev" onClick={() => prevNext(-1)}>
           prev
         </button>

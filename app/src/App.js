@@ -87,7 +87,7 @@ const App = () => {
 
 function UserDashboard({ isAuthenticated, gcal, setUser, user, setLoggedIn }) {
   return (
-    <main>
+    <>
       <div id="login">
         <button
           onClick={() => {
@@ -98,11 +98,11 @@ function UserDashboard({ isAuthenticated, gcal, setUser, user, setLoggedIn }) {
           Log out
         </button>
       </div>
-      <div className="app">
+      <main className="app">
         <h1>Timedown</h1>
         <Planner {...{ isAuthenticated, gcal, user }} />
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
 

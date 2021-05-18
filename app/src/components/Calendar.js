@@ -52,7 +52,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
     let template = [];
     let size = 100 / (total * 4);
     for (let i = 0; i < total; i += 0.25) {
-      template.push(`${size}%`);
+      template.push(`1fr`);
     }
     setTimeRows(template.join(" "));
   }
@@ -77,7 +77,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
 
     let newDayColumns =
       newDates.length === 1
-        ? "1fr 4fr"
+        ? "1fr 9fr"
         : "1fr".concat(
             newDates
               .map((date, index) => {
