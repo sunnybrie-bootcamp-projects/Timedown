@@ -10,7 +10,7 @@ const initialState = {
   description: "",
   estTimeHours: 0,
   estTimeMinutes: 0,
-  dueDate: dayjs().toISOString(),
+  dueDate: new Date(),
 };
 
 function reducer(state, action) {
@@ -28,7 +28,7 @@ function reducer(state, action) {
       return { ...state, estTimeMinutes: action.value };
 
     case "editDueDate":
-      return { ...state, dueDate: dayjs(action.value).toISOString() };
+      return { ...state, dueDate: action.value };
 
     case "wipe":
       return { ...initialState };
@@ -38,14 +38,11 @@ function reducer(state, action) {
 }
 
 //ADD FORM, CHILD OF EVENTBOARD
-function TaskAddForm({ setTasksList, user }) {
+function TaskAddForm({ getTasksInfo, user }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
-      const body = state;
-      console.log("Attempting to post...", JSON.stringify(body)); // TEST
-
       const response = await ApiClient.addTask(
         user.timedown.id,
         state.dueDate,
@@ -60,7 +57,7 @@ function TaskAddForm({ setTasksList, user }) {
 
       const data = JSON.parse(update);
 
-      setTasksList(data);
+      getTasksInfo();
 
       dispatch({ type: "wipe", value: { initialState } });
     } catch (err) {

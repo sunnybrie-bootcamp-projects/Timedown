@@ -17,8 +17,24 @@ tasks.get("/", async (request, response) => {
 
 tasks.use(express.json());
 tasks.post("/", async (request, response) => {
-  const { userId, dueDate, estTime, summary, description } = request.body;
-  const task = await db.addTask(userId, dueDate, estTime, summary, description);
+  const {
+    userId,
+    dueDate,
+    estTimeHours,
+    estTimeMinutes,
+    summary,
+    description,
+  } = request.body;
+  const task = await db.addTask(
+    userId,
+    dueDate,
+    estTimeHours,
+    estTimeMinutes,
+    summary,
+    description,
+  );
+
+  console.debug(task);
   response.status(201).json(task);
 });
 tasks.post("/delete", async (request, response) => {

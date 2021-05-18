@@ -36,13 +36,19 @@ export const getTasks = async (user) => {
 export const addTask = async (
   userId,
   dueDate,
-  estTime,
+  estTimeHours,
+  estTimeMinutes,
   summary,
   description,
 ) => {
+  let estTime = { hours: estTimeHours, minutes: estTimeMinutes };
+  estTime = JSON.stringify(estTime);
+
+  console.debug({ estTime });
+
   let newTask = await db.any(
     `INSERT INTO tasks("userId", "dueDate", "estTime", "summary", "description")
-VALUES($1, $2, $3, $4, $5) RETURNING id, summary`,
+VALUES($1, $2, $3, $4, $5)`,
     [userId, dueDate, estTime, summary, description],
   );
 

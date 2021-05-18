@@ -13,7 +13,8 @@ export const getTasks = async (user) => {
 export const addTask = async (
   userId,
   dueDate,
-  estTime,
+  estTimeHours,
+  estTimeMinutes,
   summary,
   description,
 ) => {
@@ -22,7 +23,14 @@ export const addTask = async (
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ userId, dueDate, estTime, summary, description }),
+    body: JSON.stringify({
+      userId,
+      dueDate,
+      estTimeHours,
+      estTimeMinutes,
+      summary,
+      description,
+    }),
   });
 
   return getTasks(userId);

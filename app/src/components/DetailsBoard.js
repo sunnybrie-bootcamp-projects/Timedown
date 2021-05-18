@@ -36,9 +36,7 @@ function DetailsBoard({
     let infoToRender;
     switch (action) {
       case "addTask":
-        infoToRender = (
-          <TaskAddForm setTasksList={(e) => setTasksList(e)} {...{ user }} />
-        );
+        infoToRender = <TaskAddForm {...{ user, getTasksInfo }} />;
         break;
       case "deleteTask":
         infoToRender = (
