@@ -5,7 +5,7 @@ import * as React from "react";
 import Account from "./Account.js";
 import gcal from "./api/ApiCalendar";
 import Planner from "./components/Planner.js";
-import * as dbRequest from "./dbRequest";
+import * as ApiClient from "./ApiClient";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
@@ -23,7 +23,7 @@ const App = () => {
         break;
       case "timedown":
         if (isAuthenticated && user.google) {
-          var timedownUserInfo = await dbRequest.getUser(
+          var timedownUserInfo = await ApiClient.getUser(
             user.google.getEmail(),
           );
           setUser({ ...user, timedown: timedownUserInfo });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import * as dbRequest from "../dbRequest";
+import * as ApiClient from "../ApiClient";
 
 function Task({ task, setDetails, setAction }) {
   function seeDetails(action) {

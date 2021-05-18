@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import dayjs from "dayjs";
 
-import * as dbRequest from "../dbRequest";
+import * as ApiClient from "../ApiClient";
 
 //dayjs plugins
 const AdvancedFormat = require("dayjs/plugin/advancedFormat");

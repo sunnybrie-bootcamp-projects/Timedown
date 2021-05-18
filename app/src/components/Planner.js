@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import * as dbRequest from "../dbRequest";
+import * as ApiClient from "../ApiClient";
 
 import Calendar from "./Calendar.js";
 import DetailsBoard from "./DetailsBoard.js";
@@ -21,7 +21,7 @@ function Planner({ isAuthenticated, gcal, user }) {
 
   //Fetches user's tasks
   async function getTasksInfo() {
-    let data = JSON.stringify(await dbRequest.getTasks(user.timedown.id));
+    let data = JSON.stringify(await ApiClient.getTasks(user.timedown.id));
     let tasks = JSON.parse(data);
 
     setTasksList(tasks);

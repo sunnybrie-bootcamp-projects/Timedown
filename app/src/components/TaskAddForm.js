@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
 
-import * as dbRequest from "../dbRequest";
+import * as ApiClient from "../ApiClient";
 
 //Empty add form
 const initialState = {
@@ -46,7 +46,7 @@ function TaskAddForm({ setTasksList, user }) {
       const body = state;
       console.log("Attempting to post...", JSON.stringify(body)); // TEST
 
-      const response = await dbRequest.addTask(
+      const response = await ApiClient.addTask(
         user.timedown.id,
         state.dueDate,
         state.estTimeHours,

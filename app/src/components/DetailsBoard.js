@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import dayjs from "dayjs";
 
-import * as dbRequest from "../dbRequest";
+import * as ApiClient from "../ApiClient";
 
 import Calibrator from "./Calibrator.js";
 import TaskAddForm from "./TaskAddForm";
@@ -82,7 +82,7 @@ function DetailsBoard({
 
   //Deletes task and refreshes task list
   async function confirmDelete() {
-    let deletedTask = await dbRequest.deleteTask(details.id);
+    let deletedTask = await ApiClient.deleteTask(details.id);
     getTasksInfo();
     setAction("");
     window.alert("Task deleted.", deletedTask);
