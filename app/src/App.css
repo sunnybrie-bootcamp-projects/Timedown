@@ -243,6 +243,22 @@ button.next {
   border-top: 1px solid ghostwhite;
 }
 
+.timeNotch .time {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 5;
+  top: -0.5em;
+  width: max-content;
+
+  background-color: rgba(232, 196, 104, 1);
+  border-radius: 1em 1em 1em;
+}
+
+.timeNotch .notch {
+  display: none;
+}
+
 .hidden {
   color: rgba(232, 196, 104, 0);
 }
@@ -338,7 +354,15 @@ button.next {
 }
 
 .suggestion {
-  background: linear-gradient(to bottom, #f5a462, #e86f51);
+  z-index: 5;
+  background: linear-gradient(
+    to bottom,
+    rgba(245, 164, 98, 0.6),
+    rgba(232, 111, 81, 0.6)
+  );
+  border: 2px solid rgba(232, 111, 81, 1);
+
+  text-shadow: 0.125em 0.125em 0.25em rgb(97, 27, 8);
 }
 
 ::-webkit-scrollbar {

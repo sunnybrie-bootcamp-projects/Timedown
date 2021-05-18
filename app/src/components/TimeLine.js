@@ -53,7 +53,13 @@ function TimeNotch({ time }) {
         gridRow: time.timeLineLocation,
       }}
     >
-      <span>
+      <span
+        className={
+          time.value.minute() === 0 || time.value.minute() === 30
+            ? "time"
+            : "notch"
+        }
+      >
         {time.value.minute() === 0 || time.value.minute() === 30
           ? `${time.value.format("hh:mma")}`
           : "-"}

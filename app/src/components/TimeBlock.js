@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 
 const TimeBlock = ({ start, end, summary, dayStart, type }) => {
   const [gridRow, setGridRow] = useState("auto");
-  const [gridColumn, setGridColumn] = useState("auto / span 1");
+  const [gridColumn, setGridColumn] = useState("1 / span 1");
 
   function getGridPlacement() {
     function minuteModify(time, edge) {
@@ -24,17 +24,18 @@ const TimeBlock = ({ start, end, summary, dayStart, type }) => {
       return extra;
     }
 
-    var blockStart =
+    let blockStart =
       (start.hour() - dayStart.hour()) * 4 + minuteModify(start, "start");
     blockStart = blockStart <= 0 ? 1 : blockStart;
 
-    var blockEnd =
+    let blockEnd =
       (end.hour() - dayStart.hour()) * 4 + minuteModify(end, "end");
 
     setGridRow(`${blockStart} / ${blockEnd < 0 ? "span all" : blockEnd}`);
+    setGridColumn(type === "suggestion" ? "1 / auto" : gridColumn);
   }
 
-  var eventMeasurements = {
+  let eventMeasurements = {
     gridRow: gridRow,
     gridColumn: gridColumn,
   };
