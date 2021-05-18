@@ -39,13 +39,13 @@ function Planner({
 
   return (
     <>
-      <NavBar {...{ setTab, tab }} />
+      <NavBar {...{ tab, setTab, user }} />
       <div className="planner">
-        <Calendar {...{ isAuthenticated, tab, gcal, user, suggestions }} />
+        <Calendar {...{ tab, isAuthenticated, gcal, user, suggestions }} />
         <TaskBoard
           {...{
-            isAuthenticated,
             tab,
+            isAuthenticated,
             gcal,
             user,
             getTasksInfo,
@@ -56,7 +56,15 @@ function Planner({
           }}
         />
         <Account
-          {...{ isAuthenticated, isLoggedIn, setLoggedIn, gcal, user, setUser }}
+          {...{
+            tab,
+            isAuthenticated,
+            isLoggedIn,
+            setLoggedIn,
+            gcal,
+            user,
+            setUser,
+          }}
         />
       </div>
       <DetailsBoard

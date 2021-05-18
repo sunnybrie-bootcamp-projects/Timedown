@@ -72,15 +72,15 @@ h1 {
   right: 1em;
 }
 
-.app {
+main.app {
   display: grid;
   box-sizing: border-box;
-  position: absolute;
+  position: relative;
   padding: 0.5em;
   max-height: 90vh;
   width: 97.5%;
 
-  grid-template-rows: 1fr 1.5fr 5fr;
+  grid-template-rows: 10vh 5vh auto;
 }
 
 .app h1 {
@@ -94,6 +94,7 @@ h1 {
   font-size: 3em;
 }
 
+/* MAIN NAVBAR */
 .navBar {
   display: block;
   box-sizing: border-box;
@@ -111,16 +112,15 @@ h1 {
   float: left;
   box-sizing: border-box;
   height: 100%;
-  width: 200px;
+  min-width: 25%;
+  width: auto;
+  max-width: 1fr;
 
   background-color: ghostwhite;
   border: 1px solid #f5a462;
   border-width: 2px 2px 0px 2px;
   border-top-left-radius: 0.75em 0.75em;
   border-top-right-radius: 0.75em 0.75em;
-
-  font-size: 1.5em;
-  color: #e86f51;
 }
 
 .navTab.toggled {
@@ -131,13 +131,48 @@ h1 {
   background-color: gainsboro;
   filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
 }
+.navTab h2 {
+  display: block;
+  z-index: 1;
+  top: 50%;
+  bottom: 50%;
+  left: 25%;
+  right: 25%;
+  margin: auto 0;
+
+  font-family: quicksand, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  color: #e86f51;
+}
+
+.navTab img {
+  display: block;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  right: 25%;
+  margin: auto 0;
+  height: 50%;
+
+  clip-path: circle(50% at 50% 50%);
+
+  opacity: 0.5;
+}
+
+/* PLANNERR - MAIN CONTAINER */
 
 .planner {
   display: block;
   box-sizing: border-box;
   position: relative;
-  padding: 1.5em;
-  max-height: 90%;
+  padding: 2em 0em 1em 0em;
+  width: auto;
+  min-width: min-content;
+  max-width: 70vw;
+  min-height: 70vh;
+  height: auto;
+  max-height: 80vh;
 
   grid-row: 3 / span 1;
 
@@ -157,25 +192,16 @@ h1 {
   box-sizing: border-box;
   position: relative;
   margin: auto;
-  max-height: 90%;
-  width: 95%;
+  height: auto;
+  min-height: fit-content;
+  max-height: 95%;
+  max-width: 95%;
 
   grid-template-rows: 1fr 14fr;
   row-gap: 1em;
   column-gap: 1em;
 
   border-radius: 1em 1em 1em;
-}
-
-.calHeader {
-  display: block;
-  position: relative;
-  box-sizing: border-box;
-  margin: auto;
-
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
-  color: #2b9e91;
 }
 
 /* CALENDAR NAV */
@@ -253,16 +279,18 @@ button.next {
 .timeLine {
   display: grid;
   box-sizing: border-box;
-  position: relative;
-  margin: 0 auto;
+  position: absolute;
+  margin: auto;
   padding: 1em 0em;
-  width: fit-content;
-  max-height: 90%;
+  width: 10%;
+  max-width: 20%;
+  height: 100%;
 
   grid-template-columns: 1fr 1fr;
   column-gap: 0em;
   grid-column: 1;
-  justify-content: center;
+  grid-row: 2 / span 1;
+  justify-content: space-evenly;
   align-content: space-between;
 
   background-color: #e8c468;
@@ -351,12 +379,12 @@ button.next {
 .day {
   display: grid;
   box-sizing: border-box;
-  position: relative;
+  position: absolute;
   right: 0px;
-  padding: 0.25em;
+  padding: 1em 1%;
   margin: 0 auto;
   width: 100%;
-  max-height: 90%;
+  height: 100%;
 
   grid-row: 2 / span 1;
   grid-template-columns: minmax(auto, 100%);
@@ -415,17 +443,69 @@ button.next {
 
 /* TASKBOARD COMPONENTS */
 
-.task {
-  display: block;
+table.taskBoard {
+  display: table;
   box-sizing: border-box;
-  margin: 0.5em;
-  padding: 0.5em;
+  position: absolute;
+  margin: auto;
+  padding: 1em;
+  height: auto;
+  max-height: 60%;
+  width: 100%;
 
+  border-collapse: separate;
+  border-spacing: 0em 1em;
+  vertical-align: middle;
+}
+
+thead {
+  display: table-header-group;
+  margin: auto;
+  width: 100%;
+}
+
+thead caption {
+  display: table-caption;
+  margin: auto;
+  width: fit-content;
+  text-align: center;
+}
+
+.taskBoard tbody {
+  max-height: 20%;
+
+  overflow-y: auto;
+}
+
+.taskBoard tr {
+  display: table-row;
+  box-sizing: border-box;
+  filter: drop-shadow(0.25em 0.25em 0.25em #274754);
+}
+
+.task {
+  display: table-row;
   border-radius: 1em 1em 1em;
-  box-shadow: 0.25em 0.25em 0.25em #274754;
-  background-color: #2b9e91;
 
-  color: ghostwhite;
+  background: #e8c468;
+  background-clip: border-box;
+
+  color: #274754;
+}
+
+td {
+  display: table-cell;
+  margin: auto;
+  padding: 0.5em;
+}
+td:first-child {
+  border-top-left-radius: 1em;
+  border-bottom-left-radius: 1em;
+}
+
+td:last-child {
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
 }
 
 .task button {

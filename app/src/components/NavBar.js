@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
 
 //MAIN APP NAV BAR
-function NavBar({ isAuthenticated, gcal, setTab, tab }) {
+function NavBar({ tab, setTab, user }) {
   return (
     <div className="navBar">
       <button
         className={tab === "calendar" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("calendar")}
       >
-        Calendar
+        <h2>Calendar</h2>
       </button>
       <button
         className={tab === "taskboard" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("taskboard")}
       >
-        Taskboard
+        <h2>Taskboard</h2>
+      </button>
+      <button
+        id="accountTab"
+        className={tab === "account" ? "navTab toggled" : "navTab notToggled"}
+        onClick={() => setTab("account")}
+      >
+        {user.google.getImageUrl() ? (
+          <img src={user.google.getImageUrl()} />
+        ) : (
+          <></>
+        )}
+        <h2>Account</h2>
       </button>
     </div>
   );

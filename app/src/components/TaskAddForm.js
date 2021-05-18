@@ -37,7 +37,6 @@ function reducer(state, action) {
   }
 }
 
-//ADD FORM, CHILD OF EVENTBOARD
 function TaskAddForm({ getTasksInfo, user }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const onSubmitForm = async (e) => {
