@@ -178,17 +178,154 @@ function Account({
         </fieldset>
         <fieldset>
           <legend>Weekly Scheduling</legend>
-          <label htmlFor="in-Monday">
-            Monday
+          <fieldset>
+            <legend>Monday:</legend>
+            <label htmlFor="in-monStart">Start:</label>
             <input
-              id="in-awakeTimeStart"
+              id="in-monStart"
               type="time"
               value={state.estTime}
               onChange={(e) => {
-                dispatch({ type: "editAwakeTimeStart", value: e.target.value });
+                dispatch({ type: "editMondayStart", value: e.target.value });
               }}
             />
-          </label>
+            <label htmlFor="in-monEnd">End:</label>
+            <input
+              id="in-monEnd"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editMondayEnd", value: e.target.value });
+              }}
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend>Tuesday:</legend>
+            <label htmlFor="in-tueStart">Start:</label>
+            <input
+              id="in-tueStart"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editTuesdayStart", value: e.target.value });
+              }}
+            />
+            <label htmlFor="in-tueEnd">End:</label>
+            <input
+              id="in-tueEnd"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editTuesdayEnd", value: e.target.value });
+              }}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>Wednesday:</legend>
+            <label htmlFor="in-wedStart">Start:</label>
+            <input
+              id="in-wedStart"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editWednesdayStart", value: e.target.value });
+              }}
+            />
+            <label htmlFor="in-wedEnd">End:</label>
+            <input
+              id="in-wedEnd"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editWednesdayEnd", value: e.target.value });
+              }}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>Thursday:</legend>
+            <label htmlFor="in-thuStart">Start:</label>
+            <input
+              id="in-thuStart"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editThursdayStart", value: e.target.value });
+              }}
+            />
+            <label htmlFor="in-thuEnd">End:</label>
+            <input
+              id="in-thuEnd"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editThursdayEnd", value: e.target.value });
+              }}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>Friday:</legend>
+            <label htmlFor="in-friStart">Start:</label>
+            <input
+              id="in-friStart"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editFridayStart", value: e.target.value });
+              }}
+            />
+            <label htmlFor="in-friEnd">End:</label>
+            <input
+              id="in-friEnd"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editFridayEnd", value: e.target.value });
+              }}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>Saturday:</legend>
+            <label htmlFor="in-satStart">Start:</label>
+            <input
+              id="in-satStart"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editSaturdayStart", value: e.target.value });
+              }}
+            />
+            <label htmlFor="in-satEnd">End:</label>
+            <input
+              id="in-satEnd"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editSaturdayEnd", value: e.target.value });
+              }}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>Sunday:</legend>
+            <label htmlFor="in-sunStart">Start:</label>
+            <input
+              id="in-sunStart"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editSundayStart", value: e.target.value });
+              }}
+            />
+            <label htmlFor="in-sunEnd">End:</label>
+            <input
+              id="in-sunEnd"
+              type="time"
+              value={state.estTime}
+              onChange={(e) => {
+                dispatch({ type: "editSundayEnd", value: e.target.value });
+              }}
+            />
+          </fieldset>
         </fieldset>
         <fieldset>
           <legend>Miscellaneous</legend>
