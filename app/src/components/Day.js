@@ -15,7 +15,7 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Day({ index, timeRows, gcal, day, dayStart, suggestions }) {
+function Day({ index, timeRows, gcal, day, dayStart, suggestions, calView }) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -26,7 +26,6 @@ function Day({ index, timeRows, gcal, day, dayStart, suggestions }) {
   //   showDeleted: false,
   //   singleEvents: true,
   // });
-
   const [min, setMin] = useState(day.start.toISOString());
   const [max, setMax] = useState(day.end.toISOString());
   const [daysSuggestions, setDaysSuggestions] = useState([]);

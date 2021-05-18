@@ -145,6 +145,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
               day,
               dayStart,
               suggestions,
+              calView,
             }}
           />
         );

@@ -1,3 +1,5 @@
+@import url("https://use.typekit.net/inp5cfh.css");
+
 /* Color Theme Swatches in Hex */
 .fontColor-navy {
   color: #274754;
@@ -52,6 +54,13 @@ body::-webkit-scrollbar-thumb {
   background-color: rgba(44, 241, 204, 0.4);
 }
 
+/* GENERAL STYLING */
+h1 {
+  font-family: quicksand, sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
 /* MAIN APP COMPONENTS */
 
 #login {
@@ -59,34 +68,37 @@ body::-webkit-scrollbar-thumb {
   right: 1em;
 }
 
-.planner {
-  display: block;
+.app {
+  display: grid;
+  box-sizing: border-box;
   position: absolute;
-  top: 4em;
-  left: 2em;
-  margin: auto;
-  padding: 1.5em;
-  height: 50em;
-  width: 45em;
+  padding: 0.5em;
+  height: 90vh;
 
-  background-color: ghostwhite;
-  filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
+  grid-template-rows: 10vh 5vh 85vh;
+}
 
-  border: 2px solid #f5a462;
+.app h1 {
+  position: relative;
+  margin: auto auto auto 0.25em;
+  height: auto;
+  width: max-content;
 
-  border-top-right-radius: 1em 1em;
-  border-bottom-left-radius: 1em 1em;
-  border-bottom-right-radius: 1em 1em;
+  grid-row: 1 / span 1;
+
+  font-size: 3em;
 }
 
 .navBar {
   display: block;
   box-sizing: border-box;
   position: absolute;
-  top: 1.125em;
+  bottom: -0.125em;
   left: 2em;
-  width: auto;
+  width: max-content;
   height: 3em;
+
+  grid-row: 2 / span 1;
 }
 
 .navTab {
@@ -116,17 +128,39 @@ body::-webkit-scrollbar-thumb {
   filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
 }
 
+.planner {
+  display: block;
+  position: absolute;
+  left: 2em;
+  margin: auto;
+  padding: 1.5em;
+  height: 50em;
+  width: 45em;
+
+  grid-row: 3 / span 1;
+
+  background-color: ghostwhite;
+  filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
+
+  border: 2px solid #f5a462;
+
+  border-top-right-radius: 1em 1em;
+  border-bottom-left-radius: 1em 1em;
+  border-bottom-right-radius: 1em 1em;
+}
+
 /* CALENDAR COMPONENTS */
 .calendar {
   display: grid;
   box-sizing: border-box;
   position: relative;
   margin: auto;
-  padding: 0.5em;
+  padding: 0.125em;
   height: 100%;
   width: 95%;
 
   grid-template-rows: 1fr 14fr;
+  row-gap: 1em;
   column-gap: 1em;
 
   border-radius: 1em 1em 1em;
@@ -143,6 +177,7 @@ body::-webkit-scrollbar-thumb {
   color: #2b9e91;
 }
 
+/* CALENDAR NAV */
 .calendar .navBar {
   display: grid;
   box-sizing: border-box;
@@ -150,15 +185,17 @@ body::-webkit-scrollbar-thumb {
   top: 0em;
   left: 0em;
   margin: auto;
-  padding: 0em 0.125em;
+  padding: 0.25em;
   width: 100%;
-  height: auto;
+  height: 100%;
 
   grid-template-columns: 1fr 3fr 1fr;
+  justify-content: space-around;
 
   background-color: #e86f51;
-  color: ghostwhite;
 
+  color: ghostwhite;
+  font-size: 1.25em;
   text-align: center;
 }
 
@@ -167,12 +204,20 @@ body::-webkit-scrollbar-thumb {
   width: minMax(auto, 80%);
 }
 
-button.prev {
-  left: 0em;
-}
-
+button.prev,
 button.next {
-  right: 0em;
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  margin: auto;
+
+  width: min-content;
+
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 1em 1em 1em;
+  border: 2px solid ghostwhite;
+
+  color: ghostwhite;
 }
 
 .calendar .navTab {
@@ -210,9 +255,8 @@ button.next {
   position: relative;
   padding: 1em 0em;
   min-height: 90%;
-  height: 95%;
-  min-width: 20%;
-  width: auto;
+  height: 100%;
+  width: fit-content;
 
   grid-template-columns: 1fr 1fr;
   column-gap: 0em;
@@ -234,7 +278,7 @@ button.next {
 .timeNotch {
   display: block;
   box-sizing: border-box;
-  margin: auto;
+
   min-height: 1em;
   max-height: 100%;
   max-width: 100%;
@@ -249,8 +293,11 @@ button.next {
   position: relative;
   z-index: 5;
   top: -0.5em;
+  margin: auto 12.5% auto auto;
   width: max-content;
 
+  font-size: 0.875em;
+  line-height: 1em;
   background-color: rgba(232, 196, 104, 1);
   border-radius: 1em 1em 1em;
 }
@@ -305,14 +352,14 @@ button.next {
   box-sizing: border-box;
   position: relative;
   right: 0px;
-  padding: 1em;
-  min-height: 90%;
-  height: 95%;
-  width: auto;
+  padding: 0.25em;
+  margin: auto;
+  height: 100%;
+  width: 100%;
 
-  grid-template-columns: auto auto;
   grid-row: 2 / span 1;
-  justify-content: left;
+  grid-template-columns: minmax(auto, 100%);
+  justify-content: center;
   align-content: center;
 
   background-color: #e8c468;
@@ -365,30 +412,12 @@ button.next {
   text-shadow: 0.125em 0.125em 0.25em rgb(97, 27, 8);
 }
 
-::-webkit-scrollbar {
-  width: 0.25em;
-
-  background-color: rgba(43, 158, 145, 0);
-}
-
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
-}
-
-::-webkit-scrollbar-thumb {
-  position: relative;
-  border-radius: 1rem 1rem 1rem;
-
-  background-color: rgba(43, 158, 145, 0);
-  border: 1px solid ghostwhite;
-}
-
 /* TASKBOARD COMPONENTS */
 
 .task {
   display: block;
   box-sizing: border-box;
-  margin: auto;
+  margin: 0.5em;
   padding: 0.5em;
 
   border-radius: 1em 1em 1em;
@@ -439,9 +468,6 @@ button.next {
   max-height: 70vh;
   padding: 0.25em;
   overflow-y: scroll;
-}
-
-ol {
 }
 
 .calibrator li {
