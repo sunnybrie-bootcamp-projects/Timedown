@@ -192,21 +192,20 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
 
   //get suggested time spent working on task
   function getSuggestions() {
-    let { estTime } = testTask;
-    estTime = dayjs.duration({ ...estTime });
+    let estTime = dayjs.duration(testTask.estTime);
+    console.debug({ estTime });
 
     let totals = freeTimesRemaining.map((freeTime) => {
       let amount = freeTime.freeTimePercentage * estTime.asMilliseconds();
 
-      amount = dayjs.duration(amount);
-
-      let suggestion = {
-        amount: amount,
+      let item = {
+        amount: dayjs.duration(amount),
         start: freeTime.start,
-        end: freeTime.start.add(amount),
+        end: dayjs(freeTime.start).add(amount).toISOString(),
+        summary: testTask.summary,
       };
 
-      return suggestion;
+      return item;
     });
 
     setSuggestions(totals);
@@ -254,7 +253,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
           let when = dayjs(freeTimesRemaining[index].start).format(
             "ddd, MMM D, YYYY h:mm A",
           );
-          let howLong = time.humanize();
+          let howLong = time.amount.humanize();
           return (
             <li>
               <span className="when">{`When: ${when}`}</span>

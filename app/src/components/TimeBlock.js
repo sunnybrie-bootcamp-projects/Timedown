@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import dayjs from "dayjs";
 
-const TimeBlock = ({ start, end, summary, dayStart }) => {
+const TimeBlock = ({ start, end, summary, dayStart, type }) => {
   const [gridRow, setGridRow] = useState("auto");
   const [gridColumn, setGridColumn] = useState("auto / span 1");
 
@@ -44,7 +44,7 @@ const TimeBlock = ({ start, end, summary, dayStart }) => {
   }, []);
 
   return (
-    <div className="event" style={eventMeasurements}>
+    <div className={`timeBlock ${type}`} style={eventMeasurements}>
       <p>{summary}</p>
     </div>
   );

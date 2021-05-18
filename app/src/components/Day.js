@@ -62,12 +62,11 @@ function Day({
   }
 
   function getDaysSuggestions() {
-    let results = [];
-
-    suggestions.forEach((suggestion) => {
+    let results = suggestions.filter((suggestion) => {
       if (dayjs(suggestion.start).isBetween(dayjs(min), dayjs(max))) {
-        results.push(suggestion);
+        return true;
       }
+      return false;
     });
 
     setDaysSuggestions(results);
@@ -75,11 +74,6 @@ function Day({
 
   //Component load-in...
   useEffect(() => {
-    // setQueryOptions({
-    //   ...queryOptions,
-    //   timeMax: dayEnd.toISOString(),
-    //   timeMin: dayStart.toISOString(),
-    // });
     setMin(dayjs(day.start).toISOString());
     setMax(dayjs(day.end).toISOString());
   });
@@ -89,10 +83,13 @@ function Day({
     if (isAuthenticated) {
       getEvents();
     }
+    if (suggestions.length > 0) {
+      getDaysSuggestions();
+    }
   }, [min, max, isAuthenticated]);
 
   useEffect(() => {
-    setDaysSuggestions();
+    getDaysSuggestions();
   }, [suggestions]);
 
   return (
@@ -115,6 +112,7 @@ function Day({
             end={dayjs(event.end.dateTime)}
             summary={event.summary}
             dayStart={dayStart}
+            type="event"
           />
         ))
       )}
@@ -122,14 +120,15 @@ function Day({
       {suggestions.length === 0 ? (
         <></>
       ) : (
-        suggestions.map((suggestion, index) => (
+        daysSuggestions.map((suggestion, index) => (
           <TimeBlock
             className="event"
             key={`TBS${index}`}
             start={dayjs(suggestion.start)}
             end={dayjs(suggestion.end)}
-            summary={""}
+            summary={suggestion.summary}
             dayStart={dayStart}
+            type="suggestion"
           />
         ))
       )}
