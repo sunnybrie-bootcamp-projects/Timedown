@@ -464,6 +464,40 @@ button.next {
 .taskInfo {
 }
 
+.taskAddForm {
+  display: grid;
+  box-sizing: border-box;
+  margin: auto;
+  max-height: 80%;
+  max-width: 80%;
+
+  grid-template-columns: auto auto;
+  row-gap: 0.75em;
+  column-gap: 0.5em;
+  justify-content: space-around;
+  align-content: space-around;
+
+  font-size: 1.25em;
+  text-align: right;
+}
+
+.taskAddForm .topper,
+.taskAddForm h3,
+.taskAddForm h4,
+.taskAddForm #submitTask {
+  display: block;
+  margin: auto;
+  grid-column: 1 / span 2;
+}
+
+.taskAddForm label {
+  grid-column: 1;
+}
+
+.taskAddForm input {
+  grid-column: 2;
+}
+
 .calibrator {
   display: block;
   box-sizing: border-box;
