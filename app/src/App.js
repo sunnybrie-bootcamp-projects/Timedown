@@ -2,10 +2,9 @@ import "./App.css";
 
 import * as React from "react";
 
-import Account from "./Account.js";
+import * as ApiClient from "./ApiClient";
 import gcal from "./api/ApiCalendar";
 import Planner from "./components/Planner.js";
-import * as ApiClient from "./ApiClient";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
@@ -85,24 +84,21 @@ const App = () => {
   );
 };
 
-function UserDashboard({ isAuthenticated, gcal, setUser, user, setLoggedIn }) {
+function UserDashboard({
+  isAuthenticated,
+  isLoggedIn,
+  setLoggedIn,
+  gcal,
+  user,
+  setUser,
+}) {
   return (
-    <>
-      <div id="login">
-        <button
-          onClick={() => {
-            gcal.handleSignoutClick();
-            setLoggedIn(false);
-          }}
-        >
-          Log out
-        </button>
-      </div>
-      <main className="app">
-        <h1>Timedown</h1>
-        <Planner {...{ isAuthenticated, gcal, user }} />
-      </main>
-    </>
+    <main className="app">
+      <h1>Timedown</h1>
+      <Planner
+        {...{ isAuthenticated, isLoggedIn, setLoggedIn, gcal, user, setUser }}
+      />
+    </main>
   );
 }
 

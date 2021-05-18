@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 
 import * as ApiClient from "../ApiClient";
 
+import Account from "./Account";
 import Calendar from "./Calendar.js";
 import DetailsBoard from "./DetailsBoard.js";
 import NavBar from "./NavBar.js";
 import TaskBoard from "./TaskBoard.js";
 
-function Planner({ isAuthenticated, gcal, user }) {
+function Planner({
+  isAuthenticated,
+  isLoggedIn,
+  setLoggedIn,
+  gcal,
+  user,
+  setUser,
+}) {
   //sets what tab is rendered
   const [tab, setTab] = useState("calendar");
   //Lists of Timedown User's tasks
@@ -46,6 +54,9 @@ function Planner({ isAuthenticated, gcal, user }) {
             setDetails,
             setAction,
           }}
+        />
+        <Account
+          {...{ isAuthenticated, isLoggedIn, setLoggedIn, gcal, user, setUser }}
         />
       </div>
       <DetailsBoard
