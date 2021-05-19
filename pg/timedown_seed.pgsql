@@ -62,10 +62,10 @@ CREATE TABLE public.settings (
     "pushNotifications" boolean DEFAULT false,
     "emailNotifications" boolean DEFAULT false,
     "addToGoogleCal" boolean DEFAULT false,
-    "sleepTime" jsonb DEFAULT '{"end": null, "start": null, "timeZone": null}'::jsonb,
-    "weeklyBlackOuts" jsonb DEFAULT '{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}'::jsonb,
-    "miscBlackOuts" jsonb DEFAULT '[{"end": null, "start": null, "timeZone": null}]'::jsonb,
-    "eventBuffer" jsonb DEFAULT '{"hours": null, "minutes": null}'::jsonb
+    "awakeTime" jsonb DEFAULT '{"end": "00:00", "start": "00:00"}'::jsonb,
+    "weeklyBlackOuts" jsonb DEFAULT 'null'::jsonb,
+    "miscBlackOuts" jsonb DEFAULT 'null'::jsonb,
+    "eventBuffer" jsonb DEFAULT 'null'::jsonb
 );
 
 
@@ -222,7 +222,7 @@ COPY public.checkins (id) FROM stdin;
 -- Data for Name: settings; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
 --
 
-COPY public.settings ("userId", "pushNotifications", "emailNotifications", "addToGoogleCal", "sleepTime", "weeklyBlackOuts", "miscBlackOuts", "eventBuffer") FROM stdin;
+COPY public.settings ("userId", "pushNotifications", "emailNotifications", "addToGoogleCal", "awakeTime", "weeklyBlackOuts", "miscBlackOuts", "eventBuffer") FROM stdin;
 2	f	f	f	{"end": {"hours": 21, "minutes": 0}, "start": {"hours": 9, "minutes": 0}, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": null, "minutes": 15}
 1	f	f	f	{"end": {"hours": 22, "minutes": 0}, "start": {"hours": 8, "minutes": 30}, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": 0, "minutes": 15}
 \.

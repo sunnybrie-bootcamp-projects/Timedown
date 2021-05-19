@@ -29,14 +29,14 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
 
   //sets dayStart, dayEnd, and totalHours states for rendering
   function setTimeRanges() {
-    if (user.timedown.sleepTime) {
+    if (user.timedown.awakeTime) {
       let start = dayjs();
-      start = start.hour(user.timedown.sleepTime.start.hours);
-      start = start.minute(user.timedown.sleepTime.start.minutes);
+      start = start.hour(user.timedown.awakeTime.start.hours);
+      start = start.minute(user.timedown.awakeTime.start.minutes);
 
       let end = dayjs();
-      end = end.hour(user.timedown.sleepTime.end.hours);
-      end = end.minute(user.timedown.sleepTime.end.minutes);
+      end = end.hour(user.timedown.awakeTime.end.hours);
+      end = end.minute(user.timedown.awakeTime.end.minutes);
 
       setDayStart(start);
       setDayEnd(end);
