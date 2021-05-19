@@ -101,7 +101,16 @@ function UserSettingsForm({
   setEditSettings,
 }) {
   const [blackOuts, blackOutDispatch] = React.useReducer(blackOutReducer, {});
-  const [tracker, trackerDispatch] = React.useReducer(trackerReducer, {});
+  const [tracker, trackerDispatch] = React.useReducer(trackerReducer, {
+    mon: [{ start: "00:00", end: "00:00" }],
+    tue: [{ start: "00:00", end: "00:00" }],
+    wed: [{ start: "00:00", end: "00:00" }],
+    thu: [{ start: "00:00", end: "00:00" }],
+    fri: [{ start: "00:00", end: "00:00" }],
+    sat: [{ start: "00:00", end: "00:00" }],
+    sun: [{ start: "00:00", end: "00:00" }],
+    misc: [{ start: "", end: "" }],
+  });
 
   function blackOutReducer(blackOuts, action) {
     switch (action.type) {
@@ -137,7 +146,34 @@ function UserSettingsForm({
   }
 
   function trackerReducer(tracker, action) {
-    //action : {type: , value: , index: , edge: start || end}
+    //action : {day: , type: , value: , index: , edge: start || end}
+    let { day, index, edge, value } = action;
+    switch (action.type) {
+      case "remove":
+        let downsizedArr = [];
+        tracker[day].forEach((time, i) => {
+          if (i !== index) {
+            downsizedArr.push(time);
+          }
+        });
+        return { ...tracker, [day]: downsizedArr };
+
+      case "add":
+        let upsizedArr = tracker[day];
+        upsizedArr.push(value);
+
+        return { ...tracker, [day]: upsizedArr };
+
+      case "modify":
+        let modifiedArr = tracker[day];
+        modifiedArr[index][edge] = value;
+        return { ...tracker, [day]: modifiedArr };
+
+      case "wipe":
+        return { ...initialState };
+      default:
+        return blackOuts;
+    }
   }
 
   // const onSubmitForm = async (e) => {
@@ -232,7 +268,7 @@ function UserSettingsForm({
         <input
           id="in-awakeTimeStart"
           type="time"
-          value={userSettings.estTime}
+          value={userSettings.awakeTimeStart}
           onChange={(e) => {
             settingsDispatch({
               type: "editAwakeTimeStart",
@@ -244,7 +280,7 @@ function UserSettingsForm({
         <input
           id="in-awakeTimeEnd"
           type="time"
-          value={userSettings.estTime}
+          value={userSettings.awakeTimeEnd}
           onChange={(e) => {
             settingsDispatch({
               type: "editAwakeTimeEnd",
@@ -255,32 +291,66 @@ function UserSettingsForm({
       </fieldset>
       <fieldset>
         <legend>Weekly Scheduling</legend>
-        <fieldset>
+        <fieldset key={0}>
           <legend>Monday:</legend>
-          <label htmlFor="in-monStart">Start:</label>
-          <input
-            id="in-monStart"
-            type="time"
-            value={userSettings.estTime}
-            onChange={(e) => {
-              settingsDispatch({
-                type: "editMondayStart",
-                value: e.target.value,
-              });
-            }}
-          />
-          <label htmlFor="in-monEnd">End:</label>
-          <input
-            id="in-monEnd"
-            type="time"
-            value={userSettings.estTime}
-            onChange={(e) => {
-              settingsDispatch({
-                type: "editMondayEnd",
-                value: e.target.value,
-              });
-            }}
-          />
+          {tracker.mon.map((time, index) => {
+            return (
+              <>
+                <label key={`0SL${index}`} htmlFor="in-monStart">
+                  Start:
+                </label>
+                <input
+                  id="in-monStart"
+                  key={`0SI${index}`}
+                  type="time"
+                  value={tracker.mon[index].start}
+                  onChange={(e) => {
+                    settingsDispatch({
+                      type: "edit",
+                      day: "mon",
+                      [index]: index,
+                      edge: "start",
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <label key={`0EL${index}`} htmlFor="in-monEnd">
+                  End:
+                </label>
+                <input
+                  id="in-monEnd"
+                  key={`0EI${index}`}
+                  type="time"
+                  value={tracker.mon[index].end}
+                  onChange={(e) => {
+                    settingsDispatch({
+                      type: "edit",
+                      day: "mon",
+                      [index]: index,
+                      edge: "end",
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <button
+                  key={`0D${index}`}
+                  value="remove"
+                  onClick={(e) => {
+                    settingsDispatch({
+                      type: "delete",
+                      day: "mon",
+                      [index]: index,
+                      edge: "end",
+                      value: e.target.value,
+                    });
+                  }}
+                >
+                  Remove
+                </button>
+              </>
+            );
+          })}
+          //ADD BUTTON
         </fieldset>
 
         <fieldset>
