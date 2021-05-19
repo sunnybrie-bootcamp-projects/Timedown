@@ -475,10 +475,18 @@ function UserSettingsForm({ user, setEditSettings }) {
   // };
 
   React.useEffect(() => {
-    setInitialTracker({
-      ...initialSettings.weeklyBlackOuts,
-      misc: initialSettings.miscBlackOuts,
-    });
+    setInitialTracker(
+      initialSettings.weeklyBlackOuts
+        ? {
+            ...initialSettings.weeklyBlackOuts,
+            misc: initialSettings.miscBlackOuts
+              ? initialSettings.miscBlackOuts
+              : { start: "", end: "" },
+          }
+        : {
+            ...initialTracker,
+          },
+    );
   }, []);
 
   React.useEffect(() => {

@@ -66,35 +66,55 @@ export const deleteTask = async (id) => {
 };
 
 //USER QUERIES
+// Prescott Murphy11:28 AM
+// SELECT *
+// FROM users
+// JOIN settings
+//   ON users."id" = settings."userId"
+// WHERE users.email = 'mandychen.art@gmail.com';
+// Prescott Murphy11:32 AM
+// INSERT INTO ON DUPLICATE KEY IGNORE
 export const getUser = async (email) => {
-  const account = await db.any(
-    `SELECT * 
+  try {
+    const account = await db.any(
+      `SELECT * 
 FROM users
-JOIN settings
+LEFT JOIN settings
   ON users."id" = settings."userId"
 WHERE users.email = $1`,
-    [email],
-  );
-  if (account.length < 1) {
-    user = await db.any(
+      [email],
+    );
+    if (account.length <= 0) {
+      throw {
+        error:
+          "There doesn't seem to be an account associated with that email. If this is your first time using this app, try registering instead.",
+      };
+    } else {
+      return account[0];
+    }
+  } catch (err) {
+    return err;
+  }
+};
+
+export const addUser = async (email) => {
+  try {
+    const user = await db.any(
       `INSERT INTO users("email")
 VALUES($1) RETURNING *`,
       [email],
     );
-    settings = await db.any(
+
+    const settings = await db.any(
       `INSERT INTO settings("userId") VALUES($1) RETURNING *`,
       [user[0].id],
     );
 
-    account = await db.any(
-      `SELECT * 
-FROM users
-JOIN settings
-  ON users."id" = settings."userId"
-WHERE users.email = $1`,
-      [email],
-    );
+    return {
+      message:
+        "Your new account has been successfully registered! You may now try logging in with Google.",
+    };
+  } catch (err) {
+    return { message: err };
   }
-
-  return account[0];
 };

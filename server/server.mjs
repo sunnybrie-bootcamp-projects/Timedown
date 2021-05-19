@@ -55,6 +55,12 @@ users.post("/", async (request, response) => {
 
   response.status(201).json(user);
 });
+users.post("/add", async (request, response) => {
+  const { email } = request.body;
+  const message = await db.addUser(email);
+
+  response.status(201).json(message);
+});
 
 app.use("/api/users", users);
 

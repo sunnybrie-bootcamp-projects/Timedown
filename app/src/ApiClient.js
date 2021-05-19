@@ -61,6 +61,18 @@ export const getUser = async (email) => {
   return response.json();
 };
 
+export const addUser = async (email) => {
+  const response = await fetch("/api/users/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  return response.json();
+};
+
 //TimeBlock Requests
 
 //Check-In Requests

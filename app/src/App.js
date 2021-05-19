@@ -10,6 +10,9 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
   const [user, setUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loginMessage, setLoginMessage] = React.useState(
+    "If you are a returning user, log in with your Google account. If you are a new user, register with your Google Account.",
+  );
 
   async function getUserInfo(account) {
     switch (account) {
@@ -25,7 +28,13 @@ const App = () => {
           var timedownUserInfo = await ApiClient.getUser(
             user.google.getEmail(),
           );
-          setUser({ ...user, timedown: timedownUserInfo });
+          if (timedownUserInfo.error) {
+            setLoginMessage(timedownUserInfo.error);
+          } else {
+            setUser({ ...user, timedown: timedownUserInfo });
+            setLoginMessage("Loading account information...");
+          }
+
           //console.debug(timedownUserInfo);
         }
         break;
@@ -77,16 +86,21 @@ const App = () => {
 
   return (
     <main className="App">
-      <div id="login">
-        <Login {...{ isAuthenticated, gcal }} />
-      </div>
+      <h2>Welcome to Timedown!</h2>
+      <p>
+        Timedown is an app designed to make it easier to manage your time. Log
+        in or register, add a task to your taskboard, and get suggestions for
+        times to work on it so you can finish it by its duedate!
+      </p>
+      <p>{loginMessage}</p>
+      <Login {...{ loggedIn, gcal, setUser, user }} />
     </main>
   );
 };
 
 function UserDashboard({
   isAuthenticated,
-  isLoggedIn,
+  loggedIn,
   setLoggedIn,
   gcal,
   user,
@@ -96,14 +110,26 @@ function UserDashboard({
     <main className="app">
       <h1>Timedown</h1>
       <Planner
-        {...{ isAuthenticated, isLoggedIn, setLoggedIn, gcal, user, setUser }}
+        {...{ isAuthenticated, loggedIn, setLoggedIn, gcal, user, setUser }}
       />
     </main>
   );
 }
 
-const Login = ({ isAuthenticated, gcal }) => {
-  return <button onClick={gcal.handleAuthClick}>Log in with Google</button>;
+const Login = ({ loggedIn, gcal, setUser, user }) => {
+  return (
+    <div className="login">
+      <button onClick={gcal.handleAuthClick}>Log in with Google</button>
+      <button
+        onClick={() => {
+          gcal.handleAuthClick();
+          setUser({ ...user, new: true });
+        }}
+      >
+        Register with Google
+      </button>
+    </div>
+  );
 };
 
 export default App;
