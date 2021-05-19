@@ -18,6 +18,7 @@ dayjs.extend(isBetween);
 const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   //dummy task
   const [testTask, setTestTask] = React.useState(details);
+  const [estTime, setEstTime] = React.useState(dayjs.duration(details.estTime));
 
   const [currentDate, setCurrentDate] = React.useState(dayjs());
   const [timeRemaining, setTimeRemaining] = React.useState(""); //remaining time between now and duedate
@@ -26,7 +27,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   const [taskPriority, setTaskPriority] = React.useState(0);
 
   //user's settings
-  const awakeTime = user.timedown.sleepTime;
+  const awakeTime = user.timedown.awakeTime;
   const eventBuffer = dayjs.duration({
     ...user.timedown.eventBuffer,
     hours: 0,
@@ -186,17 +187,16 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     });
 
     setFreeTimesRemaining(update);
-
-    getSuggestions();
   }
 
   //get suggested time spent working on task
   function getSuggestions() {
-    let estTime = dayjs.duration(testTask.estTime);
-    console.debug({ estTime });
-
     let totals = freeTimesRemaining.map((freeTime) => {
       let amount = freeTime.freeTimePercentage * estTime.asMilliseconds();
+      let timeWindow = dayjs(freeTime.start).diff(dayjs(freeTime.end));
+      if (amount > timeWindow.asMilliseconds()) {
+        amount = timeWindow;
+      }
 
       let item = {
         amount: dayjs.duration(amount),
@@ -209,6 +209,21 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     });
 
     setSuggestions(totals);
+  }
+
+  //checks if there is enough time left to complete task
+  function checkAchievability() {
+    let totalWorkTime = 0;
+    suggestions.forEach((suggestion) => {
+      totalWorkTime += suggestion.amount.milliseconds();
+    });
+
+    if (totalWorkTime < estTime.asMilliseconds()) {
+      let timeNeeded = dayjs.duration(estTime.asMilliseconds() - totalWorkTime);
+      return timeNeeded;
+    } else {
+      return true;
+    }
   }
 
   //USE EFFECTS
@@ -239,6 +254,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     if (totalFreeTime.asMilliseconds() !== 0) {
       try {
         getFreeTimePercentages();
+        getSuggestions();
       } catch (err) {
         console.debug("Error: ", err);
       }
@@ -248,20 +264,34 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   return (
     <div className="calibrator">
       <h4>Suggestions:</h4>
-      <ol>
-        {suggestions.map((time, index) => {
-          let when = dayjs(freeTimesRemaining[index].start).format(
-            "ddd, MMM D, YYYY h:mm A",
-          );
-          let howLong = time.amount.humanize();
-          return (
-            <li>
-              <span className="when">{`When: ${when}`}</span>
-              <span className="duration">{`For: ${howLong}`}</span>
-            </li>
-          );
-        })}
-      </ol>
+      {checkAchievability() === true ? (
+        <p>
+          You should compete your task by{" "}
+          {dayjs(testTask.dueDate).format("dddd, MMM D, YYYY h:mm A")} if you
+          follow this plan.
+          <ol>
+            {suggestions.map((time, index) => {
+              let when = dayjs(freeTimesRemaining[index].start).format(
+                "ddd, MMM D, YYYY h:mm A",
+              );
+              let howLong = time.amount.humanize();
+              return (
+                <li>
+                  <span className="when">{`When: ${when}`}</span>
+                  <span className="duration">{`For: ${howLong}`}</span>
+                </li>
+              );
+            })}
+          </ol>
+        </p>
+      ) : (
+        <p>
+          It looks like you don't have enough spare time to complete this task
+          by {dayjs(testTask.dueDate).format("dddd, MMM D, YYYY h:mm A")}.
+          According to the Calibrator, you're short on free time for this task
+          by approximately: {checkAchievability().humanize()}
+        </p>
+      )}
     </div>
   );
 };
