@@ -22,10 +22,10 @@ function reducer(state, action) {
       return { ...state, description: action.value };
 
     case "editEstTimeHours":
-      return { ...state, estTimeHours: action.value };
+      return { ...state, estTimeHours: parseInt(action.value) };
 
     case "editEstTimeMinutes":
-      return { ...state, estTimeMinutes: action.value };
+      return { ...state, estTimeMinutes: parseInt(action.value) };
 
     case "editDueDate":
       return { ...state, dueDate: action.value };
@@ -98,7 +98,7 @@ function TaskAddForm({ getTasksInfo, user }) {
           id="in-EstTimeHours"
           type="number"
           min="0"
-          value={state.estTime}
+          value={state.estTimeHours}
           onChange={(e) => {
             dispatch({ type: "editEstTimeHours", value: e.target.value });
           }}
@@ -110,7 +110,7 @@ function TaskAddForm({ getTasksInfo, user }) {
           step="5"
           min="0"
           max="55"
-          value={state.estTime}
+          value={state.estTimeMinutes}
           onChange={(e) => {
             dispatch({ type: "editEstTimeMinutes", value: e.target.value });
           }}

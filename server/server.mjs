@@ -25,6 +25,7 @@ tasks.post("/", async (request, response) => {
     summary,
     description,
   } = request.body;
+  console.debug({ estTimeHours, estTimeMinutes });
   const task = await db.addTask(
     userId,
     dueDate,

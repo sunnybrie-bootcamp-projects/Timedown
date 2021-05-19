@@ -102,7 +102,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   }
 
   //filters out free times based on user settings
-  async function filterRemainingFreeTimes() {
+  function filterRemainingFreeTimes() {
     //filter out times that don't fit in user's settings
     let filteredTimeBlocks = freeTimesRemaining.map((freeTime) => {
       freeTime.start = dayjs(freeTime.start);
@@ -153,7 +153,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     });
 
     //removes time blocks that don't pass the above filter (they return null)
-    filteredTimeBlocks = filteredTimeBlocks.filter((freeTime) => {
+    let filteredArray = filteredTimeBlocks.filter((freeTime) => {
       if (freeTime === null) {
         return false;
       }
@@ -161,7 +161,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       return true;
     });
 
-    setFreeTimesRemaining(filteredTimeBlocks);
+    setFreeTimesRemaining(filteredArray);
   }
 
   //reduce free times to total free time
@@ -171,7 +171,9 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     let total = 0;
 
     freeTimesRemaining.forEach((freeTime) => {
-      total += freeTime.duration.asMilliseconds();
+      if (freeTime.duration) {
+        total += freeTime.duration.asMilliseconds();
+      }
     });
 
     setTotalFreeTime(dayjs.duration(total));
@@ -180,9 +182,11 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   //get proportion of each free time block
   function getFreeTimePercentages() {
     let update = freeTimesRemaining.map((freeTime) => {
-      freeTime.freeTimePercentage =
-        parseInt(freeTime.duration.asMilliseconds()) /
-        totalFreeTime.asMilliseconds();
+      if (freeTime.duration) {
+        freeTime.freeTimePercentage =
+          parseInt(freeTime.duration.asMilliseconds()) /
+          totalFreeTime.asMilliseconds();
+      }
       return freeTime;
     });
 
@@ -193,8 +197,8 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   function getSuggestions() {
     let totals = freeTimesRemaining.map((freeTime) => {
       let amount = freeTime.freeTimePercentage * estTime.asMilliseconds();
-      let timeWindow = dayjs(freeTime.start).diff(dayjs(freeTime.end));
-      if (amount > timeWindow.asMilliseconds()) {
+      let timeWindow = dayjs(freeTime.end).diff(dayjs(freeTime.start));
+      if (amount > timeWindow) {
         amount = timeWindow;
       }
 
@@ -215,7 +219,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   function checkAchievability() {
     let totalWorkTime = 0;
     suggestions.forEach((suggestion) => {
-      totalWorkTime += suggestion.amount.milliseconds();
+      totalWorkTime += suggestion.amount.asMilliseconds();
     });
 
     if (totalWorkTime < estTime.asMilliseconds()) {
@@ -242,6 +246,10 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     ) {
       try {
         filterRemainingFreeTimes();
+      } catch (err) {
+        console.debug("Error: ", err);
+      }
+      try {
         getSumFreeTime();
       } catch (err) {
         console.debug("Error: ", err);
@@ -254,6 +262,10 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     if (totalFreeTime.asMilliseconds() !== 0) {
       try {
         getFreeTimePercentages();
+      } catch (err) {
+        console.debug("Error: ", err);
+      }
+      try {
         getSuggestions();
       } catch (err) {
         console.debug("Error: ", err);
@@ -261,14 +273,18 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     }
   }, [totalFreeTime]);
 
+  React.useEffect(() => {}, [suggestions]);
+
   return (
     <div className="calibrator">
       <h4>Suggestions:</h4>
       {checkAchievability() === true ? (
-        <p>
-          You should compete your task by{" "}
-          {dayjs(testTask.dueDate).format("dddd, MMM D, YYYY h:mm A")} if you
-          follow this plan.
+        <>
+          <p>
+            You should compete your task by{" "}
+            {dayjs(testTask.dueDate).format("dddd, MMM D, YYYY h:mm A")} if you
+            follow this plan.
+          </p>
           <ol>
             {suggestions.map((time, index) => {
               let when = dayjs(freeTimesRemaining[index].start).format(
@@ -282,8 +298,8 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
                 </li>
               );
             })}
-          </ol>
-        </p>
+          </ol>{" "}
+        </>
       ) : (
         <p>
           It looks like you don't have enough spare time to complete this task

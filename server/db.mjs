@@ -42,7 +42,7 @@ export const addTask = async (
   description,
 ) => {
   let estTime = { hours: estTimeHours, minutes: estTimeMinutes };
-  estTime = JSON.stringify(estTime);
+  estTime = estTime;
 
   console.debug({ estTime });
 
