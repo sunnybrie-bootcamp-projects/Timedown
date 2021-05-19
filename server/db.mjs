@@ -87,7 +87,7 @@ WHERE users.email = $1`,
     if (account.length <= 0) {
       throw {
         error:
-          "There doesn't seem to be an account associated with that email. If this is your first time using this app, try registering instead.",
+          "There doesn't seem to be an account associated with your email. If this is your first time using this app, try registering instead.",
       };
     } else {
       return account[0];

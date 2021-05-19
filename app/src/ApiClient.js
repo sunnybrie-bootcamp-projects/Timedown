@@ -50,25 +50,29 @@ export const deleteTask = async (id) => {
 
 //User Account Requests
 export const getUser = async (email) => {
-  const response = await fetch("/api/users", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `/api/user/?email=${encodeURIComponent(email)}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-    body: JSON.stringify({ email }),
-  });
+  );
 
   return response.json();
 };
 
 export const addUser = async (email) => {
-  const response = await fetch("/api/users/add", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `/api/user/?email=${encodeURIComponent(email)}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-    body: JSON.stringify({ email }),
-  });
+  );
 
   return response.json();
 };

@@ -46,23 +46,23 @@ tasks.post("/delete", async (request, response) => {
 app.use("/api/tasks", tasks);
 
 //User Routes
-const users = express.Router();
+const user = express.Router();
 
-users.use(express.json());
-users.post("/", async (request, response) => {
-  const { email } = request.body;
+user.use(express.json());
+user.get("/", async (request, response) => {
+  const { email } = request.query;
   const user = await db.getUser(email);
 
   response.status(201).json(user);
 });
-users.post("/add", async (request, response) => {
-  const { email } = request.body;
+user.post("/", async (request, response) => {
+  const { email } = request.query;
   const message = await db.addUser(email);
 
   response.status(201).json(message);
 });
 
-app.use("/api/users", users);
+app.use("/api/user", user);
 
 process.env?.SERVE_REACT?.toLowerCase() === "true" &&
   app.use(

@@ -328,6 +328,14 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
 -- Name: timeblocks taskId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
 --
 

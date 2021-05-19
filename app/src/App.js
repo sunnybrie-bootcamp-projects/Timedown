@@ -10,33 +10,36 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
   const [user, setUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [loginMessage, setLoginMessage] = React.useState(
-    "If you are a returning user, log in with your Google account. If you are a new user, register with your Google Account.",
-  );
+  const [loginMessage, setLoginMessage] = React.useState("Get started!");
 
   async function getUserInfo(account) {
     switch (account) {
       case "google":
         if (isAuthenticated) {
-          var googleUserInfo = await gcal.getBasicUserProfile();
+          let googleUserInfo = await gcal.getBasicUserProfile();
           setUser({ ...user, google: googleUserInfo });
           //console.debug(googleUserInfo);
         }
         break;
       case "timedown":
         if (isAuthenticated && user.google) {
-          var timedownUserInfo = await ApiClient.getUser(
-            user.google.getEmail(),
-          );
-          if (timedownUserInfo.error) {
-            setLoginMessage(timedownUserInfo.error);
+          if (user.new) {
+            let register = await ApiClient.addUser(user.google.getEmail());
+            setLoginMessage(register.message);
+            setUser({ ...user, new: false });
           } else {
-            setUser({ ...user, timedown: timedownUserInfo });
-            setLoginMessage("Loading account information...");
+            let timedownUserInfo = await ApiClient.getUser(
+              user.google.getEmail(),
+            );
+            if (timedownUserInfo.error) {
+              setLoginMessage(timedownUserInfo.error);
+            } else {
+              setUser({ google: user.google, timedown: timedownUserInfo });
+              setLoginMessage("Loading account information...");
+            }
           }
-
-          //console.debug(timedownUserInfo);
         }
+
         break;
       default:
         break;
@@ -119,7 +122,9 @@ function UserDashboard({
 const Login = ({ loggedIn, gcal, setUser, user }) => {
   return (
     <div className="login">
+      Returning Users:{" "}
       <button onClick={gcal.handleAuthClick}>Log in with Google</button>
+      Guests:{" "}
       <button
         onClick={() => {
           gcal.handleAuthClick();
