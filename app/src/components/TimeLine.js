@@ -8,7 +8,8 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
   function getTimes() {
     let timesToRender = [];
     for (let i = 0; i <= totalHours; i += 0.25) {
-      let value = dayjs(dayStart).add(Math.floor(i), "hour"); //creates dayjs object, determines hour
+      let value = dayjs().hour(dayStart.hours());
+      value = value.add(Math.floor(i), "hour"); //creates dayjs object, determines hour
       let minute;
       if (i % 1 === 0.25) {
         minute = 15;
@@ -81,7 +82,7 @@ function TimeIndicator({ dayStart }) {
     } else if (45 <= currentTime.minute()) {
       minuteModify = 5;
     }
-    let row = (currentTime.hour() - dayjs(dayStart).hour()) * 4 + minuteModify;
+    let row = (currentTime.hour() - dayStart.hours()) * 4 + minuteModify;
 
     setIndicatorRender(`${row}`);
   }
@@ -93,7 +94,7 @@ function TimeIndicator({ dayStart }) {
   return (
     <div
       className="timeIndicator"
-      style={{ gridRow: indicatorRender, gridColumn: "2" }}
+      style={{ gridRow: indicatorRender, gridColumn: "1 / span 2" }}
     >
       <div className="timePointer"></div>
       <span className="currentTime">{currentTime.format("hh:mma")}</span>

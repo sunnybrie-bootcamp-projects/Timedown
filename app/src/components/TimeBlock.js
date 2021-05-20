@@ -25,11 +25,11 @@ const TimeBlock = ({ start, end, summary, dayStart, type }) => {
     }
 
     let blockStart =
-      (start.hour() - dayStart.hour()) * 4 + minuteModify(start, "start");
+      (start.hour() - dayStart.hours()) * 4 + minuteModify(start, "start");
     blockStart = blockStart <= 0 ? 1 : blockStart;
 
     let blockEnd =
-      (end.hour() - dayStart.hour()) * 4 + minuteModify(end, "end");
+      (end.hour() - dayStart.hours()) * 4 + minuteModify(end, "end");
 
     setGridRow(`${blockStart} / ${blockEnd < 0 ? "span all" : blockEnd}`);
     setGridColumn(type === "suggestion" ? "1 / auto" : gridColumn);

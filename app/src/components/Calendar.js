@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, StrictMode } from "react";
 
 import dayjs from "dayjs";
 
@@ -6,14 +6,25 @@ import Day from "./Day";
 import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
+//dayjs plugins
+const AdvancedFormat = require("dayjs/plugin/advancedFormat");
+const duration = require("dayjs/plugin/duration");
+const isBetween = require("dayjs/plugin/isBetween");
+const relativeTime = require("dayjs/plugin/relativeTime");
+
+dayjs.extend(relativeTime);
+dayjs.extend(AdvancedFormat);
+dayjs.extend(duration);
+dayjs.extend(isBetween);
+
 function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
   const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
   //Starting hour for day rendering
-  const [dayStart, setDayStart] = useState(dayjs().set("hour", 0));
+  const [dayStart, setDayStart] = useState(dayjs.duration({ hours: 0 }));
   //Ending hour for day rendering
-  const [dayEnd, setDayEnd] = useState(dayjs().set("hour", 23));
+  const [dayEnd, setDayEnd] = useState(dayjs.duration({ hours: 23 }));
   //Total hours rendered in a day
   const [totalHours, setTotalHours] = useState(24);
   //Days to be displayed in calendar
@@ -30,18 +41,22 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
   //sets dayStart, dayEnd, and totalHours states for rendering
   function setTimeRanges() {
     if (user.timedown.awakeTime) {
-      let start = dayjs();
-      start = start.hour(user.timedown.awakeTime.start.hours);
-      start = start.minute(user.timedown.awakeTime.start.minutes);
+      //^([01]\d|2[0-3]):?([0-5]\d)$ //regex time
+      let startArr = user.timedown.awakeTime.start.split(":");
+      let startObj = {
+        hours: parseInt(startArr[0]),
+        minutes: parseInt(startArr[1]),
+      };
+      let start = dayjs.duration(startObj);
 
-      let end = dayjs();
-      end = end.hour(user.timedown.awakeTime.end.hours);
-      end = end.minute(user.timedown.awakeTime.end.minutes);
+      let endArr = user.timedown.awakeTime.end.split(":");
+      let endObj = { hours: parseInt(endArr[0]), minutes: parseInt(endArr[1]) };
+      let end = dayjs.duration(endObj);
 
       setDayStart(start);
       setDayEnd(end);
 
-      let total = dayjs(end).hour() - dayjs(start).hour();
+      let total = end.hours() - start.hours();
       // console.debug({ total }); //TEST
       setTotalHours(total);
     }
@@ -61,12 +76,21 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
   function getDates(num) {
     let newDates = [];
     for (let i = 0; i < num; i++) {
+      console.debug(dayStart.hours());
+
+      //set starting time
       let newStart = dayjs();
-      newStart = newStart.hour(dayStart.hour()).minute(dayStart.minute()); //set starting time
+      newStart = newStart.set("hour", dayStart.hours());
+      newStart = newStart.set(
+        "minute",
+        dayStart.minutes() ? dayStart.minutes() : 0,
+      );
       newStart = newStart.add(i + dateNavigation, "day"); //set day
 
+      //set ending time
       let newEnd = newStart;
-      newEnd = newEnd.hour(dayEnd.hour()).minute(dayStart.minute()); //set starting time
+      newEnd = newEnd.set("hour", dayEnd.hours());
+      newEnd = newEnd.set("minute", dayEnd.minutes() ? dayEnd.minutes() : 0);
       if (newEnd.isBefore(newStart)) {
         newEnd = newEnd.add(1, "day"); //set day
       }
@@ -93,65 +117,76 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
   function getView() {
     switch (calView) {
       case "1day":
-        getDates(1);
-        break;
+        return 1;
       case "3day":
-        getDates(3);
-        break;
+        return 3;
       case "week":
-        getDates(7);
+        return 7;
       default:
-        break;
+        return 1;
     }
   }
 
   //USE EFFECTS
 
   useEffect(() => {
-    setTimeRanges();
-    getView();
-    setIsReady(true);
-  }, [user]);
-
-  useEffect(() => {
-    timeToRows(totalHours);
-  }, [totalHours]);
+    try {
+      setTimeRanges();
+      timeToRows(totalHours);
+    } catch (err) {
+      window.alert(err);
+    }
+    try {
+      getDates(getView());
+    } catch (err) {
+      window.alert(err);
+    }
+    try {
+      setIsReady(true);
+    } catch (err) {
+      window.alert(err);
+    }
+  }, []);
 
   useEffect(() => {
     getView();
   }, [calView]);
 
-  return (
-    <div
-      className="calendar"
-      style={{
-        display: tab === "calendar" ? "grid" : "none",
-        gridTemplateColumns: dayColumns,
-      }}
-    >
-      <CalendarNavBar
-        {...{ calView, setCalView, dateNavigation, setDateNavigation }}
-      />
-      <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
-      {days.map((day, index) => {
-        return (
-          <Day
-            key={`D${index}`}
-            {...{
-              index,
-              timeRows,
-              isAuthenticated,
-              gcal,
-              day,
-              dayStart,
-              suggestions,
-              calView,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
+  if (isReady) {
+    return (
+      <div
+        className="calendar"
+        style={{
+          display: tab === "calendar" ? "grid" : "none",
+          gridTemplateColumns: dayColumns,
+        }}
+      >
+        <CalendarNavBar
+          {...{ calView, setCalView, dateNavigation, setDateNavigation }}
+        />
+        <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
+        {days.map((day, index) => {
+          return (
+            <Day
+              key={`D${index}`}
+              {...{
+                index,
+                timeRows,
+                isAuthenticated,
+                gcal,
+                day,
+                dayStart,
+                suggestions,
+                calView,
+              }}
+            />
+          );
+        })}
+      </div>
+    );
+  } else {
+    return <p className="loadingMessage">Loading calendar...</p>;
+  }
 }
 
 export default Calendar;

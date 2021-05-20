@@ -25,7 +25,11 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.checkins (
-    id integer NOT NULL
+    id integer NOT NULL,
+    "taskId" integer,
+    start timestamp with time zone DEFAULT now(),
+    "end" timestamp with time zone DEFAULT now(),
+    "dateRecorded" timestamp with time zone DEFAULT now()
 );
 
 
@@ -63,9 +67,9 @@ CREATE TABLE public.settings (
     "emailNotifications" boolean DEFAULT false,
     "addToGoogleCal" boolean DEFAULT false,
     "awakeTime" jsonb DEFAULT '{"end": "00:00", "start": "00:00"}'::jsonb,
-    "weeklyBlackOuts" jsonb DEFAULT 'null'::jsonb,
-    "miscBlackOuts" jsonb DEFAULT 'null'::jsonb,
-    "eventBuffer" jsonb DEFAULT 'null'::jsonb
+    "weeklyBlackOuts" jsonb DEFAULT '{"fri": [], "mon": [], "sat": [], "sun": [], "thu": [], "tue": [], "wed": []}'::jsonb,
+    "miscBlackOuts" jsonb DEFAULT '[]'::jsonb,
+    "eventBuffer" jsonb DEFAULT '{"hours": 0, "minutes": 0}'::jsonb
 );
 
 
@@ -77,12 +81,12 @@ ALTER TABLE public.settings OWNER TO tpl5_2021h1;
 
 CREATE TABLE public.tasks (
     id integer NOT NULL,
-    "userId" integer,
+    "userId" integer NOT NULL,
     "dueDate" timestamp with time zone,
     "estTime" jsonb,
     summary text,
     description text,
-    created timestamp without time zone DEFAULT '2021-05-05 19:52:37.442996'::timestamp without time zone
+    created timestamp without time zone DEFAULT now()
 );
 
 
@@ -211,83 +215,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Data for Name: checkins; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
---
-
-COPY public.checkins (id) FROM stdin;
-\.
-
-
---
--- Data for Name: settings; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
---
-
-COPY public.settings ("userId", "pushNotifications", "emailNotifications", "addToGoogleCal", "awakeTime", "weeklyBlackOuts", "miscBlackOuts", "eventBuffer") FROM stdin;
-2	f	f	f	{"end": {"hours": 21, "minutes": 0}, "start": {"hours": 9, "minutes": 0}, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": null, "minutes": 15}
-1	f	f	f	{"end": {"hours": 22, "minutes": 0}, "start": {"hours": 8, "minutes": 30}, "timeZone": "GMT-0700"}	{"fri": [{"end": null, "start": null, "timeZone": null}], "mon": [{"end": null, "start": null, "timeZone": null}], "sat": [{"end": null, "start": null, "timeZone": null}], "sun": [{"end": null, "start": null, "timeZone": null}], "thu": [{"end": null, "start": null, "timeZone": null}], "tue": [{"end": null, "start": null, "timeZone": null}], "wed": [{"end": null, "start": null, "timeZone": null}]}	[{"end": null, "start": null, "timeZone": null}]	{"hours": 0, "minutes": 15}
-\.
-
-
---
--- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
---
-
-COPY public.tasks (id, "userId", "dueDate", "estTime", summary, description, created) FROM stdin;
-2	1	2021-05-30 00:00:00-07	{"hours": 40}	Oxygen Hero Illustrations	You must create five illustrations for the product packaging that show the company's team. They would prefer a more abstract art style, and would like you to use the brand color, which is grey. Take into account the client's preferences and values.	2021-05-05 19:52:37.442996
-1	1	2021-06-06 00:00:00-07	{"hours": 60}	Oxynello Package Design	You must create packaging for the company's main product. They want you to use interesting materials, and make sure you include a description of the product. They would prefer a extravagant design, and would like you to use the brand color, which is black. Take into account the client's preferences and values.	2021-05-05 19:52:37.442996
-5	1	2021-05-21 00:00:00-07	{"hours": 15, "minutes": 30}	Bronze Capella	We make textbooks for learning writing. We stand out because of our new technologies. Our target audience is kids. We want to convey a sense of importance, while at the same time being kind. You must create two illustrations for the company website that convey the company's values. They would prefer a traditional art style, and would like you to use the brand color, which is green. Take into account the client's preferences and values.	2021-05-05 19:52:37.442996
-6	1	2021-05-28 00:00:00-07	{"hours": 20}	Essay: The Impact of Entertainment	Write an 8,000-word essay from the prompt "The Impact of Entertainment." For English class.	2021-05-05 19:52:37.442996
-7	2	2021-05-21 00:00:00-07	{"hours": 40}	Finish App	Finish Timedown app in time to present.	2021-05-05 19:52:37.442996
-\.
-
-
---
--- Data for Name: timeblocks; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
---
-
-COPY public.timeblocks (id, "taskId", "userId", start, "end") FROM stdin;
-\.
-
-
---
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: tpl5_2021h1
---
-
-COPY public.users (id, username, email) FROM stdin;
-1	sunsaplenty	sunny.codetester@gmail.com
-2	brieanburrito	brienna.klassen@gmail.com
-\.
-
-
---
--- Name: checkins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
---
-
-SELECT pg_catalog.setval('public.checkins_id_seq', 1, false);
-
-
---
--- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
---
-
-SELECT pg_catalog.setval('public.tasks_id_seq', 8, true);
-
-
---
--- Name: timeblocks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
---
-
-SELECT pg_catalog.setval('public.timeblocks_id_seq', 1, false);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tpl5_2021h1
---
-
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
-
-
---
 -- Name: checkins checkins_pkey; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
 --
 
@@ -320,6 +247,14 @@ ALTER TABLE ONLY public.timeblocks
 
 
 --
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: tpl5_2021h1
 --
 
@@ -336,35 +271,43 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: timeblocks taskId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+-- Name: checkins checkins_taskId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
 --
 
-ALTER TABLE ONLY public.timeblocks
-    ADD CONSTRAINT "taskId" FOREIGN KEY ("taskId") REFERENCES public.tasks(id);
-
-
---
--- Name: tasks userId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
---
-
-ALTER TABLE ONLY public.tasks
-    ADD CONSTRAINT "userId" FOREIGN KEY ("userId") REFERENCES public.users(id);
+ALTER TABLE ONLY public.checkins
+    ADD CONSTRAINT "checkins_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES public.tasks(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
 --
--- Name: timeblocks userId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
---
-
-ALTER TABLE ONLY public.timeblocks
-    ADD CONSTRAINT "userId" FOREIGN KEY ("userId") REFERENCES public.users(id);
-
-
---
--- Name: settings userId; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+-- Name: settings settings_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
 --
 
 ALTER TABLE ONLY public.settings
-    ADD CONSTRAINT "userId" FOREIGN KEY ("userId") REFERENCES public.users(id);
+    ADD CONSTRAINT "settings_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: tasks tasks_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT "tasks_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: timeblocks timeblocks_taskId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.timeblocks
+    ADD CONSTRAINT "timeblocks_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES public.tasks(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: timeblocks timeblocks_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tpl5_2021h1
+--
+
+ALTER TABLE ONLY public.timeblocks
+    ADD CONSTRAINT "timeblocks_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

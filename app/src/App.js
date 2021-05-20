@@ -24,15 +24,20 @@ const App = () => {
       case "timedown":
         if (isAuthenticated && user.google) {
           if (user.new) {
-            let register = await ApiClient.addUser(user.google.getEmail());
+            let register = await ApiClient.addUser(
+              user.google.getEmail(),
+              user.google.getGivenName(),
+            );
             setLoginMessage(register.message);
-            setUser({ ...user, new: false });
+            setUser({ ...user, new: false, timedown: register.account });
           } else {
             let timedownUserInfo = await ApiClient.getUser(
               user.google.getEmail(),
             );
             if (timedownUserInfo.error) {
               setLoginMessage(timedownUserInfo.error);
+              gcal.handleSignoutClick();
+              setUser({});
             } else {
               setUser({ google: user.google, timedown: timedownUserInfo });
               setLoginMessage("Loading account information...");
@@ -127,8 +132,8 @@ const Login = ({ loggedIn, gcal, setUser, user }) => {
       Guests:{" "}
       <button
         onClick={() => {
-          gcal.handleAuthClick();
           setUser({ ...user, new: true });
+          gcal.handleAuthClick();
         }}
       >
         Register with Google

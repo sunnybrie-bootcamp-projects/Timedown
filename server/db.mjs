@@ -96,7 +96,7 @@ WHERE users.email = $1`,
   }
 };
 
-export const addUser = async (email) => {
+export const addUser = async (email, name) => {
   try {
     const user = await db.any(
       `INSERT INTO users("email")
@@ -105,15 +105,34 @@ VALUES($1) RETURNING *`,
     );
 
     const settings = await db.any(
-      `INSERT INTO settings("userId") VALUES($1) RETURNING *`,
+      `INSERT INTO settings("userId", "awakeTime") VALUES($1, '{"start": '00:00', "end":'23:00'}') RETURNING *`,
+      [user[0].id],
+    );
+
+    const task = await db.any(
+      `INSERT INTO tasks("userId", "summary", "description", "estTime", "dueDate") VALUES($1, 'Hi $2!', 'Welcome to Timedown!', '{"hours": 0, "minutes": 0}', NOW())`,
+      [user[0].id, name],
+    );
+
+    const newAccount = await db.any(
+      `SELECT * 
+FROM users
+LEFT JOIN settings
+  ON users."id" = settings."userId"
+WHERE users."id" = $1`,
       [user[0].id],
     );
 
     return {
+      success: true,
       message:
         "Your new account has been successfully registered! You may now try logging in with Google.",
+      account: newAccount,
     };
   } catch (err) {
-    return { message: err };
+    return {
+      success: false,
+      message: "Account creation failed. Try refreshing and registering again.",
+    };
   }
 };

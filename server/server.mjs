@@ -57,10 +57,14 @@ user.get("/", async (request, response) => {
   response.status(201).json(user);
 });
 user.post("/", async (request, response) => {
-  const { email } = request.query;
-  const message = await db.addUser(email);
+  const { email, name } = request.query;
+  const newAccount = await db.addUser(email, name);
 
-  response.status(201).json(message);
+  if (!newAccount.success) {
+    response.status(418).json(newAccount);
+  } else {
+    response.status(201).json(newAccount);
+  }
 });
 
 app.use("/api/user", user);

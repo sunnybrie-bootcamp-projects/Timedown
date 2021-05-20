@@ -62,9 +62,11 @@ export const getUser = async (email) => {
   return response.json();
 };
 
-export const addUser = async (email) => {
+export const addUser = async (email, name) => {
   const response = await fetch(
-    `/api/user/?email=${encodeURIComponent(email)}`,
+    `/api/user/?email=${encodeURIComponent(email)}&name=${encodeURIComponent(
+      name,
+    )}`,
     {
       method: "POST",
       headers: {
