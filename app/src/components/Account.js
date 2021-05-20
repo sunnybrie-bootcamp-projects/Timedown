@@ -244,8 +244,8 @@ function UserSettingsForm({ user, setEditSettings }) {
           }}
         />
         <h4>Scheduling</h4>
-        <fieldset>
-          <legend>Event Buffer Time</legend>
+        <fieldset key="EBF">
+          <legend key="EBL">Event Buffer Time</legend>
           <label htmlFor="in-eventBufferHours">Hours:</label>
           <input
             id="in-eventBufferHours"
@@ -276,8 +276,8 @@ function UserSettingsForm({ user, setEditSettings }) {
             }}
           />
         </fieldset>
-        <fieldset>
-          <legend>Awake Time</legend>
+        <fieldset key="ATF">
+          <legend key="ATL">Awake Time</legend>
           <label htmlFor="in-awakeTimeStart">Start:</label>
           <input
             id="in-awakeTimeStart"
@@ -303,8 +303,8 @@ function UserSettingsForm({ user, setEditSettings }) {
             }}
           />
         </fieldset>
-        <fieldset>
-          <legend>Weekly Scheduling</legend>
+        <fieldset key="WSF">
+          <legend key="WSL">Weekly Scheduling</legend>
           <fieldset key={`0F`}>
             <legend key={`0L`}>Monday:</legend>
             {getInputs(tracker.mon, "mon", 0)}
@@ -426,8 +426,8 @@ function UserSettingsForm({ user, setEditSettings }) {
             </button>
           </fieldset>
         </fieldset>
-        <fieldset>
-          <legend>Miscellaneous</legend>
+        <fieldset key="MF">
+          <legend key="ML">Miscellaneous</legend>
           {getInputs(tracker.misc, "misc", "X")}
           <button
             key={`0A`}
@@ -449,6 +449,7 @@ function UserSettingsForm({ user, setEditSettings }) {
       </form>
     );
   }
+
   // const onSubmitForm = async (e) => {
   //   e.preventDefault();
   //   try {
@@ -475,13 +476,14 @@ function UserSettingsForm({ user, setEditSettings }) {
   // };
 
   React.useEffect(() => {
-    trackerDispatch({ type: `wipe`, value: initialTracker });
-  }, [initialTracker]);
+    try {
+      setFormJSX(() => getFormJSX());
+    } catch (err) {
+      console.debug(err);
+    }
 
-  React.useEffect(() => {
-    setFormJSX(() => getFormJSX());
     setFormReady(true);
-  }, [tracker]);
+  }, []);
 
   if (formReady) {
     return <>{formJSX}</>;
