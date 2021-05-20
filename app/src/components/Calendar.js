@@ -64,7 +64,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
 
   //generates string for timeRows state
   function timeToRows(total) {
-    let template = [];
+    let template = ["2.5fr"];
     let size = 100 / (total * 4);
     for (let i = 0; i < total; i += 0.25) {
       template.push(`1fr`);

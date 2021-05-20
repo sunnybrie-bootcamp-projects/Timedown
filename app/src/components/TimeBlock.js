@@ -10,9 +10,9 @@ const TimeBlock = ({ start, end, summary, dayStart, type }) => {
     function minuteModify(time, edge) {
       let extra;
       if (edge === "start") {
-        extra = -1;
+        extra = 0;
       } else if (edge === "end") {
-        extra = 1;
+        extra = 2;
       }
       if (15 <= time.minute() < 30) {
         return 2 + extra;
@@ -21,7 +21,7 @@ const TimeBlock = ({ start, end, summary, dayStart, type }) => {
       } else if (45 <= time.minute()) {
         return 4 + extra;
       }
-      return extra;
+      return extra + 2;
     }
 
     let blockStart =

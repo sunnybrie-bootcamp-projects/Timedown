@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
@@ -22,7 +22,9 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
       }
       value = value.set("minute", minute); //sets minute
 
-      let timeLineLocation = `${i * 4 + 1}`; //determines row to render on
+      let timeLineLocation = `${
+        Math.floor(i) === 0 ? 1 + (1 + i * 4) : i * 4 + 2
+      }`; //determines row to render on
 
       timesToRender.push({ value, timeLineLocation }); //pushes as object
     }
@@ -30,12 +32,13 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
     return timesToRender;
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getTimes();
   }, []);
 
   return (
     <div className="timeLine" style={{ gridTemplateRows: timeRows }}>
+      <h3 className="dateTimeHeader">Time</h3>
       {getTimes().map((time, index) => {
         return <TimeNotch key={`TN${index}`} {...{ time }} />;
       })}
@@ -82,7 +85,7 @@ function TimeIndicator({ dayStart }) {
     } else if (45 <= currentTime.minute()) {
       minuteModify = 5;
     }
-    let row = (currentTime.hour() - dayStart.hours()) * 4 + minuteModify;
+    let row = (currentTime.hour() - dayStart.hours()) * 4 + minuteModify + 1;
 
     setIndicatorRender(`${row}`);
   }

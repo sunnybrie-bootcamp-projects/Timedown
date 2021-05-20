@@ -194,7 +194,7 @@ main.app {
   margin: auto;
   height: auto;
   min-height: fit-content;
-  max-height: 95%;
+  max-height: 100%;
   max-width: 95%;
 
   grid-template-rows: 1fr 14fr;
@@ -202,6 +202,27 @@ main.app {
   column-gap: 1em;
 
   border-radius: 1em 1em 1em;
+}
+
+.dateTimeHeader {
+  display: inline-block;
+  position: absolute;
+  box-sizing: border-box;
+  margin: 0% 0.5%;
+  height: 100%;
+  width: 99%;
+  grid-row: 1 / span 1;
+
+  background-clip: border-box;
+  border-bottom: 1px solid #e86f51;
+
+  text-align: center;
+}
+
+.timeLine .dateTimeHeader {
+  border-bottom: 1px solid rgba(0, 0, 0, 0);
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 /* CALENDAR NAV */
@@ -281,18 +302,19 @@ button.next {
   box-sizing: border-box;
   position: absolute;
   margin: auto;
-  padding: 1em 0em;
+  padding: 0% 0.5%;
   width: 10%;
   max-width: 20%;
   height: 100%;
 
   grid-template-columns: 1fr 1fr;
-  column-gap: 0em;
   grid-column: 1;
   grid-row: 2 / span 1;
+  row-gap: 1px;
   justify-content: space-evenly;
-  align-content: center;
+  align-content: space-between;
 
+  border-top: 3px solid #e86f51;
   background-color: #e8c468;
   box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
 
@@ -311,7 +333,7 @@ button.next {
   min-height: 1fr;
   max-height: 100%;
   max-width: 100%;
-  width: auto;
+  width: 100%;
 
   border-top: 1px solid ghostwhite;
 }
@@ -321,12 +343,12 @@ button.next {
   position: absolute;
   z-index: 5;
   top: -0.5em;
+  bottom: 0.5em;
   left: 5%;
   margin: auto auto 5%;
 
-  font-size: small;
-  line-height: 100%;
-  background-color: rgba(232, 196, 104, 1);
+  font-size: 11px;
+  background-color: #e8c468;
   border-radius: 1em 1em 1em;
 }
 
@@ -383,18 +405,20 @@ button.next {
   box-sizing: border-box;
   position: absolute;
   right: 0px;
-  padding: 1em 1%;
+  padding: 0% 1%;
   margin: 0 auto;
   width: 100%;
   height: 100%;
 
   grid-row: 2 / span 1;
   grid-template-columns: minmax(auto, 100%);
-  justify-content: center;
-  align-content: center;
+  row-gap: 1px;
+  justify-content: space-evenly;
+  align-content: space-between;
 
   background-color: #e8c468;
   box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
+  border-top: 3px solid #e86f51;
 
   border-radius: 1em 1em 1em;
 }
@@ -403,7 +427,7 @@ button.next {
   display: inline-block;
   position: relative;
   box-sizing: border-box;
-  margin: auto;
+  margin: 0px;
   padding: 0.125em;
   min-height: 100%;
   max-height: 100%;

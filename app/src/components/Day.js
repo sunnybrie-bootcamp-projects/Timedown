@@ -104,6 +104,9 @@ function Day({ index, timeRows, gcal, day, dayStart, suggestions, calView }) {
         gridRow: "2 / span 1",
       }}
     >
+      <h3 className="dateTimeHeader" title={day.start.toISOString()}>
+        {day.start.format("dddd, MMM D, 'YY")}
+      </h3>
       {events.length === 0 ? (
         <p>You have no events for this day.</p>
       ) : (
