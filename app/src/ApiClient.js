@@ -37,12 +37,11 @@ export const addTask = async (
 };
 
 export const deleteTask = async (id) => {
-  const response = await fetch("/api/tasks/delete", {
-    method: "POST",
+  const response = await fetch(`/api/tasks/?id=${encodeURIComponent(id)}`, {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id }),
   });
 
   return response.json();

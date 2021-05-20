@@ -61,7 +61,6 @@ export const deleteTask = async (id) => {
     [id],
   );
 
-  window.alert("Deleted Task: ", { deletedTask });
   return deletedTask;
 };
 

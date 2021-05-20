@@ -54,13 +54,13 @@ function UserSettingsForm({ user, setEditSettings }) {
   );
   //Tracks the blackOuts in the user's form
   const [tracker, trackerDispatch] = React.useReducer(trackerReducer, {
-    mon: [{ start: "00:00", end: "00:00" }],
-    tue: [{ start: "00:00", end: "00:00" }],
-    wed: [{ start: "00:00", end: "00:00" }],
-    thu: [{ start: "00:00", end: "00:00" }],
-    fri: [{ start: "00:00", end: "00:00" }],
-    sat: [{ start: "00:00", end: "00:00" }],
-    sun: [{ start: "00:00", end: "00:00" }],
+    mon: [{ start: "", end: "" }],
+    tue: [{ start: "", end: "" }],
+    wed: [{ start: "", end: "" }],
+    thu: [{ start: "", end: "" }],
+    fri: [{ start: "", end: "" }],
+    sat: [{ start: "", end: "" }],
+    sun: [{ start: "", end: "" }],
     misc: [{ start: "", end: "" }],
   });
 
@@ -77,13 +77,13 @@ function UserSettingsForm({ user, setEditSettings }) {
   });
 
   const [initialTracker, setInitialTracker] = React.useState({
-    mon: [{ start: "00:00", end: "00:00" }],
-    tue: [{ start: "00:00", end: "00:00" }],
-    wed: [{ start: "00:00", end: "00:00" }],
-    thu: [{ start: "00:00", end: "00:00" }],
-    fri: [{ start: "00:00", end: "00:00" }],
-    sat: [{ start: "00:00", end: "00:00" }],
-    sun: [{ start: "00:00", end: "00:00" }],
+    mon: [{ start: "", end: "" }],
+    tue: [{ start: "", end: "" }],
+    wed: [{ start: "", end: "" }],
+    thu: [{ start: "", end: "" }],
+    fri: [{ start: "", end: "" }],
+    sat: [{ start: "", end: "" }],
+    sun: [{ start: "", end: "" }],
     misc: [{ start: "", end: "" }],
   });
 
@@ -473,21 +473,6 @@ function UserSettingsForm({ user, setEditSettings }) {
   //     console.error(err.message);
   //   }
   // };
-
-  React.useEffect(() => {
-    setInitialTracker(
-      initialSettings.weeklyBlackOuts
-        ? {
-            ...initialSettings.weeklyBlackOuts,
-            misc: initialSettings.miscBlackOuts
-              ? initialSettings.miscBlackOuts
-              : { start: "", end: "" },
-          }
-        : {
-            ...initialTracker,
-          },
-    );
-  }, []);
 
   React.useEffect(() => {
     trackerDispatch({ type: `wipe`, value: initialTracker });

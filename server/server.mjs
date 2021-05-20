@@ -38,8 +38,8 @@ tasks.post("/", async (request, response) => {
   console.debug(task);
   response.status(201).json(task);
 });
-tasks.post("/delete", async (request, response) => {
-  const { id } = request.body;
+tasks.delete("/", async (request, response) => {
+  const { id } = request.query;
   const deletedTask = await db.deleteTask(id);
   response.status(201).json(deletedTask);
 });
