@@ -79,13 +79,13 @@ function TimeIndicator({ dayStart }) {
   function findCurrentTime() {
     let minuteModify = 0;
     if (15 <= currentTime.minute() < 30) {
-      minuteModify = 3;
+      minuteModify = 1;
     } else if (30 <= currentTime.minute() < 45) {
-      minuteModify = 4;
+      minuteModify = 2;
     } else if (45 <= currentTime.minute()) {
-      minuteModify = 5;
+      minuteModify = 3;
     }
-    let row = (currentTime.hour() - dayStart.hours()) * 4 + minuteModify + 1;
+    let row = (currentTime.hour() - dayStart.hours()) * 4 + minuteModify;
 
     setIndicatorRender(`${row}`);
   }

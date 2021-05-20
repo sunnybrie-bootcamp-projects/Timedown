@@ -1,41 +1,29 @@
 @import url("https://use.typekit.net/inp5cfh.css");
 
-/* Color Theme Swatches in Hex */
-.fontColor-navy {
-  color: #274754;
-}
-.fontColor-green {
-  color: #2b9e91;
-}
-.fontColor-yellow {
-  color: #e8c468;
-}
-.fontColor-orange {
-  color: #f5a462;
-}
-.fontColor-redorange {
-  color: #e86f51;
-}
+:root {
+  /* COLORS */
+  --white: ghostwhite;
+  --yellow: rgba(232, 196, 104, 1);
+  --navy: rgba(39, 71, 84, 1);
+  --green: rgba(43, 158, 145, 1);
+  --orange: rgba(245, 164, 98, 1);
+  --bloodorange: rgba(232, 111, 81, 1);
+  --softblue: #90d1ca;
 
-/* Color Theme Swatches in RGBA */
-.bgColor-navy {
-  color: rgba(39, 71, 84, 1);
-}
-.bgColor-green {
-  color: rgba(43, 158, 145, 1);
-}
-.bgColor-yellow {
-  color: rgba(232, 196, 104, 1);
-}
-.bgColor-orange {
-  color: rgba(245, 164, 98, 1);
-}
-.bgColor-redorange {
-  color: rgba(232, 111, 81, 1);
+  --transparent_yellow: rgba(232, 196, 104, 0.7);
+  --transparent_navy: rgba(39, 71, 84, 0.7);
+  --transparent_green: rgba(43, 158, 145, 0.7);
+  --transparent_orange: rgba(245, 164, 98, 0.7);
+  --transparent_bloodorange: rgba(232, 111, 81, 0.7);
+  --invisible: rgba(0, 0, 0, 0);
+  --shadow: rgba(34, 62, 73, 0.605);
+
+  --thematic: quicksand, sans-serif;
+  --regular: freight-neo-pro, sans-serif;
 }
 
 body {
-  background-color: #90d1ca;
+  background-color: var(--softblue);
 
   font-family: freight-neo-pro, sans-serif;
   font-weight: 400;
@@ -49,7 +37,7 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px var(--shadow);
 }
 
 body::-webkit-scrollbar-thumb {
@@ -59,10 +47,18 @@ body::-webkit-scrollbar-thumb {
 }
 
 /* GENERAL STYLING */
-h1 {
-  font-family: quicksand, sans-serif;
+h1,
+h2 {
+  max-height: 100%;
+  font-family: var(--thematic);
   font-weight: 300;
   font-style: normal;
+}
+
+h3 {
+  font-family: var(--thematic);
+  font-weight: 400;
+  line-height: 1em;
 }
 
 /* MAIN APP COMPONENTS */
@@ -129,7 +125,7 @@ main.app {
 
 .navTab.notToggled {
   background-color: gainsboro;
-  filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
+  filter: drop-shadow(0.5em 0.75em 0.5em var(--shadow));
 }
 .navTab h2 {
   display: block;
@@ -140,7 +136,7 @@ main.app {
   right: 25%;
   margin: auto 0;
 
-  font-family: quicksand, sans-serif;
+  font-family: var(--thematic);
   font-weight: 500;
   font-style: normal;
   color: #e86f51;
@@ -177,7 +173,7 @@ main.app {
   grid-row: 3 / span 1;
 
   background-color: ghostwhite;
-  filter: drop-shadow(0.5em 0.75em 0.5em rgba(39, 71, 84, 1));
+  filter: drop-shadow(0.5em 0.75em 0.5em var(--shadow));
 
   border: 2px solid #f5a462;
 
@@ -280,7 +276,7 @@ button.next {
   background-color: ghostwhite;
   border: 2px solid #f5a462;
   border-radius: 0.75em 0.75em;
-  box-shadow: 0.25em 0.25em 0.25em rgba(39, 71, 84, 0.75);
+  box-shadow: 0.25em 0.25em 0.25em var(--shadow);
   filter: none;
 
   font-size: 1rem;
@@ -316,7 +312,7 @@ button.next {
 
   border-top: 3px solid #e86f51;
   background-color: #e8c468;
-  box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
+  box-shadow: 0.5em 0.5em 0.5em var(--shadow);
 
   color: ghostwhite;
   text-align: right;
@@ -371,7 +367,8 @@ button.next {
 
   border-style: none;
   background-color: #e8c468;
-  filter: drop-shadow(0.125em 0.125em 0.125em rgba(39, 71, 84, 0.9));
+  filter: drop-shadow(0.125em 0.125em 0.125em var(--shadow));
+  border-radius: 0.25em 0.25em 0.25em;
 
   overflow: visible;
 }
@@ -389,12 +386,12 @@ button.next {
 .currentTime {
   position: absolute;
   display: inline-block;
-  left: 0%;
-  bottom: 50%;
+  left: 10%;
+  bottom: 40%;
 
   line-height: 0em;
   font-weight: bolder;
-  text-shadow: 0em 0em 0.5em rgb(163, 54, 27);
+  text-shadow: 0em 0em 0.2em var(--shadow);
   background-color: #e86f51;
 }
 
@@ -417,7 +414,7 @@ button.next {
   align-content: space-between;
 
   background-color: #e8c468;
-  box-shadow: 0.5em 0.5em 0.5em rgba(39, 71, 84, 0.75);
+  box-shadow: 0.5em 0.5em 0.5em var(--shadow);
   border-top: 3px solid #e86f51;
 
   border-radius: 1em 1em 1em;
@@ -436,7 +433,7 @@ button.next {
   width: 100%;
 
   border-radius: 0.5em 0.5em 0.5em;
-  box-shadow: 0.25em 0.25em 0.25em rgba(39, 71, 84, 0.5);
+  box-shadow: 0.25em 0.25em 0.25em var(--shadow);
 
   color: ghostwhite;
 
@@ -446,14 +443,17 @@ button.next {
 .timeBlock p {
   position: relative;
   margin: auto;
-
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 1.0625em;
   vertical-align: middle;
 }
 
 .event {
-  background: linear-gradient(to bottom, #90d1ca, #2b9e91);
+  border-top: 2px solid var(--green);
+  background: linear-gradient(
+    to bottom,
+    var(--softblue),
+    var(--transparent_green)
+  );
 }
 
 .suggestion {
@@ -465,7 +465,7 @@ button.next {
   );
   border: 2px solid rgba(232, 111, 81, 1);
 
-  text-shadow: 0.125em 0.125em 0.25em rgb(97, 27, 8);
+  text-shadow: 0.125em 0.125em 0.25em var(--shadow);
 }
 
 /* TASKBOARD COMPONENTS */
@@ -507,7 +507,7 @@ thead caption {
 .taskBoard tr {
   display: table-row;
   box-sizing: border-box;
-  filter: drop-shadow(0.25em 0.25em 0.25em #274754);
+  filter: drop-shadow(0.25em 0.25em 0.25em var(--shadow));
 }
 
 .task {
@@ -560,7 +560,7 @@ td:last-child {
   grid-row: 3 / span 1;
 
   background-color: ghostwhite;
-  box-shadow: 0.5em 0.75em 0.5em rgba(39, 71, 84, 0.75);
+  box-shadow: 0.5em 0.75em 0.5em var(--shadow);
   border-radius: 1em 1em 1em;
 }
 
@@ -626,11 +626,11 @@ td:last-child {
 
   color: ghostwhite;
   background-color: #e86f51;
-  box-shadow: 0.25em 0.25em 0.25em rgb(163, 54, 27);
+  box-shadow: 0.25em 0.25em 0.25em var(--shadow);
   border-radius: 1em 1em 1em;
 
   text-align: center;
-  text-shadow: 0.25em 0.25em 0.25em rgb(163, 54, 27);
+  text-shadow: 0.25em 0.25em 0.25em var(--shadow);
 }
 
 .when {
