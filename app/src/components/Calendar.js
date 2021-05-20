@@ -1,4 +1,4 @@
-import React, { useState, useEffect, StrictMode } from "react";
+import React, { useState, useEffect, StrictMode, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
@@ -76,8 +76,6 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
   function getDates(num) {
     let newDates = [];
     for (let i = 0; i < num; i++) {
-      console.debug(dayStart.hours());
-
       //set starting time
       let newStart = dayjs();
       newStart = newStart.set("hour", dayStart.hours());
@@ -85,7 +83,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
         "minute",
         dayStart.minutes() ? dayStart.minutes() : 0,
       );
-      newStart = newStart.add(i + dateNavigation, "day"); //set day
+      newStart = newStart.add(i, "day"); //set day
 
       //set ending time
       let newEnd = newStart;
@@ -93,6 +91,18 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
       newEnd = newEnd.set("minute", dayEnd.minutes() ? dayEnd.minutes() : 0);
       if (newEnd.isBefore(newStart)) {
         newEnd = newEnd.add(1, "day"); //set day
+      }
+
+      if (dateNavigation < 0) {
+        newStart = newStart.subtract(
+          dayjs.duration({ days: Math.abs(dateNavigation) }),
+        );
+        newEnd = newEnd.subtract(
+          dayjs.duration({ days: Math.abs(dateNavigation) }),
+        );
+      } else if (dateNavigation > 0) {
+        newStart = newStart.add(Math.abs(dateNavigation), "days");
+        newEnd = newEnd.add(dayjs.duration({ days: Math.abs(dateNavigation) })); //set day
       }
       newDates.push({ start: newStart, end: newEnd });
     }
@@ -129,7 +139,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
 
   //USE EFFECTS
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       setTimeRanges();
       timeToRows(totalHours);
@@ -148,9 +158,14 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
     }
   }, []);
 
-  useEffect(() => {
-    getView();
-  }, [calView]);
+  useLayoutEffect(() => {
+    try {
+      setDays([]);
+      getDates(getView());
+    } catch (err) {
+      window.alert(err);
+    }
+  }, [calView, dateNavigation]);
 
   if (isReady) {
     return (

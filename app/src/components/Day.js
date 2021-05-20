@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
@@ -64,20 +64,34 @@ function Day({ index, timeRows, gcal, day, dayStart, suggestions, calView }) {
   }
 
   //Component load-in...
-  useEffect(() => {
-    setMin(day.start.toISOString());
-    setMax(day.end.toISOString());
+  useLayoutEffect(() => {
+    try {
+      setMin(day.start.toISOString());
+      setMax(day.end.toISOString());
+      getEvents();
+      if (suggestions.length > 0) {
+        getDaysSuggestions();
+      }
+    } catch (err) {
+      console.debug(err);
+    }
   }, []);
 
-  //After day's parameters are set...
-  useEffect(() => {
-    getEvents();
-    if (suggestions.length > 0) {
-      getDaysSuggestions();
+  //Component load-in...
+  useLayoutEffect(() => {
+    try {
+      setMin(day.start.toISOString());
+      setMax(day.end.toISOString());
+      getEvents();
+      if (suggestions.length > 0) {
+        getDaysSuggestions();
+      }
+    } catch (err) {
+      console.debug(err);
     }
-  }, [min, max]);
+  }, [day]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getDaysSuggestions();
   }, [suggestions]);
 
