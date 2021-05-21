@@ -177,7 +177,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
         }}
       >
         <CalendarNavBar
-          {...{ calView, setCalView, dateNavigation, setDateNavigation }}
+          {...{ calView, setCalView, dateNavigation, setDateNavigation, days }}
         />
         <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
         {days.map((day, index) => {

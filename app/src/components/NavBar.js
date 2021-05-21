@@ -40,6 +40,7 @@ export const CalendarNavBar = ({
   setCalView,
   dateNavigation,
   setDateNavigation,
+  days,
 }) => {
   const [gridColumn, setGridColumn] = useState("2 / auto");
 
@@ -111,7 +112,13 @@ export const CalendarNavBar = ({
         <button className="prev" onClick={() => prevNext(-1)}>
           prev
         </button>
-        <span className="navTitle">Today</span>
+        <span className="navTitle">
+          {days.length > 1
+            ? `${days[0].start.format("MMM D, YYYY")} - ${days[
+                days.length - 1
+              ].start.format("MMM D, YYYY")}`
+            : `${days[0].start.format("MMM D, YYYY")}`}
+        </span>
         <button className="next" onClick={() => prevNext(1)}>
           next
         </button>

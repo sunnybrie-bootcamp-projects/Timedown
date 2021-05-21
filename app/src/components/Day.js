@@ -142,24 +142,4 @@ function Day({ index, timeRows, gcal, day, dayStart, suggestions, calView }) {
   );
 }
 
-// const Events = ({ gcal, queryOptions }) => {
-//   const [events, setEvents] = React.useState([]);
-
-//   React.useEffect(() => {
-//     gcal
-//       .listUpcomingEvents(10)
-//       .then(({ result: { items } }) => setEvents(items));
-//   }, []);
-
-//   return events.length === 0 ? (
-//     <p>You have no events for this day.</p>
-//   ) : (
-//       {events.map((event) => (
-//         <TimeBlock className="event" key={event.id} summary={event.summary} />
-
-//       ))}
-
-//   );
-// };
-
 export default Day;
