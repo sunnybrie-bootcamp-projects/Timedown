@@ -121,6 +121,8 @@ function Planner({
           {...{
             gcal,
             user,
+            dayStart,
+            dayEnd,
             setAction,
             action,
             setDetails,

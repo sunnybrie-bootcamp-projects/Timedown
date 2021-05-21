@@ -20,6 +20,8 @@ dayjs.extend(isBetween);
 
 function DetailsBoard({
   user,
+  dayStart,
+  dayEnd,
   gcal,
   action,
   details,
@@ -68,7 +70,15 @@ function DetailsBoard({
       case "suggestTimes":
         infoToRender = (
           <Calibrator
-            {...{ user, details, gcal, suggestions, setSuggestions }}
+            {...{
+              user,
+              dayStart,
+              dayEnd,
+              details,
+              gcal,
+              suggestions,
+              setSuggestions,
+            }}
           />
         );
       default:

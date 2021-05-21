@@ -15,19 +15,26 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
-  //dummy task
-  const [testTask, setTestTask] = React.useState(details);
-  const [estTime, setEstTime] = React.useState(dayjs.duration(details.estTime));
+const Calibrator = ({
+  gcal,
+  user,
+  dayStart,
+  dayEnd,
+  details,
+  suggestions,
+  setSuggestions,
+}) => {
+  const [isReady, setIsReady] = useState(false);
+  const [estTime, setEstTime] = useState(dayjs.duration(details.estTime));
 
-  const [currentDate, setCurrentDate] = React.useState(dayjs());
-  const [timeRemaining, setTimeRemaining] = React.useState(""); //remaining time between now and duedate
-  const [freeTimesRemaining, setFreeTimesRemaining] = React.useState([]); //remaining available time between now and due date
-  const [totalFreeTime, setTotalFreeTime] = React.useState(dayjs.duration(0)); //sum total of free times remaining
-  const [taskPriority, setTaskPriority] = React.useState(0);
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [timeRemaining, setTimeRemaining] = useState(""); //remaining time between now and duedate
+  const [freeTimesRemaining, setFreeTimesRemaining] = useState([]); //remaining available time between now and due date
+  const [totalFreeTime, setTotalFreeTime] = useState(dayjs.duration(0)); //sum total of free times remaining
+  const [taskPriority, setTaskPriority] = useState(0);
 
   //user's settings
-  const awakeTime = user.timedown.awakeTime;
+  const awakeTime = { start: dayStart, end: dayEnd };
   const eventBuffer = dayjs.duration({
     ...user.timedown.eventBuffer,
     hours: 0,
@@ -105,24 +112,22 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   function filterRemainingFreeTimes(freeTimeArr) {
     //filter out times that don't fit in user's settings
     let filteredTimeBlocks = freeTimeArr.map((freeTime) => {
-      freeTime.start = dayjs(freeTime.start);
-      freeTime.end = dayjs(freeTime.end);
+      let start = dayjs(freeTime.start);
+      let end = dayjs(freeTime.end);
 
-      if (freeTime.end.isBefore(freeTime.start)) {
+      if (end.isBefore(start)) {
         return null;
       }
 
       let range = {
-        min: freeTime.start
-          .hour(awakeTime.start.hours)
-          .minute(awakeTime.start.minutes),
-        max: freeTime.start
-          .hour(awakeTime.end.hours)
-          .minute(awakeTime.end.minutes),
+        min: start
+          .hour(awakeTime.start.hours())
+          .minute(awakeTime.start.minutes()),
+        max: start.hour(awakeTime.end.hours()).minute(awakeTime.end.minutes()),
       };
 
-      let early = freeTime.start.isBefore(range.min);
-      let late = freeTime.end.isAfter(range.max);
+      let early = start.isBefore(range.min);
+      let late = end.isAfter(range.max);
 
       //console.debug({ range }, { early }, { late });
 
@@ -131,24 +136,23 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       if (early && late) {
         return null;
       } else if (early) {
-        freeTime.start = range.min;
+        start = range.min;
       } else if (late) {
-        freeTime.end = range.max;
+        end = range.max;
       }
 
-      let ftDuration = dayjs.duration(freeTime.end.diff(freeTime.start));
+      let ftDuration = dayjs.duration(end.diff(start));
       let minDuration = eventBuffer;
 
       if (ftDuration.asMilliseconds() < minDuration.asMilliseconds()) {
         return null;
-      } else {
-        freeTime.duration = ftDuration;
       }
 
       return {
         ...freeTime,
-        start: freeTime.start.toISOString(),
-        end: freeTime.end.toISOString(),
+        start: start.toISOString(),
+        end: end.toISOString(),
+        duration: ftDuration,
       };
     });
 
@@ -176,18 +180,17 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       }
     });
 
-    setTotalFreeTime(dayjs.duration(total));
+    return dayjs.duration(total);
   }
 
   //get proportion of each free time block
-  function getFreeTimePercentages(freeTimeArr) {
+  function getFreeTimePercentages(total, freeTimeArr) {
     let update = freeTimeArr.map((freeTime) => {
-      if (freeTime.duration) {
-        freeTime.freeTimePercentage =
-          parseInt(freeTime.duration.asMilliseconds()) /
-          totalFreeTime.asMilliseconds();
-      }
-      return freeTime;
+      let freeTimePercentage = parseFloat(
+        freeTime.duration.asMilliseconds() / total.asMilliseconds(),
+      );
+
+      return { ...freeTime, freeTimePercentage };
     });
 
     return update;
@@ -206,7 +209,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
         amount: dayjs.duration(amount),
         start: freeTime.start,
         end: dayjs(freeTime.start).add(amount).toISOString(),
-        summary: testTask.summary,
+        summary: details.summary,
       };
 
       return item;
@@ -235,65 +238,72 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   useLayoutEffect(() => {
     try {
       (async (d) => {
-        return await getRemainingFreeTimes(d);
-      })(testTask.dueDate).then((results) => {
-        setFreeTimesRemaining(results);
-      });
-    } catch (err) {
-      console.debug("Error: ", err);
-    }
-    try {
-      setTimeRemaining(getRemainingTime(testTask.dueDate, currentDate));
-      setFreeTimesRemaining((freeTimesRemaining) =>
-        filterRemainingFreeTimes(freeTimesRemaining),
-      );
-      getSumFreeTime(freeTimesRemaining);
-      setFreeTimesRemaining((freeTimesRemaining) =>
-        getFreeTimePercentages(freeTimesRemaining),
-      );
-      getSuggestions();
+        return getRemainingFreeTimes(d);
+      })(details.dueDate)
+        .then((results) => {
+          getRemainingTime(details.dueDate, currentDate);
+          return filterRemainingFreeTimes(results);
+        })
+        .then((results) => {
+          setTimeRemaining(results[0]);
+          setTotalFreeTime(getSumFreeTime(results));
+          return [getSumFreeTime(results), results];
+        })
+        .then((results) => {
+          return getFreeTimePercentages(results[0], results[1]);
+        })
+        .then((results) => {
+          setFreeTimesRemaining(results);
+        });
     } catch (err) {
       console.debug("Error: ", err);
     }
   }, []);
 
-  useEffect(() => {}, [suggestions]);
+  useEffect(() => {
+    getSuggestions();
+    setIsReady(true);
+  }, [freeTimesRemaining.length]);
 
-  return (
-    <div className="calibrator">
-      <h4>Suggestions:</h4>
-      {checkAchievability() === true ? (
-        <>
+  if (isReady) {
+    return (
+      <div className="calibrator">
+        <h4>Suggestions:</h4>
+        {checkAchievability() === true ? (
+          <>
+            <p>
+              You should compete your task by{" "}
+              {dayjs(details.dueDate).format("dddd, MMM D, YYYY h:mm A")} if you
+              follow this plan.
+            </p>
+            <ol>
+              {suggestions.map((time, index) => {
+                let when = dayjs(freeTimesRemaining[index].start).format(
+                  "ddd, MMM D, YYYY h:mm A",
+                );
+                let howLong = time.amount.humanize();
+                return (
+                  <li>
+                    <span className="when">{`When: ${when}`}</span>
+                    <span className="duration">{`For: ${howLong}`}</span>
+                  </li>
+                );
+              })}
+            </ol>{" "}
+          </>
+        ) : (
           <p>
-            You should compete your task by{" "}
-            {dayjs(testTask.dueDate).format("dddd, MMM D, YYYY h:mm A")} if you
-            follow this plan.
+            It looks like you don't have enough spare time to complete this task
+            by {dayjs(details.dueDate).format("dddd, MMM D, YYYY h:mm A")}.
+            According to the Calibrator, you're short on free time for this task
+            by approximately: {checkAchievability().humanize()}
           </p>
-          <ol>
-            {suggestions.map((time, index) => {
-              let when = dayjs(freeTimesRemaining[index].start).format(
-                "ddd, MMM D, YYYY h:mm A",
-              );
-              let howLong = time.amount.humanize();
-              return (
-                <li>
-                  <span className="when">{`When: ${when}`}</span>
-                  <span className="duration">{`For: ${howLong}`}</span>
-                </li>
-              );
-            })}
-          </ol>{" "}
-        </>
-      ) : (
-        <p>
-          It looks like you don't have enough spare time to complete this task
-          by {dayjs(testTask.dueDate).format("dddd, MMM D, YYYY h:mm A")}.
-          According to the Calibrator, you're short on free time for this task
-          by approximately: {checkAchievability().humanize()}
-        </p>
-      )}
-    </div>
-  );
+        )}
+      </div>
+    );
+  } else {
+    return <p className="loadingMessage">Calculating...</p>;
+  }
 };
 
 export default Calibrator;
