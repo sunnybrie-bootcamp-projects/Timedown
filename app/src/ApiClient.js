@@ -1,12 +1,14 @@
 //Task Requests
 export const getTasks = async (user) => {
-  const response = await fetch("/api/tasks", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "timedown-user": user,
+  const response = await fetch(
+    `/api/tasks?userId=${encodeURIComponent(user)}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-  });
+  );
   return response.json();
 };
 
@@ -78,6 +80,19 @@ export const addUser = async (email, name) => {
   return response.json();
 };
 
-//TimeBlock Requests
+export const updateSettings = async (id, userSettings) => {
+  const response = await fetch(
+    `/api/user/settings/?userId=${encodeURIComponent(id)}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...userSettings }),
+    },
+  );
 
-//Check-In Requests
+  return response.json();
+};
+
+//TimeBlock Requests

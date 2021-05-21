@@ -10,8 +10,8 @@ const port = process.env.PORT || 4000;
 const tasks = express.Router();
 
 tasks.get("/", async (request, response) => {
-  const timedownUser = request.header("timedown-user");
-  const tasks = await db.getTasks(timedownUser);
+  const { userId } = request.query;
+  const tasks = await db.getTasks(userId);
   response.json(tasks);
 });
 
@@ -64,6 +64,17 @@ user.post("/", async (request, response) => {
     response.status(418).json(newAccount);
   } else {
     response.status(201).json(newAccount);
+  }
+});
+user.post("/settings", async (request, response) => {
+  const { userId } = request.query;
+  const { awakeTime, eventBuffer } = request.body;
+  const update = await db.updateSettings(userId, awakeTime, eventBuffer);
+
+  if (!update.success) {
+    response.status(418).json(update);
+  } else {
+    response.status(201).json(update);
   }
 });
 

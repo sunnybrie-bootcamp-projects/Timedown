@@ -136,3 +136,31 @@ WHERE users."id" = $1`,
     };
   }
 };
+
+export const updateSettings = async (userId, awakeTime, eventBuffer) => {
+  try {
+    let query = `UPDATE settings SET "awakeTime" = '${JSON.stringify(
+      awakeTime,
+    )}', "eventBuffer" = '${JSON.stringify(
+      eventBuffer,
+    )}' WHERE "userId" = ${userId}`;
+    const update = await db.any(query);
+
+    return {
+      success: true,
+      message: "Your settings have been updated!",
+    };
+  } catch (err) {
+    let query = `INSERT INTO settings("userId", "awakeTime", "eventBuffer") VALUES(${userId}, '${JSON.stringify(
+      awakeTime,
+    )} RETURNING *', '${JSON.stringify(eventBuffer)}'`;
+    const update = await db.any(query);
+
+    return {
+      success: false,
+      message:
+        "Settings failed to be updated because they were not found. New settings were inserted.",
+      settings: update,
+    };
+  }
+};
