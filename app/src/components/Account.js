@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import ReactDOM from "react-dom";
 
 import dayjs from "dayjs";
 
@@ -109,68 +110,6 @@ function UserSettingsForm({ user, setEditSettings }) {
     }
   }
 
-  //Renders blackOut inputs
-  function getInputs(dayArr, dayString, dayKey) {
-    console.log(dayArr.length);
-    return dayArr.map((time, index) => {
-      return (
-        <>
-          <label key={`${dayKey}SL${index}`} htmlFor={`in-${dayString}Start`}>
-            Start:
-          </label>
-          <input
-            id={`in-${dayString}Start`}
-            key={`${dayKey}SI${index}`}
-            type={dayKey === "X" ? "dateTime-local" : "time"}
-            value={dayArr[index].start}
-            onChange={(e) => {
-              trackerDispatch({
-                type: `edit`,
-                day: `${dayString}`,
-                [index]: index,
-                edge: `start`,
-                value: e.target.value,
-              });
-            }}
-          />
-          <label key={`${dayKey}EL${index}`} htmlFor={`in-${dayString}End`}>
-            End:
-          </label>
-          <input
-            id={`in-${dayString}End`}
-            key={`${dayKey}EI${index}`}
-            type={dayKey === "X" ? "dateTime-local" : "time"}
-            value={dayArr[index].end}
-            onChange={(e) => {
-              trackerDispatch({
-                type: `edit`,
-                day: `${dayString}`,
-                [index]: index,
-                edge: `end`,
-                value: e.target.value,
-              });
-            }}
-          />
-          <button
-            key={`${dayKey}D${index}`}
-            value="remove"
-            onClick={(e) => {
-              trackerDispatch({
-                type: `delete`,
-                day: `${dayString}`,
-                [index]: index,
-                edge: `end`,
-                value: e.target.value,
-              });
-            }}
-          >
-            Remove
-          </button>
-        </>
-      );
-    });
-  }
-
   //builds jsx form to be rendered
   function getFormJSX() {
     return (
@@ -266,6 +205,7 @@ function UserSettingsForm({ user, setEditSettings }) {
           <fieldset key={`0F`}>
             <legend key={`0L`}>Monday:</legend>
             <DayInputs
+              key={`DI0`}
               dayArr={tracker.mon}
               dayString="mon"
               dayIndex={0}
@@ -289,7 +229,13 @@ function UserSettingsForm({ user, setEditSettings }) {
 
           <fieldset>
             <legend>Tuesday:</legend>
-            {getInputs(tracker.tue, "tue", 1)}
+            <DayInputs
+              key={`DI1`}
+              dayArr={tracker.tue}
+              dayString="tue"
+              dayIndex={1}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -307,7 +253,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Wednesday:</legend>
-            {getInputs(tracker.wed, "wed", 2)}
+            <DayInputs
+              key={`DI2`}
+              dayArr={tracker.wed}
+              dayString="wed"
+              dayIndex={2}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -325,7 +277,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Thursday:</legend>
-            {getInputs(tracker.thu, "thu", 3)}
+            <DayInputs
+              key={`DI3`}
+              dayArr={tracker.thu}
+              dayString="thu"
+              dayIndex={3}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -343,7 +301,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Friday:</legend>
-            {getInputs(tracker.fri, "fri", 4)}
+            <DayInputs
+              key={`DI4`}
+              dayArr={tracker.fri}
+              dayString="fri"
+              dayIndex={4}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -361,7 +325,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Saturday:</legend>
-            {getInputs(tracker.sat, "sat", 5)}
+            <DayInputs
+              key={`DI5`}
+              dayArr={tracker.sat}
+              dayString="sat"
+              dayIndex={5}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -379,7 +349,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Sunday:</legend>
-            {getInputs(tracker.sun, "sun", 6)}
+            <DayInputs
+              key={`DI6`}
+              dayArr={tracker.sun}
+              dayString="sun"
+              dayIndex={6}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -398,7 +374,13 @@ function UserSettingsForm({ user, setEditSettings }) {
         </fieldset>
         <fieldset key="MF">
           <legend key="ML">Miscellaneous</legend>
-          {getInputs(tracker.misc, "misc", "X")}
+          <DayInputs
+            key={`DIX`}
+            dayArr={tracker.misc}
+            dayString="misc"
+            dayIndex={"X"}
+            {...{ trackerDispatch }}
+          />
           <button
             type="button"
             key={`0A`}
@@ -447,25 +429,10 @@ function UserSettingsForm({ user, setEditSettings }) {
   // };
 
   React.useEffect(() => {
-    try {
-      setFormJSX(() => getFormJSX());
-    } catch (err) {
-      console.debug(err);
-    }
+    setFormReady(true);
   }, []);
 
-  React.useEffect(() => {
-    setFormReady(true);
-  }, [formJSX]);
-
   if (formReady) {
-    return <>{formJSX}</>;
-  } else {
-    return <p>Loading settings...</p>;
-  }
-}
-  //builds jsx form to be rendered
-  function GetFormJSX({tracker, userSettings, trackerDispatch}) {
     return (
       <form className="userSettingsForm" id="settingsSubmission">
         <label htmlFor="in-pushNotifications">Push Notifications:</label>
@@ -559,6 +526,7 @@ function UserSettingsForm({ user, setEditSettings }) {
           <fieldset key={`0F`}>
             <legend key={`0L`}>Monday:</legend>
             <DayInputs
+              key={`DI0`}
               dayArr={tracker.mon}
               dayString="mon"
               dayIndex={0}
@@ -582,7 +550,13 @@ function UserSettingsForm({ user, setEditSettings }) {
 
           <fieldset>
             <legend>Tuesday:</legend>
-            {getInputs(tracker.tue, "tue", 1)}
+            <DayInputs
+              key={`DI1`}
+              dayArr={tracker.tue}
+              dayString="tue"
+              dayIndex={1}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -600,7 +574,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Wednesday:</legend>
-            {getInputs(tracker.wed, "wed", 2)}
+            <DayInputs
+              key={`DI2`}
+              dayArr={tracker.wed}
+              dayString="wed"
+              dayIndex={2}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -618,7 +598,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Thursday:</legend>
-            {getInputs(tracker.thu, "thu", 3)}
+            <DayInputs
+              key={`DI3`}
+              dayArr={tracker.thu}
+              dayString="thu"
+              dayIndex={3}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -636,7 +622,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Friday:</legend>
-            {getInputs(tracker.fri, "fri", 4)}
+            <DayInputs
+              key={`DI4`}
+              dayArr={tracker.fri}
+              dayString="fri"
+              dayIndex={4}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -654,7 +646,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Saturday:</legend>
-            {getInputs(tracker.sat, "sat", 5)}
+            <DayInputs
+              key={`DI5`}
+              dayArr={tracker.sat}
+              dayString="sat"
+              dayIndex={5}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -672,7 +670,13 @@ function UserSettingsForm({ user, setEditSettings }) {
           </fieldset>
           <fieldset>
             <legend>Sunday:</legend>
-            {getInputs(tracker.sun, "sun", 6)}
+            <DayInputs
+              key={`DI6`}
+              dayArr={tracker.sun}
+              dayString="sun"
+              dayIndex={6}
+              {...{ trackerDispatch }}
+            />
             <button
               type="button"
               key={`0A`}
@@ -691,7 +695,13 @@ function UserSettingsForm({ user, setEditSettings }) {
         </fieldset>
         <fieldset key="MF">
           <legend key="ML">Miscellaneous</legend>
-          {getInputs(tracker.misc, "misc", "X")}
+          <DayInputs
+            key={`DIX`}
+            dayArr={tracker.misc}
+            dayString="misc"
+            dayIndex={"X"}
+            {...{ trackerDispatch }}
+          />
           <button
             type="button"
             key={`0A`}
@@ -712,67 +722,149 @@ function UserSettingsForm({ user, setEditSettings }) {
         </fieldset>
       </form>
     );
+  } else {
+    return <p>Loading settings...</p>;
   }
+}
 
 //Renders blackOut inputs
 function DayInputs({ dayArr, dayString, dayKey, trackerDispatch }) {
-  return dayArr.map((time, index) => {
-    return (
-      <React.Fragment key={`DI${dayKey}-${index}`}>
-        <label key={`${dayKey}SL${index}`} htmlFor={`in-${dayString}Start`}>
-          Start:
-        </label>
-        <input
-          id={`in-${dayString}Start`}
-          key={`${dayKey}SI${index}`}
-          type={dayKey === "X" ? "dateTime-local" : "time"}
-          value={dayArr[index].start}
-          onChange={(e) => {
-            trackerDispatch({
-              type: `edit`,
-              day: `${dayString}`,
-              [index]: index,
-              edge: `start`,
-              value: e.target.value,
-            });
-          }}
-        />
-        <label key={`${dayKey}EL${index}`} htmlFor={`in-${dayString}End`}>
-          End:
-        </label>
-        <input
-          id={`in-${dayString}End`}
-          key={`${dayKey}EI${index}`}
-          type={dayKey === "X" ? "dateTime-local" : "time"}
-          value={dayArr[index].end}
-          onChange={(e) => {
-            trackerDispatch({
-              type: `edit`,
-              day: `${dayString}`,
-              [index]: index,
-              edge: `end`,
-              value: e.target.value,
-            });
-          }}
-        />
-        <button
-          key={`${dayKey}D${index}`}
-          value="remove"
-          onClick={(e) => {
-            trackerDispatch({
-              type: `delete`,
-              day: `${dayString}`,
-              [index]: index,
-              edge: `end`,
-              value: e.target.value,
-            });
-          }}
-        >
-          Remove
-        </button>
-      </React.Fragment>
+  const [inputsReady, setInputsReady] = useState(false);
+  const [JSXinputs, setJSXInputs] = useState(<p>Here are the inputs</p>);
+
+  useLayoutEffect(() => {
+    setJSXInputs(
+      dayArr.map((time, index) => {
+        return (
+          <React.Fragment key={`DI${dayKey}-${index}`}>
+            <label key={`${dayKey}SL${index}`} htmlFor={`in-${dayString}Start`}>
+              Start:
+            </label>
+            <input
+              id={`in-${dayString}Start`}
+              key={`${dayKey}SI${index}`}
+              type={dayKey === "X" ? "dateTime-local" : "time"}
+              value={dayArr[index].start}
+              onChange={(e) => {
+                trackerDispatch({
+                  type: `edit`,
+                  day: `${dayString}`,
+                  [index]: index,
+                  edge: `start`,
+                  value: e.target.value,
+                });
+              }}
+            />
+            <label key={`${dayKey}EL${index}`} htmlFor={`in-${dayString}End`}>
+              End:
+            </label>
+            <input
+              id={`in-${dayString}End`}
+              key={`${dayKey}EI${index}`}
+              type={dayKey === "X" ? "dateTime-local" : "time"}
+              value={dayArr[index].end}
+              onChange={(e) => {
+                trackerDispatch({
+                  type: `edit`,
+                  day: `${dayString}`,
+                  [index]: index,
+                  edge: `end`,
+                  value: e.target.value,
+                });
+              }}
+            />
+            <button
+              key={`${dayKey}D${index}`}
+              value="remove"
+              onClick={(e) => {
+                trackerDispatch({
+                  type: `delete`,
+                  day: `${dayString}`,
+                  [index]: index,
+                  edge: `end`,
+                  value: e.target.value,
+                });
+              }}
+            >
+              Remove
+            </button>
+          </React.Fragment>
+        );
+      }),
     );
-  });
+  }, []);
+
+  useEffect(() => {
+    setJSXInputs(
+      dayArr.map((time, index) => {
+        return (
+          <React.Fragment key={`DI${dayKey}-${index}`}>
+            <label key={`${dayKey}SL${index}`} htmlFor={`in-${dayString}Start`}>
+              Start:
+            </label>
+            <input
+              id={`in-${dayString}Start`}
+              key={`${dayKey}SI${index}`}
+              type={dayKey === "X" ? "dateTime-local" : "time"}
+              value={dayArr[index].start}
+              onChange={(e) => {
+                trackerDispatch({
+                  type: `edit`,
+                  day: `${dayString}`,
+                  [index]: index,
+                  edge: `start`,
+                  value: e.target.value,
+                });
+              }}
+            />
+            <label key={`${dayKey}EL${index}`} htmlFor={`in-${dayString}End`}>
+              End:
+            </label>
+            <input
+              id={`in-${dayString}End`}
+              key={`${dayKey}EI${index}`}
+              type={dayKey === "X" ? "dateTime-local" : "time"}
+              value={dayArr[index].end}
+              onChange={(e) => {
+                trackerDispatch({
+                  type: `edit`,
+                  day: `${dayString}`,
+                  [index]: index,
+                  edge: `end`,
+                  value: e.target.value,
+                });
+              }}
+            />
+            <button
+              key={`${dayKey}D${index}`}
+              value="remove"
+              onClick={(e) => {
+                trackerDispatch({
+                  type: `delete`,
+                  day: `${dayString}`,
+                  [index]: index,
+                  edge: `end`,
+                  value: e.target.value,
+                });
+              }}
+            >
+              Remove
+            </button>
+          </React.Fragment>
+        );
+      }),
+    );
+  }, [dayArr.length]);
+
+  useEffect(() => {
+    setInputsReady(true);
+  }, [JSXinputs]);
+
+  if (inputsReady) {
+    return { JSXinputs };
+  } else {
+    return <p className="loadingMessage">Loading inputs...</p>;
+  }
 }
 
 //Manages blackOut inputs
