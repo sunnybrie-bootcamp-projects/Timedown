@@ -98,7 +98,7 @@ function TimeIndicator({ dayStart }) {
       style={{ gridRow: indicatorRender, gridColumn: "1 / span 2" }}
     >
       <div className="timePointer"></div>
-      <span className="currentTime">{currentTime.format("hh:mma")}</span>
+      <span className="currentTime">{currentTime.format("h:mma")}</span>
     </div>
   );
 }

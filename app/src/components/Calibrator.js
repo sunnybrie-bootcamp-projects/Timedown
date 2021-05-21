@@ -199,8 +199,15 @@ const Calibrator = ({
   //get suggested time spent working on task
   function getSuggestions() {
     let totals = freeTimesRemaining.map((freeTime) => {
-      let amount = freeTime.freeTimePercentage * estTime.asMilliseconds();
-      let timeWindow = dayjs(freeTime.end).diff(dayjs(freeTime.start));
+      let amount =
+        freeTime.freeTimePercentage *
+        dayjs.duration(details.estTime).asMilliseconds();
+      let timeWindow = dayjs
+        .duration(dayjs(freeTime.end).diff(dayjs(freeTime.start)))
+        .asMilliseconds();
+      if (amount < dayjs.duration({ minutes: 15 }).asMilliseconds()) {
+        amount = dayjs.duration({ minutes: 15 }).asMilliseconds();
+      }
       if (amount > timeWindow) {
         amount = timeWindow;
       }
@@ -213,6 +220,17 @@ const Calibrator = ({
       };
 
       return item;
+    });
+
+    totals = totals.filter((freeTime) => {
+      if (
+        freeTime.amount.asMilliseconds() <
+        dayjs.duration({ minutes: 15 }).asMilliseconds()
+      ) {
+        return false;
+      } else {
+        return true;
+      }
     });
 
     setSuggestions(totals);

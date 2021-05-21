@@ -30,6 +30,7 @@ body {
   font-family: freight-neo-pro, sans-serif;
   font-weight: 400;
   font-style: normal;
+  color: var(--navy);
 }
 
 body::-webkit-scrollbar {
@@ -119,7 +120,6 @@ main.app {
   width: auto;
   max-width: 1fr;
 
-  color: var(--white);
   background: var(--paper), var(--orange);
   background-blend-mode: multiply, normal;
   background-position: center;
@@ -138,7 +138,7 @@ main.app {
   background-color: var(--bloodorange);
   filter: drop-shadow(0.5em 0.75em 0.5em var(--shadow));
 }
-.navTab h2 {
+.navTitle {
   display: block;
   z-index: 1;
   top: 50%;
@@ -150,6 +150,8 @@ main.app {
   font-family: var(--thematic);
   font-weight: 500;
   font-style: normal;
+  color: var(--white);
+  font-size: minMax(2em, 120%);
 }
 
 .navTab img {
@@ -172,7 +174,7 @@ main.app {
   display: block;
   box-sizing: border-box;
   position: relative;
-  padding: 2em 0em 1em 0em;
+  padding: 1em 0.5em;
   width: auto;
   min-width: min-content;
   max-width: 70vw;
@@ -201,12 +203,12 @@ main.app {
   box-sizing: border-box;
   position: relative;
   margin: auto;
-  height: auto;
+  height: 95%;
   min-height: fit-content;
   max-height: 100%;
   max-width: 95%;
 
-  grid-template-rows: 1fr 14fr;
+  grid-template-rows: 15% 85%;
   row-gap: 1em;
   column-gap: 1em;
 
@@ -217,38 +219,40 @@ main.app {
   display: inline-block;
   position: absolute;
   box-sizing: border-box;
-  margin: 0% 0.5%;
+  margin: 0%;
   height: 100%;
-  width: 99%;
+  width: 100%;
   grid-row: 1 / span 1;
 
   background-clip: border-box;
-  border-bottom: 1px solid #e86f51;
+  background: linear-gradient(to bottom, var(--bloodorange), var(--orange));
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
 
+  color: var(--white);
   text-align: center;
+  font-weight: 600;
 }
 
 .timeLine .dateTimeHeader {
-  border-bottom: 1px solid rgba(0, 0, 0, 0);
-  color: rgba(0, 0, 0, 0);
-  background-color: rgba(0, 0, 0, 0);
+  color: var(--invisible);
+  background-color: var(--invisible);
 }
 
 /* CALENDAR NAV */
-.calendar .navBar {
+.day.navBar {
   display: grid;
   box-sizing: border-box;
   position: relative;
-  top: 0em;
-  left: 0em;
   margin: auto;
-  padding: 0.25em;
+  padding: 1% 3%;
   width: 100%;
   height: 100%;
 
   grid-template-columns: 1fr 3fr 1fr;
   grid-column: 2 / span all;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  align-content: center;
 
   background-color: var(--bloodorange);
 
@@ -257,52 +261,52 @@ main.app {
   text-align: center;
 }
 
-.calendar .navBar button {
-  height: auto;
-  width: minMax(auto, 80%);
+button.day.navBar {
+  height: 2em;
+  width: auto;
 }
 
 button.prev,
 button.next {
-  display: block;
-  box-sizing: border-box;
-  position: relative;
-  margin: auto;
-
-  width: min-content;
-
-  background-color: rgba(0, 0, 0, 0);
-  border-radius: 1em 1em 1em;
+  background: linear-gradient(to bottom, var(--orange) 1%, var(--bloodorange));
+  box-shadow: 0.25em 0.25em 0.25em var(--shadow);
+  border-radius: 0.5em 0.5em 0.5em;
   border: 2px solid ghostwhite;
 
   color: ghostwhite;
 }
 
-.calendar .navTab {
+.calViewOptions {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  line-height: 1em;
+  font-size: x-small;
+}
+
+.calViewOptions button.navTab {
   display: block;
   position: relative;
-  float: left;
   box-sizing: border-box;
-  margin: 1%;
+  margin: auto;
   height: auto;
   width: auto;
 
-  background-color: ghostwhite;
   border: 2px solid #f5a462;
   border-radius: 0.75em 0.75em;
   box-shadow: 0.25em 0.25em 0.25em var(--shadow);
   filter: none;
 
-  font-size: 1rem;
+  font-size: 0.5rem;
   color: #e86f51;
 }
 
-.calendar .navTab.toggled {
-  z-index: 2;
+.calViewOptions .navTab.toggled {
+  background-color: var(--white);
 }
 
-.calendar .navTab.notToggled {
-  background-color: gainsboro;
+.calViewOptions .navTab.notToggled {
+  background-color: var(--invisible);
 }
 
 /* TIMELINE */
@@ -485,18 +489,22 @@ button.next {
 /* TASKBOARD COMPONENTS */
 
 table.taskBoard {
-  display: table;
+  display: inline-table;
   box-sizing: border-box;
   position: absolute;
   margin: auto;
   padding: 1em;
-  height: auto;
-  max-height: 60%;
-  width: 100%;
+  height: 80%;
+  max-height: 95%;
+  width: 90%;
 
   border-collapse: separate;
   border-spacing: 0em 1em;
   vertical-align: middle;
+  align-content: center;
+
+  border-radius: 1em 1em 1em;
+  background-color: var(--white);
 }
 
 thead {
