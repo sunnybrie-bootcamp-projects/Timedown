@@ -28,7 +28,7 @@ function TaskBoard({
     <table
       className="taskBoard"
       style={{
-        display: tab === "taskboard" ? "inline-table" : "none",
+        display: tab === "taskboard" ? "table" : "none",
       }}
     >
       <caption>

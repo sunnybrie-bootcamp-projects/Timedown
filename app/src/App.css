@@ -69,6 +69,15 @@ h3 {
   line-height: 1em;
 }
 
+button {
+  background-color: var(--green);
+  border-radius: 1rem 1rem 1rem;
+  border-color: var(--softblue);
+
+  color: var(--white);
+  font-size: 1rem;
+}
+
 /* MAIN APP COMPONENTS */
 
 #login {
@@ -504,12 +513,14 @@ button.next {
 /* TASKBOARD COMPONENTS */
 
 table.taskBoard {
-  display: inline-table;
+  display: table;
   box-sizing: border-box;
   position: absolute;
+  left: 5%;
+  right: 5%;
   margin: auto;
   padding: 1em;
-  height: 80%;
+  height: auto;
   max-height: 95%;
   width: 90%;
 
@@ -604,13 +615,17 @@ form.userSettingsForm {
   right: 5%;
   margin: auto;
   padding: 0.5em;
-  width: 30vw;
-  min-height: 80vh;
-  max-height: 80vh;
+  min-width: 8em;
+  width: 25vw;
+  min-height: fit-content;
+  height: auto;
+  max-height: 60vh;
 
   grid-row: 3 / span 1;
 
-  background-color: ghostwhite;
+  background-color: var(--white);
+  border-top: 0.5em solid var(--green);
+  border-bottom: 0.5em solid var(--green);
   box-shadow: 0.5em 0.75em 0.5em var(--shadow);
   border-radius: 1em 1em 1em;
 }
@@ -660,8 +675,12 @@ form.userSettingsForm {
   display: block;
   box-sizing: border-box;
   position: relative;
-  max-height: 70vh;
+  max-height: 20em;
   padding: 0.25em;
+}
+
+.calibrator ol {
+  max-height: 10em;
   overflow-y: scroll;
 }
 
@@ -697,13 +716,19 @@ form.userSettingsForm {
   border: 1px solid #2b9e91;
 }
 
+.app p {
+  display: block;
+  width: 80%;
+}
+
 @media screen and (orientation: portrait) and (max-width: 600px) {
   .app {
-    left: 0;
-    right: 0;
-    padding: 0;
+    position: absolute;
+    right: 0em;
+    padding: 0em;
     margin: 0;
     width: 100vw;
+    height: 90vh;
 
     grid-template-rows: 0.5fr 1.75fr 15fr;
   }
@@ -717,25 +742,40 @@ form.userSettingsForm {
 
   .planner,
   .navBar {
-    left: 0;
-    margin: 0;
-    width: 100vw;
+    margin: 0vw -1vw 0vw -2vw;
+    position: absolute;
+    min-width: 100vw;
     padding: 0;
   }
 
+  .app > .navBar {
+    height: 5vh;
+  }
+  .navBar .navTab {
+    font-size: 0.5rem;
+    border-bottom-right-radius: none;
+    border-bottom-left-radius: none;
+  }
+
   .planner {
+    min-height: 85vh;
+    padding: 0vw;
     border-radius: 0%;
   }
 
   .calendar {
-    padding: 1rem 0;
-    width: 100%;
+    padding: 1vh 0vw;
+    width: 100vw;
+    height: 84vh;
 
-    grid-template-columns: 1fr 20fr;
+    row-gap: 3px;
+
+    grid-template-columns: 8vw 82vw;
   }
 
   .calendar .navBar {
     grid-column: 1 / span all;
+    height: 5vh;
   }
 
   .calViewOptions {
@@ -743,7 +783,15 @@ form.userSettingsForm {
   }
 
   .timeLine {
+    left: -2.5vw;
+    height: 65vh;
+    width: 90%;
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
+  }
+
+  .day {
+    width: 100%;
+    height: 65vh;
   }
 }
