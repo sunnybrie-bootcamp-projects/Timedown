@@ -2,12 +2,12 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
-function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
+function TimeLine({ timeRows, isAuthenticated, dayStart }) {
   //Returns an array of time objects at half-hour increments with row location
   //based on dayStart starting hour and totalHours
   function getTimes() {
     let timesToRender = [];
-    for (let i = 0; i <= totalHours; i += 0.25) {
+    for (let i = 0; i < (timeRows.split(" ").length - 1) / 4; i += 0.25) {
       let value = dayjs().hour(dayStart.hours());
       value = value.add(Math.floor(i), "hour"); //creates dayjs object, determines hour
       let minute;
@@ -22,9 +22,7 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
       }
       value = value.set("minute", minute); //sets minute
 
-      let timeLineLocation = `${
-        Math.floor(i) === 0 ? 1 + (1 + i * 4) : i * 4 + 2
-      }`; //determines row to render on
+      let timeLineLocation = `${i * 4 + 2}`; //determines row to render on
 
       timesToRender.push({ value, timeLineLocation }); //pushes as object
     }

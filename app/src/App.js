@@ -30,6 +30,7 @@ const App = () => {
             );
             setLoginMessage(register.message);
             setUser({ ...user, new: false, timedown: register.account });
+            Location.reload(false);
           } else {
             let timedownUserInfo = await ApiClient.getUser(
               user.google.getEmail(),

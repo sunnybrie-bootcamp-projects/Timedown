@@ -557,6 +557,20 @@ td:last-child {
   color: red;
 }
 
+/* Account Panel */
+
+.accountPanel {
+  display: block;
+  position: absolute;
+  margin: auto;
+  padding: 1em;
+  width: 90%;
+}
+
+form.userSettingsForm {
+  display: inline-block;
+}
+
 /* DETAILS BOARD */
 
 .detailsBoard {

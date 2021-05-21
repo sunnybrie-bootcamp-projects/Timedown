@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
@@ -34,12 +34,12 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   });
 
   //time remaining
-  function getRemainingTime(dueDate, currentDate) {
+  function getRemainingTime(dueDate) {
     return dayjs(dueDate).fromNow();
   }
 
   //free time remaining
-  async function getRemainingFreeTimes(dueDate, currentDate) {
+  async function getRemainingFreeTimes(dueDate) {
     //console.debug(`getRemainingFreeTimes(duedate, currentdate)`); //Test
     const timeBlocks = await gcal
       .listEvents({
@@ -98,13 +98,13 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
         console.debug("ERROR: ", err);
       });
 
-    setFreeTimesRemaining(await timeBlocks);
+    return await timeBlocks;
   }
 
   //filters out free times based on user settings
-  function filterRemainingFreeTimes() {
+  function filterRemainingFreeTimes(freeTimeArr) {
     //filter out times that don't fit in user's settings
-    let filteredTimeBlocks = freeTimesRemaining.map((freeTime) => {
+    let filteredTimeBlocks = freeTimeArr.map((freeTime) => {
       freeTime.start = dayjs(freeTime.start);
       freeTime.end = dayjs(freeTime.end);
 
@@ -153,7 +153,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
     });
 
     //removes time blocks that don't pass the above filter (they return null)
-    let filteredArray = filteredTimeBlocks.filter((freeTime) => {
+    filteredTimeBlocks = filteredTimeBlocks.filter((freeTime) => {
       if (freeTime === null) {
         return false;
       }
@@ -161,16 +161,16 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       return true;
     });
 
-    setFreeTimesRemaining(filteredArray);
+    return filteredTimeBlocks;
   }
 
   //reduce free times to total free time
-  function getSumFreeTime() {
+  function getSumFreeTime(freeTimeArr) {
     //console.debug("getSumFreeTime()"); //Test
 
     let total = 0;
 
-    freeTimesRemaining.forEach((freeTime) => {
+    freeTimeArr.forEach((freeTime) => {
       if (freeTime.duration) {
         total += freeTime.duration.asMilliseconds();
       }
@@ -180,8 +180,8 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
   }
 
   //get proportion of each free time block
-  function getFreeTimePercentages() {
-    let update = freeTimesRemaining.map((freeTime) => {
+  function getFreeTimePercentages(freeTimeArr) {
+    let update = freeTimeArr.map((freeTime) => {
       if (freeTime.duration) {
         freeTime.freeTimePercentage =
           parseInt(freeTime.duration.asMilliseconds()) /
@@ -190,7 +190,7 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
       return freeTime;
     });
 
-    setFreeTimesRemaining(update);
+    return update;
   }
 
   //get suggested time spent working on task
@@ -232,48 +232,32 @@ const Calibrator = ({ gcal, user, details, suggestions, setSuggestions }) => {
 
   //USE EFFECTS
   //When component mounts, gets array of free timeblocks and total remaining time until due date
-  React.useEffect(async () => {
-    getRemainingFreeTimes(testTask.dueDate, currentDate);
-    setTimeRemaining(getRemainingTime(testTask.dueDate, currentDate));
+  useLayoutEffect(() => {
+    try {
+      (async (d) => {
+        return await getRemainingFreeTimes(d);
+      })(testTask.dueDate).then((results) => {
+        setFreeTimesRemaining(results);
+      });
+    } catch (err) {
+      console.debug("Error: ", err);
+    }
+    try {
+      setTimeRemaining(getRemainingTime(testTask.dueDate, currentDate));
+      setFreeTimesRemaining((freeTimesRemaining) =>
+        filterRemainingFreeTimes(freeTimesRemaining),
+      );
+      getSumFreeTime(freeTimesRemaining);
+      setFreeTimesRemaining((freeTimesRemaining) =>
+        getFreeTimePercentages(freeTimesRemaining),
+      );
+      getSuggestions();
+    } catch (err) {
+      console.debug("Error: ", err);
+    }
   }, []);
 
-  //When length of freeTimesRemaining changes (aka they've loaded in)
-  //Gets sum of all free time
-  React.useEffect(() => {
-    if (
-      freeTimesRemaining.length > 0 &&
-      freeTimesRemaining[freeTimesRemaining.length - 1].end
-    ) {
-      try {
-        filterRemainingFreeTimes();
-      } catch (err) {
-        console.debug("Error: ", err);
-      }
-      try {
-        getSumFreeTime();
-      } catch (err) {
-        console.debug("Error: ", err);
-      }
-    }
-  }, [freeTimesRemaining.length]);
-
-  //when total free time is calculated, calculates percentages
-  React.useEffect(() => {
-    if (totalFreeTime.asMilliseconds() !== 0) {
-      try {
-        getFreeTimePercentages();
-      } catch (err) {
-        console.debug("Error: ", err);
-      }
-      try {
-        getSuggestions();
-      } catch (err) {
-        console.debug("Error: ", err);
-      }
-    }
-  }, [totalFreeTime]);
-
-  React.useEffect(() => {}, [suggestions]);
+  useEffect(() => {}, [suggestions]);
 
   return (
     <div className="calibrator">

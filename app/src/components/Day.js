@@ -15,7 +15,7 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Day({ index, timeRows, gcal, day, dayStart, suggestions, calView }) {
+function Day({ index, timeRows, gcal, day, dayStart, suggestions }) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",

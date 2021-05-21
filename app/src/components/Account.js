@@ -10,7 +10,7 @@ function Account({ tab, setLoggedIn, gcal, user, setUser }) {
   useEffect(() => {}, [editSettings]);
   return (
     <div
-      className="AccountPanel"
+      className="accountPanel"
       style={{ display: tab === "account" ? "block" : "none" }}
     >
       <h2>Logged in as...</h2>

@@ -17,16 +17,10 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
+function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
   const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
-  //Starting hour for day rendering
-  const [dayStart, setDayStart] = useState(dayjs.duration({ hours: 0 }));
-  //Ending hour for day rendering
-  const [dayEnd, setDayEnd] = useState(dayjs.duration({ hours: 23 }));
-  //Total hours rendered in a day
-  const [totalHours, setTotalHours] = useState(24);
   //Days to be displayed in calendar
   const [days, setDays] = useState([
     { start: dayjs().set("hour", 0), end: dayjs().set("hour", 23) },
@@ -39,28 +33,28 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
   const [timeRows, setTimeRows] = useState("");
 
   //sets dayStart, dayEnd, and totalHours states for rendering
-  function setTimeRanges() {
-    if (user.timedown.awakeTime) {
-      //^([01]\d|2[0-3]):?([0-5]\d)$ //regex time
-      let startArr = user.timedown.awakeTime.start.split(":");
-      let startObj = {
-        hours: parseInt(startArr[0]),
-        minutes: parseInt(startArr[1]),
-      };
-      let start = dayjs.duration(startObj);
+  // function setTimeRanges() {
+  //   if (user.timedown.awakeTime) {
+  //     //^([01]\d|2[0-3]):?([0-5]\d)$ //regex time
+  //     let startArr = user.timedown.awakeTime.start.split(":");
+  //     let startObj = {
+  //       hours: parseInt(startArr[0]),
+  //       minutes: parseInt(startArr[1]),
+  //     };
+  //     let start = dayjs.duration(startObj);
 
-      let endArr = user.timedown.awakeTime.end.split(":");
-      let endObj = { hours: parseInt(endArr[0]), minutes: parseInt(endArr[1]) };
-      let end = dayjs.duration(endObj);
+  //     let endArr = user.timedown.awakeTime.end.split(":");
+  //     let endObj = { hours: parseInt(endArr[0]), minutes: parseInt(endArr[1]) };
+  //     let end = dayjs.duration(endObj);
 
-      setDayStart(start);
-      setDayEnd(end);
+  //     setDayStart(start);
+  //     setDayEnd(end);
 
-      let total = end.hours() - start.hours();
-      // console.debug({ total }); //TEST
-      setTotalHours(total);
-    }
-  }
+  //     let total = end.hours() - start.hours();
+  //     // console.debug({ total }); //TEST
+  //     setTotalHours(total);
+  //   }
+  // }
 
   //generates string for timeRows state
   function timeToRows(total) {
@@ -141,7 +135,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
 
   useLayoutEffect(() => {
     try {
-      setTimeRanges();
+      let totalHours = dayEnd.hours() - dayStart.hours();
       timeToRows(totalHours);
     } catch (err) {
       window.alert(err);
@@ -179,7 +173,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
         <CalendarNavBar
           {...{ calView, setCalView, dateNavigation, setDateNavigation, days }}
         />
-        <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
+        <TimeLine {...{ timeRows, dayStart }} />
         {days.map((day, index) => {
           return (
             <Day
@@ -187,7 +181,7 @@ function Calendar({ isAuthenticated, tab, gcal, user, suggestions }) {
               {...{
                 index,
                 timeRows,
-                isAuthenticated,
+
                 gcal,
                 day,
                 dayStart,
