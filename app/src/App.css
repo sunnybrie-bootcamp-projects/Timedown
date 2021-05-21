@@ -215,6 +215,10 @@ main.app {
   border-radius: 1em 1em 1em;
 }
 
+.calendar > * {
+  box-shadow: 0.75rem 0.75rem 0.75rem var(--shadow);
+}
+
 .dateTimeHeader {
   display: inline-block;
   position: absolute;
@@ -277,28 +281,37 @@ button.next {
 }
 
 .calViewOptions {
+  display: block;
+  box-sizing: border-box;
   margin: auto;
+  padding: 0.5em;
   width: 100%;
+  height: auto;
   text-align: center;
   line-height: 1em;
   font-size: x-small;
+
+  border-radius: 1em 1em 1em;
+  background-color: var(--orange);
+  box-shadow: 0.5em 0.5em 0.5em var(--shadow);
 }
 
 .calViewOptions button.navTab {
   display: block;
   position: relative;
   box-sizing: border-box;
-  margin: auto;
+  margin: 2%;
   height: auto;
   width: auto;
 
-  border: 2px solid #f5a462;
+  border: 1px solid var(--green);
   border-radius: 0.75em 0.75em;
   box-shadow: 0.25em 0.25em 0.25em var(--shadow);
   filter: none;
 
-  font-size: 0.5rem;
-  color: #e86f51;
+  font-size: 0.75rem;
+  font-weight: bolder;
+  color: var(--green);
 }
 
 .calViewOptions .navTab.toggled {
@@ -330,7 +343,6 @@ button.next {
 
   border-top: 3px solid #e86f51;
   background-color: var(--orange);
-  box-shadow: 0.5em 0.5em 0.5em var(--shadow);
 
   color: ghostwhite;
   text-align: right;
@@ -345,6 +357,7 @@ button.next {
   box-sizing: border-box;
   position: absolute;
   min-height: 1fr;
+  height: 100%;
   max-height: 100%;
   max-width: 100%;
   width: 100%;
@@ -353,16 +366,18 @@ button.next {
 }
 
 .timeNotch .time {
-  display: inline;
+  display: inline-block;
   position: absolute;
   z-index: 5;
   top: -0.5em;
   bottom: 0.5em;
-  left: 5%;
+  left: 15%;
   margin: auto auto 5%;
+  height: auto;
 
   font-size: 11px;
-  background-color: #e8c468;
+  background-color: var(--orange);
+  filter: drop-shadow(0rem 0rem 0.125rem var(--orange));
   border-radius: 1em 1em 1em;
 }
 
@@ -411,6 +426,7 @@ button.next {
 
   line-height: 0em;
   font-weight: bolder;
+  font-size: 11px;
 }
 
 /* DAY + TIMEBLOCKS */
@@ -432,7 +448,6 @@ button.next {
   align-content: space-between;
 
   background-color: var(--white);
-  box-shadow: 0.5em 0.5em 0.5em var(--shadow);
   border-top: 3px solid var(--bloodorange);
 
   border-radius: 1em 1em 1em;

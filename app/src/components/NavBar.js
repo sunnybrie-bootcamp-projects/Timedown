@@ -82,7 +82,7 @@ export const CalendarNavBar = ({
         className="calViewOptions"
         style={{ gridRow: "1", gridColumn: "1 / span 1" }}
       >
-        <span>View Options:</span>
+        <p className="navTitle">View Options:</p>
         <button
           className={
             calView === "1day" ? "navTab toggled" : "navTab notToggled"

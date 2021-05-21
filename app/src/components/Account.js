@@ -76,17 +76,6 @@ function UserSettingsForm({ user, setEditSettings }) {
     eventBuffer: user.timedown.eventBuffer,
   });
 
-  const [initialTracker, setInitialTracker] = React.useState({
-    mon: [{ start: "", end: "" }],
-    tue: [{ start: "", end: "" }],
-    wed: [{ start: "", end: "" }],
-    thu: [{ start: "", end: "" }],
-    fri: [{ start: "", end: "" }],
-    sat: [{ start: "", end: "" }],
-    sun: [{ start: "", end: "" }],
-    misc: [{ start: "", end: "" }],
-  });
-
   function settingsReducer(userSettings, action) {
     switch (action.type) {
       case "editSummary":
@@ -120,40 +109,9 @@ function UserSettingsForm({ user, setEditSettings }) {
     }
   }
 
-  //Manages blackOut inputs
-  function trackerReducer(tracker, action) {
-    //action : {day: , type: , value: , index: , edge: start || end}
-    let { day, index, edge, value } = action;
-    switch (action.type) {
-      case "remove":
-        let downsizedArr = [];
-        tracker[day].forEach((time, i) => {
-          if (i !== index) {
-            downsizedArr.push(time);
-          }
-        });
-        return { ...tracker, [day]: downsizedArr };
-
-      case "add":
-        let upsizedArr = tracker[day];
-        upsizedArr.push(value);
-
-        return { ...tracker, [day]: upsizedArr };
-
-      case "modify":
-        let modifiedArr = tracker[day];
-        modifiedArr[index][edge] = value;
-        return { ...tracker, [day]: modifiedArr };
-
-      case "wipe":
-        return value;
-      default:
-        return tracker;
-    }
-  }
-
   //Renders blackOut inputs
   function getInputs(dayArr, dayString, dayKey) {
+    console.log(dayArr.length);
     return dayArr.map((time, index) => {
       return (
         <>
@@ -307,8 +265,14 @@ function UserSettingsForm({ user, setEditSettings }) {
           <legend key="WSL">Weekly Scheduling</legend>
           <fieldset key={`0F`}>
             <legend key={`0L`}>Monday:</legend>
-            {getInputs(tracker.mon, "mon", 0)}
+            <DayInputs
+              dayArr={tracker.mon}
+              dayString="mon"
+              dayIndex={0}
+              {...{ trackerDispatch }}
+            />
             <button
+              type="button"
               key={`0A`}
               value="add"
               onClick={() => {
@@ -327,6 +291,7 @@ function UserSettingsForm({ user, setEditSettings }) {
             <legend>Tuesday:</legend>
             {getInputs(tracker.tue, "tue", 1)}
             <button
+              type="button"
               key={`0A`}
               value="add"
               onClick={() => {
@@ -344,6 +309,7 @@ function UserSettingsForm({ user, setEditSettings }) {
             <legend>Wednesday:</legend>
             {getInputs(tracker.wed, "wed", 2)}
             <button
+              type="button"
               key={`0A`}
               value="add"
               onClick={() => {
@@ -361,6 +327,7 @@ function UserSettingsForm({ user, setEditSettings }) {
             <legend>Thursday:</legend>
             {getInputs(tracker.thu, "thu", 3)}
             <button
+              type="button"
               key={`0A`}
               value="add"
               onClick={() => {
@@ -378,6 +345,7 @@ function UserSettingsForm({ user, setEditSettings }) {
             <legend>Friday:</legend>
             {getInputs(tracker.fri, "fri", 4)}
             <button
+              type="button"
               key={`0A`}
               value="add"
               onClick={() => {
@@ -395,6 +363,7 @@ function UserSettingsForm({ user, setEditSettings }) {
             <legend>Saturday:</legend>
             {getInputs(tracker.sat, "sat", 5)}
             <button
+              type="button"
               key={`0A`}
               value="add"
               onClick={() => {
@@ -412,6 +381,7 @@ function UserSettingsForm({ user, setEditSettings }) {
             <legend>Sunday:</legend>
             {getInputs(tracker.sun, "sun", 6)}
             <button
+              type="button"
               key={`0A`}
               value="add"
               onClick={() => {
@@ -430,6 +400,7 @@ function UserSettingsForm({ user, setEditSettings }) {
           <legend key="ML">Miscellaneous</legend>
           {getInputs(tracker.misc, "misc", "X")}
           <button
+            type="button"
             key={`0A`}
             value="add"
             onClick={() => {
@@ -481,9 +452,11 @@ function UserSettingsForm({ user, setEditSettings }) {
     } catch (err) {
       console.debug(err);
     }
-
-    setFormReady(true);
   }, []);
+
+  React.useEffect(() => {
+    setFormReady(true);
+  }, [formJSX]);
 
   if (formReady) {
     return <>{formJSX}</>;
@@ -491,5 +464,343 @@ function UserSettingsForm({ user, setEditSettings }) {
     return <p>Loading settings...</p>;
   }
 }
+  //builds jsx form to be rendered
+  function GetFormJSX({tracker, userSettings, trackerDispatch}) {
+    return (
+      <form className="userSettingsForm" id="settingsSubmission">
+        <label htmlFor="in-pushNotifications">Push Notifications:</label>
+        <input
+          id="in-pushNotifications"
+          type="checkbox"
+          value={userSettings.summary}
+          onChange={(e) => {
+            settingsDispatch({
+              type: "editPushNotifications",
+              value: e.target.value,
+            });
+          }}
+        />
+        <label htmlFor="in-addToGoogleCal">
+          Add task times to Google Calendar:
+        </label>
+        <input
+          id="in-addToGoogleCal"
+          value={userSettings.description}
+          type="checkbox"
+          onChange={(e) => {
+            settingsDispatch({
+              type: "editAddToGoogleCal",
+              value: e.target.value,
+            });
+          }}
+        />
+        <h4>Scheduling</h4>
+        <fieldset key="EBF">
+          <legend key="EBL">Event Buffer Time</legend>
+          <label htmlFor="in-eventBufferHours">Hours:</label>
+          <input
+            id="in-eventBufferHours"
+            type="number"
+            min="0"
+            maxLength="3"
+            value={userSettings.estTime}
+            onChange={(e) => {
+              settingsDispatch({
+                type: "editEventBufferHours",
+                value: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="in-eventBufferMinutes">Minutes:</label>
+          <input
+            id="in-eventBufferMinutes"
+            type="number"
+            step="5"
+            min="0"
+            max="55"
+            value={userSettings.estTime}
+            onChange={(e) => {
+              settingsDispatch({
+                type: "editEventBufferMinutes",
+                value: e.target.value,
+              });
+            }}
+          />
+        </fieldset>
+        <fieldset key="ATF">
+          <legend key="ATL">Awake Time</legend>
+          <label htmlFor="in-awakeTimeStart">Start:</label>
+          <input
+            id="in-awakeTimeStart"
+            type="time"
+            value={userSettings.awakeTimeStart}
+            onChange={(e) => {
+              settingsDispatch({
+                type: "editAwakeTimeStart",
+                value: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="in-awakeTimeEnd">End:</label>
+          <input
+            id="in-awakeTimeEnd"
+            type="time"
+            value={userSettings.awakeTimeEnd}
+            onChange={(e) => {
+              settingsDispatch({
+                type: "editAwakeTimeEnd",
+                value: e.target.value,
+              });
+            }}
+          />
+        </fieldset>
+        <fieldset key="WSF">
+          <legend key="WSL">Weekly Scheduling</legend>
+          <fieldset key={`0F`}>
+            <legend key={`0L`}>Monday:</legend>
+            <DayInputs
+              dayArr={tracker.mon}
+              dayString="mon"
+              dayIndex={0}
+              {...{ trackerDispatch }}
+            />
+            <button
+              type="button"
+              key={`0A`}
+              value="add"
+              onClick={() => {
+                trackerDispatch({
+                  type: "add",
+                  day: "mon",
+                  value: { start: "00:00", end: "00:00" },
+                });
+              }}
+            >
+              Add
+            </button>
+          </fieldset>
 
+          <fieldset>
+            <legend>Tuesday:</legend>
+            {getInputs(tracker.tue, "tue", 1)}
+            <button
+              type="button"
+              key={`0A`}
+              value="add"
+              onClick={() => {
+                trackerDispatch({
+                  type: "add",
+                  day: "tue",
+                  value: { start: "00:00", end: "00:00" },
+                });
+              }}
+            >
+              Add
+            </button>
+          </fieldset>
+          <fieldset>
+            <legend>Wednesday:</legend>
+            {getInputs(tracker.wed, "wed", 2)}
+            <button
+              type="button"
+              key={`0A`}
+              value="add"
+              onClick={() => {
+                trackerDispatch({
+                  type: "add",
+                  day: "wed",
+                  value: { start: "00:00", end: "00:00" },
+                });
+              }}
+            >
+              Add
+            </button>
+          </fieldset>
+          <fieldset>
+            <legend>Thursday:</legend>
+            {getInputs(tracker.thu, "thu", 3)}
+            <button
+              type="button"
+              key={`0A`}
+              value="add"
+              onClick={() => {
+                trackerDispatch({
+                  type: "add",
+                  day: "thu",
+                  value: { start: "00:00", end: "00:00" },
+                });
+              }}
+            >
+              Add
+            </button>
+          </fieldset>
+          <fieldset>
+            <legend>Friday:</legend>
+            {getInputs(tracker.fri, "fri", 4)}
+            <button
+              type="button"
+              key={`0A`}
+              value="add"
+              onClick={() => {
+                trackerDispatch({
+                  type: "add",
+                  day: "fri",
+                  value: { start: "00:00", end: "00:00" },
+                });
+              }}
+            >
+              Add
+            </button>
+          </fieldset>
+          <fieldset>
+            <legend>Saturday:</legend>
+            {getInputs(tracker.sat, "sat", 5)}
+            <button
+              type="button"
+              key={`0A`}
+              value="add"
+              onClick={() => {
+                trackerDispatch({
+                  type: "add",
+                  day: "sat",
+                  value: { start: "00:00", end: "00:00" },
+                });
+              }}
+            >
+              Add
+            </button>
+          </fieldset>
+          <fieldset>
+            <legend>Sunday:</legend>
+            {getInputs(tracker.sun, "sun", 6)}
+            <button
+              type="button"
+              key={`0A`}
+              value="add"
+              onClick={() => {
+                trackerDispatch({
+                  type: "add",
+                  day: "sun",
+                  value: { start: "00:00", end: "00:00" },
+                });
+              }}
+            >
+              Add
+            </button>
+          </fieldset>
+        </fieldset>
+        <fieldset key="MF">
+          <legend key="ML">Miscellaneous</legend>
+          {getInputs(tracker.misc, "misc", "X")}
+          <button
+            type="button"
+            key={`0A`}
+            value="add"
+            onClick={() => {
+              trackerDispatch({
+                type: "add",
+                day: "misc",
+                value: {
+                  start: dayjs().toISOString(),
+                  end: dayjs().toISOString(),
+                },
+              });
+            }}
+          >
+            Add
+          </button>
+        </fieldset>
+      </form>
+    );
+  }
+
+//Renders blackOut inputs
+function DayInputs({ dayArr, dayString, dayKey, trackerDispatch }) {
+  return dayArr.map((time, index) => {
+    return (
+      <React.Fragment key={`DI${dayKey}-${index}`}>
+        <label key={`${dayKey}SL${index}`} htmlFor={`in-${dayString}Start`}>
+          Start:
+        </label>
+        <input
+          id={`in-${dayString}Start`}
+          key={`${dayKey}SI${index}`}
+          type={dayKey === "X" ? "dateTime-local" : "time"}
+          value={dayArr[index].start}
+          onChange={(e) => {
+            trackerDispatch({
+              type: `edit`,
+              day: `${dayString}`,
+              [index]: index,
+              edge: `start`,
+              value: e.target.value,
+            });
+          }}
+        />
+        <label key={`${dayKey}EL${index}`} htmlFor={`in-${dayString}End`}>
+          End:
+        </label>
+        <input
+          id={`in-${dayString}End`}
+          key={`${dayKey}EI${index}`}
+          type={dayKey === "X" ? "dateTime-local" : "time"}
+          value={dayArr[index].end}
+          onChange={(e) => {
+            trackerDispatch({
+              type: `edit`,
+              day: `${dayString}`,
+              [index]: index,
+              edge: `end`,
+              value: e.target.value,
+            });
+          }}
+        />
+        <button
+          key={`${dayKey}D${index}`}
+          value="remove"
+          onClick={(e) => {
+            trackerDispatch({
+              type: `delete`,
+              day: `${dayString}`,
+              [index]: index,
+              edge: `end`,
+              value: e.target.value,
+            });
+          }}
+        >
+          Remove
+        </button>
+      </React.Fragment>
+    );
+  });
+}
+
+//Manages blackOut inputs
+function trackerReducer(tracker, action) {
+  //action : {day: , type: , value: , index: , edge: start || end}
+  let { day, index, edge, value } = action;
+  switch (action.type) {
+    case "remove":
+      let downsizedArr = [];
+      tracker[day].forEach((time, i) => {
+        if (i !== index) {
+          downsizedArr.push(time);
+        }
+      });
+      return { ...tracker, [day]: downsizedArr };
+
+    case "add":
+      return { ...tracker, [day]: [...tracker[day], value] };
+
+    case "modify":
+      let modifiedArr = tracker[day];
+      modifiedArr[index][edge] = value;
+      return { ...tracker, [day]: modifiedArr };
+
+    case "wipe":
+      return value;
+    default:
+      return tracker;
+  }
+}
 export default Account;
