@@ -842,76 +842,58 @@ table.suggestionsTable tr.suggestion {
 }
 
 @media screen and (orientation: portrait) and (max-width: 600px) {
-  .app {
-    position: absolute;
-    right: 0em;
-    padding: 0em;
-    margin: 0;
-    width: 100vw;
-    height: 90vh;
-
-    grid-template-rows: 0.5fr 1.75fr 15fr;
-  }
-
-  .app h1 {
-    margin: auto;
-    height: max-content;
-
-    font-size: 1em;
-  }
-
-  .planner,
-  .navBar {
-    margin: 0vw -1vw 0vw -2vw;
-    position: absolute;
-    min-width: 100vw;
-    padding: 0;
-  }
-
-  .app > .navBar {
-    height: 5vh;
-  }
-  .navBar .navTab {
-    font-size: 0.5rem;
-    border-bottom-right-radius: none;
-    border-bottom-left-radius: none;
-  }
-
-  .planner {
-    min-height: 85vh;
+  html {
     padding: 0vw;
-    border-radius: 0%;
+    height: 100vh;
+    background-size: cover;
+    background-position: bottom right;
+  }
+
+  main.app {
+    top: 0vh;
+    bottom: 0vh;
+    margin: 0px;
+    height: 100vh;
+  }
+
+  div.planner {
+    bottom: 0vh;
+    margin: 0;
+    padding: 1% 0px;
+    height: 82.5vh;
+
+    border-radius: 0em;
+    border-left: none;
+    border-right: none;
+  }
+
+  main.app,
+  div.planner,
+  div.navBar {
+    position: absolute;
+    left: 0vw;
+    width: 100vw;
   }
 
   .calendar {
-    padding: 1vh 0vw;
-    width: 100vw;
-    height: 84vh;
+    margin: 0px;
+    padding: 0%;
 
-    row-gap: 3px;
-
-    grid-template-columns: 8vw 82vw;
-  }
-
-  .calendar .navBar {
-    grid-column: 1 / span all;
-    height: 5vh;
-  }
-
-  .calViewOptions {
-    display: none;
+    grid-template-rows: 7.5% 92.5%;
+    grid-template-columns: 17.5vw 75vw;
+    column-gap: 2.5vw;
+    justify-content: flex-start;
   }
 
   .timeLine {
-    left: -2.5vw;
-    height: 65vh;
-    width: 90%;
-    border-top-left-radius: 0%;
-    border-bottom-left-radius: 0%;
+    left: 0vw;
+    width: 17.5vw;
+    max-width: 17.5vw;
+    border-top-left-radius: 0em;
+    border-bottom-left-radius: 0em;
   }
 
-  .day {
-    width: 100%;
-    height: 65vh;
+  .time {
+    left: 0vw;
   }
 }
