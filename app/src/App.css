@@ -40,7 +40,7 @@ html {
   background-position-x: right;
   background-position-y: bottom;
   background-repeat: no-repeat;
-  background-blend-mode: screen;
+  background-blend-mode: exclusion;
 
   overflow-x: hidden;
   overflow-y: auto;
