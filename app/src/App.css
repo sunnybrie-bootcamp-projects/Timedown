@@ -24,9 +24,17 @@
   --paper: url("./assets/papertexture.jpeg");
 }
 
-body {
-  background-color: var(--softblue);
+html {
+  height: 100vh;
+  background: url("./assets/backgroundsplash.png") var(--softblue);
+  background-size: contain;
+  background-position-x: right;
+  background-position-y: bottom;
+  background-repeat: no-repeat;
+  background-blend-mode: screen;
+}
 
+body {
   font-family: freight-neo-pro, sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -78,20 +86,42 @@ button {
   font-size: 1rem;
 }
 
-/* MAIN APP COMPONENTS */
-
-#login {
-  position: absolute;
-  right: 1em;
+.loadingMessage {
+  font-weight: bold;
 }
+
+/* LANDING PAGE */
+.guestLanding {
+  margin: auto;
+  padding: 12.5%;
+
+  text-align: center;
+}
+
+.guestLanding p {
+  margin: auto;
+  width: 50%;
+}
+
+.login {
+  padding: 5%;
+}
+
+.login button,
+.login .buttonLabel {
+  margin: 1%;
+}
+
+/* MAIN APP COMPONENTS */
 
 main.app {
   display: grid;
   box-sizing: border-box;
-  position: relative;
+  position: absolute;
+  margin: auto;
   padding: 0.5em;
-  max-height: 90vh;
-  width: 97.5%;
+  height: 100vh;
+  width: 100vw;
 
   grid-template-rows: 10vh 5vh auto;
 }
@@ -99,12 +129,7 @@ main.app {
 .app h1 {
   position: relative;
   margin: auto;
-  height: auto;
-  width: max-content;
-
   grid-row: 1 / span 1;
-
-  font-size: 3em;
 }
 
 /* MAIN NAVBAR */
@@ -135,8 +160,10 @@ main.app {
   background-size: cover, cover;
   border: 1px solid #f5a462;
   border-width: 2px 2px 0px 2px;
-  border-top-left-radius: 0.75em 0.75em;
-  border-top-right-radius: 0.75em 0.75em;
+  border-top-left-radius: 1em 1em;
+  border-top-right-radius: 1em 1em;
+  border-bottom-left-radius: 0em;
+  border-bottom-right-radius: 0em;
 }
 
 .navTab.toggled {
@@ -146,21 +173,6 @@ main.app {
 .navTab.notToggled {
   background-color: var(--bloodorange);
   filter: drop-shadow(0.5em 0.75em 0.5em var(--shadow));
-}
-.navTitle {
-  display: block;
-  z-index: 1;
-  top: 50%;
-  bottom: 50%;
-  left: 25%;
-  right: 25%;
-  margin: auto 0;
-
-  font-family: var(--thematic);
-  font-weight: 500;
-  font-style: normal;
-  color: var(--white);
-  font-size: minMax(2em, 120%);
 }
 
 .navTab img {
@@ -175,6 +187,22 @@ main.app {
   clip-path: circle(50% at 50% 50%);
 
   opacity: 0.5;
+}
+
+nav {
+  display: block;
+  z-index: 1;
+  top: 50%;
+  bottom: 50%;
+  left: 25%;
+  right: 25%;
+  margin: auto 0;
+
+  font-family: var(--thematic);
+  font-weight: 500;
+  font-style: normal;
+  color: var(--white);
+  font-size: minMax(2em, 120%);
 }
 
 /* PLANNERR - MAIN CONTAINER */

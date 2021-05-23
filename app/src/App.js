@@ -95,14 +95,16 @@ const App = () => {
 
   return (
     <main className="App">
-      <h2>Welcome to Timedown!</h2>
-      <p>
-        Timedown is an app designed to make it easier to manage your time. Log
-        in or register, add a task to your taskboard, and get suggestions for
-        times to work on it so you can finish it by its duedate!
-      </p>
-      <p>{loginMessage}</p>
-      <Login {...{ loggedIn, gcal, setUser, user }} />
+      <div className="guestLanding">
+        <h2>Welcome to Timedown!</h2>
+        <p>
+          Timedown is an app designed to make it easier to manage your time. Log
+          in or register, add a task to your taskboard, and get suggestions for
+          times to work on it so you can finish it by its duedate!
+        </p>
+        <p className="loadingMessage">{loginMessage}</p>
+        <Login {...{ loggedIn, gcal, setUser, user }} />
+      </div>
     </main>
   );
 };
@@ -128,9 +130,10 @@ function UserDashboard({
 const Login = ({ loggedIn, gcal, setUser, user }) => {
   return (
     <div className="login">
-      Returning Users:{" "}
+      <span className="buttonLabel"> Members:</span>
       <button onClick={gcal.handleAuthClick}>Log in with Google</button>
-      Guests:{" "}
+      <br />
+      <span className="buttonLabel"> Guests: </span>
       <button
         onClick={() => {
           setUser({ ...user, new: true });

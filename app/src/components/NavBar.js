@@ -8,13 +8,13 @@ function NavBar({ tab, setTab, user }) {
         className={tab === "calendar" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("calendar")}
       >
-        <h2 className="navTitle">Calendar</h2>
+        <nav>Calendar</nav>
       </button>
       <button
         className={tab === "taskboard" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("taskboard")}
       >
-        <h2 className="navTitle">Taskboard</h2>
+        <nav>Taskboard</nav>
       </button>
       <button
         id="accountTab"
@@ -26,7 +26,7 @@ function NavBar({ tab, setTab, user }) {
         ) : (
           <></>
         )}
-        <h2 className="navTitle">Account</h2>
+        <nav>Account</nav>
       </button>
     </div>
   );
