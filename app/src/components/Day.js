@@ -101,7 +101,6 @@ function Day({ index, timeRows, gcal, day, dayStart, suggestions }) {
       style={{
         gridTemplateRows: timeRows,
         gridColumn: `${index + 2} / span 1`,
-        gridRow: "2 / span 1",
       }}
     >
       <h3 className="dateTimeHeader" title={day.start.toISOString()}>

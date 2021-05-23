@@ -28,7 +28,7 @@ function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
   // Adjust days state when user clicks "previous" or "next" in navigation
   const [dateNavigation, setDateNavigation] = useState(0);
   //Sets Calendar's columns based on calView
-  const [dayColumns, setDayColumns] = useState("1fr 4fr");
+  const [dayColumns, setDayColumns] = useState("100%");
   //Sets the rows for TimeLine and Day components, based on total hours
   const [timeRows, setTimeRows] = useState("");
 
@@ -105,11 +105,11 @@ function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
 
     let newDayColumns =
       newDates.length === 1
-        ? "1fr 9fr"
-        : "1fr".concat(
+        ? "auto"
+        : ["1fr"].concat(
             newDates
               .map((date, index) => {
-                return " 2fr";
+                return " 1fr";
               })
               .join(""),
           );
@@ -167,30 +167,34 @@ function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
         className="calendar"
         style={{
           display: tab === "calendar" ? "grid" : "none",
-          gridTemplateColumns: dayColumns,
         }}
       >
         <CalendarNavBar
           {...{ calView, setCalView, dateNavigation, setDateNavigation, days }}
         />
         <TimeLine {...{ timeRows, dayStart }} />
-        {days.map((day, index) => {
-          return (
-            <Day
-              key={`D${index}`}
-              {...{
-                index,
-                timeRows,
+        <div
+          className="dayContainer"
+          style={{ gridTemplateColumns: dayColumns }}
+        >
+          {days.map((day, index) => {
+            return (
+              <Day
+                key={`D${index}`}
+                {...{
+                  index,
+                  timeRows,
 
-                gcal,
-                day,
-                dayStart,
-                suggestions,
-                calView,
-              }}
-            />
-          );
-        })}
+                  gcal,
+                  day,
+                  dayStart,
+                  suggestions,
+                  calView,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
     );
   } else {

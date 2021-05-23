@@ -16,10 +16,19 @@
   --transparent_orange: rgba(245, 164, 98, 0.7);
   --transparent_bloodorange: rgba(232, 111, 81, 0.7);
   --invisible: rgba(0, 0, 0, 0);
+
   --shadow: rgba(34, 62, 73, 0.605);
+  --small_shadow: 0.125em 0.125em 0.25em var(--shadow);
+  --medium_shadow: 0.25rem 0.25rem 0.5rem var(--shadow);
+  --large_shadow: 0.5rem 0.5rem 0.75rem var(--shadow);
 
   --thematic: quicksand, sans-serif;
   --regular: freight-neo-pro, sans-serif;
+
+  --app_border: 3px solid var(--green);
+  --notToggled_border: 3px solid var(--transparent_green);
+  --small_radius: 0.5rem 0.5rem 0.5rem;
+  --large_radius: 1rem 1rem 1rem;
 
   --paper: url("./assets/papertexture.jpeg");
 }
@@ -32,6 +41,9 @@ html {
   background-position-y: bottom;
   background-repeat: no-repeat;
   background-blend-mode: screen;
+
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
@@ -79,7 +91,7 @@ h3 {
 
 button {
   background-color: var(--green);
-  border-radius: 1rem 1rem 1rem;
+  border-radius: var(--small_radius);
   border-color: var(--softblue);
 
   color: var(--white);
@@ -137,14 +149,14 @@ main.app {
   display: block;
   box-sizing: border-box;
   position: relative;
-  bottom: -0.125em;
-  width: 90%;
+  bottom: -3px;
+  width: 60vw;
   height: 100%;
 
   grid-row: 2 / span 1;
 }
 
-.navTab {
+button.navTab {
   display: block;
   position: relative;
   float: left;
@@ -158,8 +170,8 @@ main.app {
   background-blend-mode: multiply, normal;
   background-position: center;
   background-size: cover, cover;
-  border: 1px solid #f5a462;
-  border-width: 2px 2px 0px 2px;
+  border: var(--app_border);
+  border-width: 3px 3px 0px 3px;
   border-top-left-radius: 1em 1em;
   border-top-right-radius: 1em 1em;
   border-bottom-left-radius: 0em;
@@ -171,6 +183,7 @@ main.app {
 }
 
 .navTab.notToggled {
+  border: var(--notToggled_border);
   background-color: var(--bloodorange);
   filter: drop-shadow(0.5em 0.75em 0.5em var(--shadow));
 }
@@ -211,13 +224,9 @@ nav {
   display: block;
   box-sizing: border-box;
   position: relative;
-  padding: 1em 0.5em;
-  width: auto;
-  min-width: min-content;
-  max-width: 70vw;
-  min-height: 70vh;
-  height: auto;
-  max-height: 80vh;
+  padding: 0.5rem;
+  width: 60vw;
+  height: 75vh;
 
   grid-row: 3 / span 1;
 
@@ -227,7 +236,7 @@ nav {
   background-size: cover, cover;
   filter: drop-shadow(0.5em 0.75em 0.5em var(--shadow));
 
-  border: 2px solid #f5a462;
+  border: var(--app_border);
 
   border-top-right-radius: 1em 1em;
   border-bottom-left-radius: 1em 1em;
@@ -240,20 +249,18 @@ nav {
   box-sizing: border-box;
   position: relative;
   margin: auto;
+  padding: 0px;
   height: 95%;
-  min-height: fit-content;
-  max-height: 100%;
-  max-width: 95%;
+  width: 100%;
 
-  grid-template-rows: 15% 85%;
-  row-gap: 1em;
-  column-gap: 1em;
-
-  border-radius: 1em 1em 1em;
+  grid-template-rows: minmax(5%, 10%) minmax(90%, 95%);
+  grid-template-columns: 1fr 9fr;
+  row-gap: 2.5%;
+  column-gap: 2.5%;
 }
 
 .calendar > * {
-  box-shadow: 0.75rem 0.75rem 0.75rem var(--shadow);
+  filter: drop-shadow(var(--small_shadow));
 }
 
 .dateTimeHeader {
@@ -281,38 +288,35 @@ nav {
 }
 
 /* CALENDAR NAV */
-.day.navBar {
+div.day.navBar {
   display: grid;
   box-sizing: border-box;
   position: relative;
   margin: auto;
-  padding: 1% 3%;
   width: 100%;
   height: 100%;
 
-  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-columns: minmax(10%, 15%) minmax(70%, 80%) minmax(10%, 15%);
   grid-column: 2 / span all;
   justify-content: space-evenly;
   align-content: center;
 
   background-color: var(--bloodorange);
+  border-radius: var(--small_radius);
 
-  color: ghostwhite;
-  font-size: 2rem;
+  color: var(--white);
   text-align: center;
+  line-height: 1em;
 }
 
-button.day.navBar {
-  height: 2em;
-  width: auto;
-}
+.day.navBar button {
+  margin: auto;
+  padding: 3px;
+  max-height: 70%;
 
-button.prev,
-button.next {
   background: linear-gradient(to bottom, var(--orange) 1%, var(--bloodorange));
-  box-shadow: 0.25em 0.25em 0.25em var(--shadow);
-  border-radius: 0.5em 0.5em 0.5em;
-  border: 2px solid ghostwhite;
+  box-shadow: var(--small_shadow);
+  border: 2px double var(--transparent_bloodorange);
 
   color: ghostwhite;
 }
@@ -321,42 +325,45 @@ button.next {
   display: block;
   box-sizing: border-box;
   margin: auto;
-  padding: 0.5em;
+  padding: 5%;
   width: 100%;
-  height: auto;
-  text-align: center;
-  line-height: 1em;
-  font-size: x-small;
+  height: 100%;
 
-  border-radius: 1em 1em 1em;
-  background-color: var(--orange);
-  box-shadow: 0.5em 0.5em 0.5em var(--shadow);
+  background-color: var(--softblue);
+  border-radius: var(--small_radius);
+
+  text-align: center;
+  font-size: 11px;
 }
 
 .calViewOptions button.navTab {
-  display: block;
-  position: relative;
   box-sizing: border-box;
-  margin: 2%;
-  height: auto;
-  width: auto;
+  margin: 2.5%;
+  padding: 1%;
+  height: 50%;
+  width: 25%;
 
-  border: 1px solid var(--green);
-  border-radius: 0.75em 0.75em;
-  box-shadow: 0.25em 0.25em 0.25em var(--shadow);
+  border: 1px solid var(--bloodorange);
+  border-radius: var(--small_radius);
+  background: none;
+  box-shadow: var(--small_shadow);
   filter: none;
 
+  text-align: center;
   font-size: 0.75rem;
   font-weight: bolder;
-  color: var(--green);
+  color: var(--bloodorange);
 }
 
 .calViewOptions .navTab.toggled {
-  background-color: var(--white);
+  color: var(--green);
+  border-color: var(--green);
 }
 
 .calViewOptions .navTab.notToggled {
-  background-color: var(--invisible);
+  color: var(--transparent_navy);
+  border-color: var(--transparent_navy);
+  background-color: var(--transparent_green);
 }
 
 /* TIMELINE */
@@ -413,9 +420,9 @@ button.next {
   height: auto;
 
   font-size: 11px;
-  background-color: var(--orange);
+  background-color: var(--transparent_orange);
   filter: drop-shadow(0rem 0rem 0.125rem var(--orange));
-  border-radius: 1em 1em 1em;
+  border-radius: var(--small_radius);
 }
 
 .timeNotch .notch {
@@ -467,19 +474,32 @@ button.next {
 }
 
 /* DAY + TIMEBLOCKS */
+div.dayContainer {
+  display: grid;
+  box-sizing: border-box;
+  position: relative;
+  margin: 0px;
+  min-height: 100%;
+  width: 100%;
 
-.day {
-  display: inline-grid;
+  grid-row: 2 / span 1;
+  grid-column: 2 / span all;
+  grid-template-columns: 100%;
+  column-gap: 1%;
+  justify-content: space-evenly;
+}
+
+div.day {
+  display: grid;
   box-sizing: border-box;
   position: absolute;
-  right: 0px;
   padding: 0% 1%;
-  margin: 0 auto;
+  left: 0px;
   width: 100%;
   height: 100%;
 
-  grid-row: 2 / span 1;
-  grid-template-columns: minmax(auto, 100%);
+  grid-row: 2;
+  grid-column: auto / span 1;
   row-gap: 1px;
   justify-content: space-evenly;
   align-content: space-between;
@@ -487,7 +507,7 @@ button.next {
   background-color: var(--white);
   border-top: 3px solid var(--bloodorange);
 
-  border-radius: 1em 1em 1em;
+  border-radius: var(--large_radius);
 }
 
 .timeBlock {
@@ -502,8 +522,8 @@ button.next {
   height: 100%;
   width: 100%;
 
-  border-radius: 0.5em 0.5em 0.5em;
-  box-shadow: 0.25em 0.25em 0.25em var(--shadow);
+  border-radius: var(--small_radius);
+  box-shadow: var(--small_shadow);
 
   color: ghostwhite;
 
