@@ -105,14 +105,12 @@ function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
 
     let newDayColumns =
       newDates.length === 1
-        ? "auto"
-        : ["1fr"].concat(
-            newDates
-              .map((date, index) => {
-                return " 1fr";
-              })
-              .join(""),
-          );
+        ? "100%"
+        : newDates
+            .map((date, index) => {
+              return " 1fr";
+            })
+            .join("");
 
     setDayColumns(newDayColumns);
   }
@@ -184,7 +182,7 @@ function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
                 {...{
                   index,
                   timeRows,
-
+                  days,
                   gcal,
                   day,
                   dayStart,

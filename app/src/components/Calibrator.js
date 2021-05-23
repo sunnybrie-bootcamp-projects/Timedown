@@ -318,31 +318,56 @@ const Calibrator = ({
   if (isReady) {
     return (
       <div className="calibrator">
-        <h4>Suggestions:</h4>
         {checkAchievability() === true ? (
           <>
-            <p>
-              You should compete your task by{" "}
-              {dayjs(details.dueDate).format("dddd, MMM D, YYYY h:mm A")} if you
-              follow this plan.
-            </p>
-            <button onClick={() => addToGoogleCal(suggestions)}>
-              Add to Google Calendar
-            </button>
-            <ol>
-              {suggestions.map((time, index) => {
-                let when = dayjs(freeTimesRemaining[index].start).format(
-                  "ddd, MMM D, YYYY h:mm A",
-                );
-                let howLong = time.amount.humanize();
-                return (
-                  <li>
-                    <span className="when">{`When: ${when}`}</span>
-                    <span className="duration">{`For: ${howLong}`}</span>
-                  </li>
-                );
-              })}
-            </ol>{" "}
+            <div className="detailsHeader">
+              <p>
+                You should compete your task by{" "}
+                {dayjs(details.dueDate).format("dddd, MMM D, YYYY h:mm A")} if
+                you follow this plan.
+              </p>
+              <button onClick={() => addToGoogleCal(suggestions)}>
+                Add to Google Calendar
+              </button>
+            </div>
+            <br />
+            <div className="detailsBody">
+              <table className="suggestionsTable">
+                <caption>Suggestions:</caption>
+                <thead>
+                  <tr>
+                    <th>Starting</th>
+                    <th>For</th>
+                    <th>Until</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {suggestions.map((time, index) => {
+                    let when = dayjs(freeTimesRemaining[index].start).format(
+                      `ddd, M/D/YY
+                  h:mma`,
+                    );
+                    let until = dayjs(freeTimesRemaining[index].start)
+                      .add(time.amount)
+                      .format(`h:mm a`);
+                    let howLong = time.amount.humanize();
+                    return (
+                      <tr className="suggestion">
+                        <td>
+                          <p>{`${when}`}</p>
+                        </td>
+                        <td>
+                          <p>{`${howLong}`}</p>
+                        </td>
+                        <td>
+                          <p>{`${until}`}</p>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>{" "}
+            </div>
           </>
         ) : (
           <p>

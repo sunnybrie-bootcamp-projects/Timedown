@@ -103,15 +103,14 @@ function DetailsBoard({
     >
       <button
         className="exitButton"
+        title="exit"
         onClick={() => {
           setAction("");
           setDetails({});
         }}
       >
-        {" "}
         X
       </button>
-      <h2>Details Board</h2>
       {getDetails()}
     </div>
   );

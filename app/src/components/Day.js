@@ -15,7 +15,7 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Day({ index, timeRows, gcal, day, dayStart, suggestions }) {
+function Day({ days, index, timeRows, gcal, day, dayStart, suggestions }) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -100,14 +100,16 @@ function Day({ index, timeRows, gcal, day, dayStart, suggestions }) {
       className="day"
       style={{
         gridTemplateRows: timeRows,
-        gridColumn: `${index + 2} / span 1`,
+        gridColumn: `${index + 1} / span 1`,
       }}
     >
       <h3 className="dateTimeHeader" title={day.start.toISOString()}>
-        {day.start.format("dddd, MMM D, 'YY")}
+        {days.length > 3
+          ? day.start.format("ddd, M/D")
+          : day.start.format("dddd, M/D")}
       </h3>
       {events.length === 0 ? (
-        <p>You have no events for this day.</p>
+        <p className="noResults">You have no events for this day.</p>
       ) : (
         events.map((event) => (
           <TimeBlock
