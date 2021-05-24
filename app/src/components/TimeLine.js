@@ -75,13 +75,13 @@ function TimeIndicator({ dayStart }) {
   const [currentTime, setCurrentTime] = useState(dayjs());
   //finds row placement for current time
   function findCurrentTime() {
-    let minuteModify = 0;
+    let minuteModify = 3;
     if (15 <= currentTime.minute() < 30) {
-      minuteModify = 1;
+      minuteModify = 4;
     } else if (30 <= currentTime.minute() < 45) {
-      minuteModify = 2;
+      minuteModify = 5;
     } else if (45 <= currentTime.minute()) {
-      minuteModify = 3;
+      minuteModify = 6;
     }
     let row = (currentTime.hour() - dayStart.hours()) * 4 + minuteModify;
 

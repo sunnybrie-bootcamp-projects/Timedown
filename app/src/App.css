@@ -515,7 +515,7 @@ div.day.navBar {
 
   overflow: visible;
 
-  color: var(--orange);
+  color: var(--white);
   font-family: var(--thematic);
   font-weight: bolder;
   text-shadow: 0rem 0rem 0.175rem var(--navy);
@@ -542,9 +542,10 @@ div.day.navBar {
   line-height: 0em;
   font-weight: bolder;
   font-size: 12px;
-  text-shadow: -1px -1px 0 var(--transparent_green),
-    1px -1px 0 var(--transparent_green), -1px 1px 0 var(--transparent_green),
-    1px 1px 0 var(--transparent_green);
+  text-shadow: -1px -1px 0 var(--transparent_bloodorange),
+    1px -1px 0 var(--transparent_bloodorange),
+    -1px 1px 0 var(--transparent_bloodorange),
+    1px 1px 0 var(--transparent_bloodorange);
 }
 
 /* DAY + TIMEBLOCKS */
@@ -650,7 +651,7 @@ div.timeBlock.suggestion {
   margin: 5% auto;
   width: 90%;
   min-height: 80%;
-  height: 95%;
+  height: 90%;
   overflow-y: auto;
   border-radius: var(--small_radius);
   background-color: var(--transparent_white);
@@ -822,16 +823,16 @@ button.exitButton {
   overflow-y: hidden;
 }
 
-.detailsBoard ::-webkit-scrollbar {
+.planner ::-webkit-scrollbar {
   width: 8px;
 
   background-color: var(--invisible);
 }
 
-.detailsBoard ::-webkit-scrollbar-track {
+.planner ::-webkit-scrollbar-track {
 }
 
-.detailsBoard ::-webkit-scrollbar-thumb {
+.planner ::-webkit-scrollbar-thumb {
   border-radius: 1rem 1rem 1rem;
 
   background-color: var(--transparent_orange);

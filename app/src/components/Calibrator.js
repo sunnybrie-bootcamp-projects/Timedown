@@ -155,8 +155,6 @@ const Calibrator = ({
       let early = start.isBefore(range.min);
       let late = end.isAfter(range.max);
 
-      //console.debug({ range }, { early }, { late });
-
       //if out of range, drop this time
       //if early/late, adjust time
       if (early && late) {
