@@ -131,7 +131,7 @@ function Day({
             dayStart={dayStart}
             setAction={setAction}
             setDetails={setDetails}
-            type="event"
+            type={/^Timedown/.test(event.summary) ? "taskBlock" : "event"}
             info={event}
           />
         ))

@@ -195,7 +195,11 @@ function TaskInfo({ details, setAction, type }) {
           Suggest Times
         </button>
       ) : (
-        <p className="loadingMessage">This is not a Timedown task</p>
+        <p className="loadingMessage">
+          {/^Timedown/.test(details.summary)
+            ? "This event was created by Timedown"
+            : "This is not a Timedown task"}
+        </p>
       )}
     </div>
   );

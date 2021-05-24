@@ -52,6 +52,7 @@ const TimeBlock = ({
   function checkForDetails() {
     switch (type) {
       case "event":
+      case "taskBlock":
         setDetails(info);
         setAction("readEvent");
         break;

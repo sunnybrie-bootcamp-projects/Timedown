@@ -626,6 +626,15 @@ div.day p.noResults {
   );
 }
 
+.taskBlock {
+  border-top: 2px solid var(--bloodorange);
+  background: linear-gradient(
+    to bottom,
+    var(--orange),
+    var(--transparent_bloodorange)
+  );
+}
+
 div.timeBlock.suggestion {
   z-index: 5;
 }
