@@ -1,6 +1,7 @@
 # Timedown
 
 [Heroku Link](https://sb-timedown.herokuapp.com/)
+
 Timedown is a flexible time management app designed to cultivate a healthy work-life balance while staying on top of your deadlines. It allows a user to submit a task and uses the information to determine how they should allocate their time spent working on it so they finish before the due date. It then synchronizes with a user's calendar to suggest time blocks that fit into their schedule. 
 
 ## To Use 
@@ -77,17 +78,24 @@ Users should be able to...
    
 ---
 
+## Data Schema
+
 ![Data_Schema_TIMEDOWN](https://user-images.githubusercontent.com/76143251/115933182-31c9b980-a443-11eb-85f0-5dc30ce9d617.png)
+
+## Userflow
+
 ![userflow_TIMEDOWN](https://user-images.githubusercontent.com/76143251/115935412-f67db980-a447-11eb-8b7e-88c015b69f03.png)
 
 ---
 ## Landscape Wireframes
 
-![wireframes_landscape_TIMEDOWN](https://user-images.githubusercontent.com/76143251/115933333-89682500-a443-11eb-9a06-d60c3faf2cc5.png)
-![wireframes_landscape_TIMEDOWN2](https://user-images.githubusercontent.com/76143251/115933334-8a995200-a443-11eb-8b50-a598dafc0d29.png)
+![smallwireframes_landscape_TIMEDOWN](https://user-images.githubusercontent.com/76143251/119388298-f3602e00-bc7e-11eb-8647-b97ad7599c13.png)
+![smallwireframes_landscape_TIMEDOWN2](https://user-images.githubusercontent.com/76143251/119388301-f3f8c480-bc7e-11eb-990d-ecb1300cc490.png)
+
 ---
 ## Mobile Wireframes
 
-![wireframes_mobile_TIMEDOWN](https://user-images.githubusercontent.com/76143251/115933335-8b31e880-a443-11eb-80ae-89ea8b59e57c.png)
-![wireframes_mobile_TIMEDOWN2](https://user-images.githubusercontent.com/76143251/115933337-8bca7f00-a443-11eb-8bca-343b5f5ec95e.png)
+![smallwireframes_mobile_TIMEDOWN](https://user-images.githubusercontent.com/76143251/119388328-fce99600-bc7e-11eb-9b29-ee3cd2a9476d.png)
+![smallwireframes_mobile_TIMEDOWN2](https://user-images.githubusercontent.com/76143251/119388332-fd822c80-bc7e-11eb-9aeb-16a104dfab19.png)
+
 
