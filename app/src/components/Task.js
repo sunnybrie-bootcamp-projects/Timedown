@@ -15,7 +15,7 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Task({ task, setDetails, setAction }) {
+function Task({ task, setDetails, setAction, tasksList }) {
   function seeDetails(action) {
     setDetails(task);
     setAction(action);
@@ -28,23 +28,36 @@ function Task({ task, setDetails, setAction }) {
         <i>{dayjs(task.dueDate).fromNow()}</i>
       </td>
       <td headers="taskSummary">{task.summary}</td>
-      <td headers="taskProgress">Progress...</td>
       <td headers="taskOptions">
-        <button
-          value="deleteTask"
-          className="deleteButton"
-          onClick={(e) => seeDetails(e.target.value)}
-        >
-          Delete
-        </button>
-        <button
-          value="readTask"
-          className="detailsButton"
-          onClick={(e) => seeDetails(e.target.value)}
-        >
-          {" "}
-          See Details
-        </button>
+        {tasksList.length <= 1 ? (
+          <button
+            value="readTask"
+            className="detailsButton"
+            onClick={(e) => seeDetails(e.target.value)}
+          >
+            {" "}
+            See Details
+          </button>
+        ) : (
+          <>
+            <button
+              value="deleteTask"
+              className="deleteButton"
+              onClick={(e) => seeDetails(e.target.value)}
+            >
+              Delete
+            </button>
+
+            <button
+              value="readTask"
+              className="detailsButton"
+              onClick={(e) => seeDetails(e.target.value)}
+            >
+              {" "}
+              See Details
+            </button>
+          </>
+        )}
       </td>
     </tr>
   );

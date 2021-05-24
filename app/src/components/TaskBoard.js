@@ -25,42 +25,48 @@ function TaskBoard({
   }, []);
 
   return (
-    <table
-      className="taskBoard"
+    <div
+      className="tableContainer"
       style={{
-        display: tab === "taskboard" ? "table" : "none",
+        display: tab === "taskboard" ? "block" : "none",
       }}
     >
-      <caption>
-        <h2>Your Tasks</h2>
-      </caption>
-      <thead>
-        <tr className="taskBoardActions">
-          <td>
-            <button onClick={() => taskAction("addTask")}>Add New Task</button>
-          </td>
-        </tr>
-        <tr>
-          <th id="taskDueDate" scope="col">
-            Due
-          </th>
-          <th id="taskSummary" scope="col">
-            Summary
-          </th>
-          <th id="taskProgress" scope="col">
-            Progress
-          </th>
-          <th id="taskOptions" scope="col">
-            Options
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {tasksList.map((task, index) => {
-          return <Task key={index} {...{ task, setDetails, setAction }} />;
-        })}
-      </tbody>
-    </table>
+      <table className="taskBoard">
+        <caption>
+          <h2>Your Tasks</h2>
+        </caption>
+        <thead>
+          <tr className="taskBoardActions">
+            <td>
+              <button onClick={() => taskAction("addTask")}>
+                Add New Task
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <th id="taskDueDate" scope="col">
+              Due
+            </th>
+            <th id="taskSummary" scope="col">
+              Summary
+            </th>
+            <th id="taskOptions" scope="col">
+              Options
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasksList.map((task, index) => {
+            return (
+              <Task
+                key={index}
+                {...{ task, setDetails, setAction, tasksList }}
+              />
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
