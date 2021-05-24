@@ -725,8 +725,8 @@ form.userSettingsForm {
   grid-row: 3 / span 1;
 
   background-color: var(--white);
-  border-top: 5px solid var(--green);
-  border-bottom: 5px solid var(--green);
+  border-top: 5px solid var(--bloodorange);
+  border-bottom: 5px solid var(--bloodorange);
   border-left: 2em solid var(--transparent_bloodorange);
   box-shadow: var(--large_shadow);
   border-radius: var(--large_radius);
@@ -750,7 +750,7 @@ form.userSettingsForm {
 
   -webkit-appearance: none;
   outline: none;
-  background: url("./assets/toggleLeft.png"), var(--transparent_bloodorange);
+  background-color: var(--transparent_bloodorange);
   border: none;
   background-size: contain;
   background-position: center;

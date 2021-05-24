@@ -17,7 +17,16 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
+function Calendar({
+  tab,
+  gcal,
+  user,
+  dayStart,
+  dayEnd,
+  suggestions,
+  setAction,
+  setDetails,
+}) {
   const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
@@ -188,6 +197,8 @@ function Calendar({ tab, gcal, user, dayStart, dayEnd, suggestions }) {
                   dayStart,
                   suggestions,
                   calView,
+                  setAction,
+                  setDetails,
                 }}
               />
             );

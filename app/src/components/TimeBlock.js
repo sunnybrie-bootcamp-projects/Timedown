@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 
 import dayjs from "dayjs";
 
-const TimeBlock = ({ start, end, summary, dayStart, type }) => {
+const TimeBlock = ({
+  start,
+  end,
+  summary,
+  dayStart,
+  type,
+  info,
+  setAction,
+  setDetails,
+}) => {
   const [gridRow, setGridRow] = useState("auto");
   const [gridColumn, setGridColumn] = useState("1 / span 1");
 

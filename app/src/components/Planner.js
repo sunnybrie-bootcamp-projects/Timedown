@@ -91,7 +91,18 @@ function Planner({
       <>
         <NavBar {...{ tab, setTab, user }} />
         <div className="planner">
-          <Calendar {...{ tab, gcal, user, dayStart, dayEnd, suggestions }} />
+          <Calendar
+            {...{
+              tab,
+              gcal,
+              user,
+              dayStart,
+              dayEnd,
+              suggestions,
+              setAction,
+              setDetails,
+            }}
+          />
           <TaskBoard
             {...{
               tab,
