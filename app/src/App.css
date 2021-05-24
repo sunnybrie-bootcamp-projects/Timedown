@@ -727,8 +727,35 @@ form.userSettingsForm {
   background-color: var(--white);
   border-top: 5px solid var(--green);
   border-bottom: 5px solid var(--green);
+  border-left: 2em solid var(--transparent_bloodorange);
   box-shadow: var(--large_shadow);
   border-radius: var(--large_radius);
+
+  transition: right 500ms ease 0.5s / 0s, height 100ms linear 0s;
+}
+
+.detailsBoard > * {
+  transition: height 25ms linear;
+}
+
+.toggleButton {
+  position: relative;
+  float: left;
+  top: 40%;
+  bottom: 40%;
+  left: -2em;
+  padding: 2.5%;
+  height: 2em;
+  width: 1.75em;
+
+  -webkit-appearance: none;
+  outline: none;
+  background: url("./assets/toggleLeft.png"), var(--transparent_bloodorange);
+  border: none;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: color;
 }
 
 button.exitButton {
@@ -895,5 +922,13 @@ table.suggestionsTable tr.suggestion {
 
   .time {
     left: 0vw;
+  }
+
+  .detailsBoard {
+    min-width: 80vw;
+    height: 85vh;
+    max-height: 95vh;
+
+    /*transition: right 0.5s cubic-bezier(0.17, 0.04, 0.03, 0.94);*/
   }
 }

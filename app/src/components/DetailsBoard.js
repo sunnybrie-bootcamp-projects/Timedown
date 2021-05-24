@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import * as ApiClient from "../ApiClient";
+import * as ToggleOpen from "../assets/toggleLeft.png";
+import * as ToggleShut from "../assets/toggleRight.png";
 
 import Calibrator from "./Calibrator.js";
 import TaskAddForm from "./TaskAddForm";
@@ -32,8 +34,16 @@ function DetailsBoard({
   suggestions,
   setSuggestions,
 }) {
+  const [open, setOpen] = useState(false);
   //Determines what to render based on the "action" state
   //Read details, edit, delete, or add new task
+
+  useEffect(() => {
+    if (action !== "") {
+      setOpen(true);
+    }
+  }, [action]);
+
   function getDetails() {
     let infoToRender;
     switch (action) {
@@ -99,14 +109,29 @@ function DetailsBoard({
   return (
     <div
       className="detailsBoard"
-      style={{ display: action === "" ? "none" : "block" }}
+      style={{
+        display: action === "" ? "none" : "block",
+        right: open ? "10%" : "-80%",
+        height: open ? "100%" : "50%",
+      }}
     >
       <button
+        className="toggleButton"
+        alt="toggle details"
+        style={{
+          background: open ? `url('${ToggleShut}')` : `url('${ToggleOpen}')`,
+        }}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      />
+      <button
         className="exitButton"
-        title="exit"
+        alt="exit details"
         onClick={() => {
           setAction("");
           setDetails({});
+          setOpen(false);
         }}
       >
         X
