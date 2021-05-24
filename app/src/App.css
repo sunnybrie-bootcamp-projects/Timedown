@@ -197,6 +197,10 @@ main.app {
   position: relative;
   margin: auto;
   grid-row: 1 / span 1;
+
+  text-shadow: 0em 0em 5em var(--shadow), 0em 0em 0.25em var(--shadow),
+    0em 0em 0.125em var(--shadow);
+  font-size: 3em;
 }
 
 /* MAIN NAVBAR */
@@ -247,14 +251,13 @@ button.navTab {
   display: block;
   position: absolute;
   top: 25%;
-  left: 25%;
-  right: 25%;
+  right: 5%;
   margin: auto 0;
   height: 50%;
 
   clip-path: circle(50% at 50% 50%);
 
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 nav {
@@ -270,7 +273,7 @@ nav {
   font-weight: 500;
   font-style: normal;
   color: var(--white);
-  font-size: minMax(2em, 120%);
+  font-size: minMax(3em, 160%);
 }
 
 /* PLANNERR - MAIN CONTAINER */
@@ -641,6 +644,19 @@ div.timeBlock.suggestion {
 
 /* TASKBOARD COMPONENTS */
 
+.tableContainer {
+  display: block;
+  position: relative;
+  margin: 5% auto;
+  width: 90%;
+  min-height: 80%;
+  height: 95%;
+  overflow-y: auto;
+  border-radius: var(--small_radius);
+  background-color: var(--transparent_white);
+  box-shadow: var(--large_shadow);
+}
+
 table.taskBoard {
   display: table;
   box-sizing: border-box;
@@ -650,17 +666,14 @@ table.taskBoard {
   margin: auto;
   padding: 1em;
   height: auto;
-  max-height: 95%;
+  max-height: 90%;
   width: 90%;
+  overflow: auto;
 
   border-collapse: separate;
   border-spacing: 0em 1em;
   vertical-align: middle;
   align-content: center;
-
-  border-radius: var(--small_radius);
-  background-color: var(--transparent_white);
-  box-shadow: var(--large_shadow);
 }
 
 thead {
@@ -702,6 +715,8 @@ td {
   display: table-cell;
   margin: auto;
   padding: 0.5em;
+
+  text-align: center;
 }
 td:first-child {
   border-top-left-radius: 1em;
@@ -715,9 +730,11 @@ td:last-child {
 
 .task button {
   float: right;
+  width: min-content;
 }
 
 .deleteButton {
+  background-color: var(--transparent_white);
   color: red;
 }
 
