@@ -91,10 +91,6 @@ function DetailsBoard({
             }}
           />
         );
-        break;
-      case "readEvent":
-        infoToRender = <TaskInfo {...{ setAction, details }} />;
-        break;
       default:
         break;
     }
@@ -115,7 +111,7 @@ function DetailsBoard({
       className="detailsBoard"
       style={{
         display: action === "" ? "none" : "block",
-        right: open ? "10%" : "-77.5%",
+        right: open ? "10%" : "-80%",
         height: open ? "100%" : "50%",
       }}
     >
@@ -123,11 +119,7 @@ function DetailsBoard({
         className="toggleButton"
         alt="toggle details"
         style={{
-          backgroundImage: open
-            ? `url('https://raw.githubusercontent.com/sunnybrie/Timedown/user-settings/app/src/assets/toggleRight.png')`
-            : `url('https://raw.githubusercontent.com/sunnybrie/Timedown/user-settings/app/src/assets/toggleLeft.png')`,
-          backgroundSize: "contain",
-          backgroundPosition: "center",
+          background: open ? `url('${ToggleShut}')` : `url('${ToggleOpen}')`,
         }}
         onClick={() => {
           setOpen(!open);
