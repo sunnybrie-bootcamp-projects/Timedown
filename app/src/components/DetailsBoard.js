@@ -111,15 +111,20 @@ function DetailsBoard({
       className="detailsBoard"
       style={{
         display: action === "" ? "none" : "block",
-        right: open ? "10%" : "-80%",
+        right: open ? "10%" : "-77.5%",
         height: open ? "100%" : "50%",
+        marginTop: open ? "auto" : "25%",
       }}
     >
       <button
         className="toggleButton"
         alt="toggle details"
         style={{
-          background: open ? `url('${ToggleShut}')` : `url('${ToggleOpen}')`,
+          backgroundImage: open
+            ? `url('https://raw.githubusercontent.com/sunnybrie/Timedown/user-settings/app/src/assets/toggleRight.png')`
+            : `url('https://raw.githubusercontent.com/sunnybrie/Timedown/user-settings/app/src/assets/toggleLeft.png')`,
+          backgroundSize: "contain",
+          backgroundPosition: "center",
         }}
         onClick={() => {
           setOpen(!open);
