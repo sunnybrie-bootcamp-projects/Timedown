@@ -48,26 +48,20 @@ const Calibrator = ({
     //{"kind":"calendar#event","etag":"\"3243224849178000\"","id":"5f8acg1mhfb5263cchonigpuki_20210521T160000Z","status":"confirmed","htmlLink":"https://www.google.com/calendar/event?eid=NWY4YWNnMW1oZmI1MjYzY2Nob25pZ3B1a2lfMjAyMTA1MjFUMTYwMDAwWiBicmllbm5hLmtsYXNzZW5AbQ&ctz=America/Los_Angeles","created":"2021-01-24T22:41:30.000Z","updated":"2021-05-21T15:53:44.589Z","summary":"Techtonica: Daily Morning Stand-Up","description":"Techtonica Org is inviting you to a scheduled Zoom meeting.\n\nJoin Zoom Meeting\nhttps://zoom.us/j/93737314088?pwd=RXhvYTUrREJiQ2c1MDgwVGF0NDRKZz09\n\nMeeting ID: 937 3731 4088\nPasscode: 00000001\nOne tap mobile\n+16699009128,,93737314088#,,,,*00000001# US (San Jose)\n+12532158782,,93737314088#,,,,*00000001# US (Tacoma)\n\nDial by your location\n        +1 669 900 9128 US (San Jose)\n        +1 253 215 8782 US (Tacoma)\n        +1 346 248 7799 US (Houston)\n        +1 312 626 6799 US (Chicago)\n        +1 646 558 8656 US (New York)\n        +1 301 715 8592 US (Washington DC)\nMeeting ID: 937 3731 4088\nPasscode: 00000001\nFind your local number: https://zoom.us/u/abOHP0Ldi9","location":"https://zoom.us/j/93737314088?pwd=RXhvYTUrREJiQ2c1MDgwVGF0NDRKZz09","creator":{"email":"nquinones@techtonica.org"},"organizer":{"email":"c_j5d3c22o6nod523b02gatphkos@group.calendar.google.com","displayName":"Techtonica events"},"start":{"dateTime":"2021-05-21T09:00:00-07:00"},"end":{"dateTime":"2021-05-21T09:30:00-07:00"},"recurringEventId":"5f8acg1mhfb5263cchonigpuki_R20210510T160000","originalStartTime":{"dateTime":"2021-05-21T09:00:00-07:00"},"iCalUID":"5f8acg1mhfb5263cchonigpuki_R20210510T160000@google.com","sequence":1,"attendees":[{"email":"adilene.valencias@gmail.com","responseStatus":"declined"},{"email":"jewangyj@gmail.com","responseStatus":"accepted"},{"email":"abigail.edwards317@gmail.com","responseStatus":"accepted"},{"email":"taela.luccia@gmail.com","responseStatus":"accepted"},{"email":"leiaquesada@gmail.com","responseStatus":"accepted"},{"email":"michelleglauser@techtonica.org","responseStatus":"declined"},{"email":"sophiarafat@icloud.com","responseStatus":"needsAction"},{"email":"brienna.klassen@gmail.com","self":true,"responseStatus":"accepted"},{"email":"me@averymiller.me","responseStatus":"accepted"},{"email":"meianatividad@gmail.com","responseStatus":"accepted"},{"email":"mandychen.art@gmail.com","responseStatus":"accepted"},{"email":"a.lukinicheva@gmail.com","responseStatus":"accepted"},{"email":"scawley@techtonica.org","responseStatus":"declined"},{"email":"crodriguez@techtonica.org","responseStatus":"accepted"}],"reminders":{"useDefault":true},"eventType":"default"}
     try {
       let additions = eventsArr.map(async (suggestion) => {
-        return await gcal.createEvent(
-          JSON.stringify({
-            resource: {
-              summary: suggestion.summary,
-              location: "",
-              description: details.description,
-              start: {
-                dateTime: dayjs(suggestion.start).toISOString(),
-                timeZone: "America/Los_Angeles",
-              },
-              end: {
-                dateTime: dayjs(suggestion.end).toISOString(),
-                timeZone: "America/Los_Angeles",
-              },
-              colorId: 1,
-            },
-            calendarId: "primary",
-            sendUpdates: "none",
-          }),
-        );
+        return await gcal.createEvent({
+          summary: "Timedown: " + suggestion.summary,
+          location: "",
+          description: details.description,
+          start: {
+            dateTime: suggestion.start,
+            timeZone: "America/Los_Angeles",
+          },
+          end: {
+            dateTime: suggestion.end,
+            timeZone: "America/Los_Angeles",
+          },
+          colorId: 1,
+        });
       });
 
       await Promise.all(additions);

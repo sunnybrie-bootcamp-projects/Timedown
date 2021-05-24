@@ -21,42 +21,44 @@ function Account({ tab, setLoggedIn, gcal, user, setUser }) {
 
   useEffect(() => {}, [editSettings]);
   return (
-    <div
-      className="accountPanel"
-      style={{ display: tab === "account" ? "block" : "none" }}
-    >
-      <h2>Logged in as...</h2>
-      <img
-        id="profilePic"
-        alt="profile photo"
-        src={user.google.getImageUrl()}
-      />
-      <h3> {user.name} </h3>
-      <button
-        onClick={() => {
-          gcal.handleSignoutClick();
-          setLoggedIn(false);
-          setUser({});
-        }}
+    <>
+      <div
+        className="accountPanel"
+        style={{ display: tab === "account" ? "block" : "none" }}
       >
-        Log out
-      </button>
-      <button onClick={() => setEditSettings(true)}>Edit Settings</button>
-      {editSettings ? (
-        <>
-          <UserSettingsForm
-            {...{
-              user,
-              setUser,
-              setEditSettings,
-            }}
-          />
-          <button onClick={() => setEditSettings(false)}>Cancel</button>
-        </>
-      ) : (
-        <></>
-      )}
-    </div>
+        <h2>Logged in as...</h2>
+        <img
+          id="profilePic"
+          alt="profile photo"
+          src={user.google.getImageUrl()}
+        />
+        <h3> {user.name} </h3>
+        <button
+          onClick={() => {
+            gcal.handleSignoutClick();
+            setLoggedIn(false);
+            setUser({});
+          }}
+        >
+          Log out
+        </button>
+        <button onClick={() => setEditSettings(true)}>Edit Settings</button>
+        {editSettings ? (
+          <>
+            <UserSettingsForm
+              {...{
+                user,
+                setUser,
+                setEditSettings,
+              }}
+            />
+            <button onClick={() => setEditSettings(false)}>Cancel</button>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+    </>
   );
 }
 

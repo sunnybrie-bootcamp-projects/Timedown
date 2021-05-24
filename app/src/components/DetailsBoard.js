@@ -123,7 +123,7 @@ function DetailsBoard({
         right: open ? "0%" : "0%",
         height: open ? "90%" : "50%",
         width: open ? "max-content" : "1em",
-        minWidth: open ? "min-content" : "1em",
+        minWidth: open ? "fit-content" : "1em",
         maxWidth: open ? "min-content" : "1em",
         marginTop: open ? "auto" : "0",
       }}
@@ -150,6 +150,7 @@ function DetailsBoard({
       <button
         className="exitButton"
         alt="exit details"
+        style={{ display: open ? "block" : "none" }}
         onClick={() => {
           setAction("");
           setDetails({});
