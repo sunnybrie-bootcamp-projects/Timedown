@@ -12,7 +12,7 @@ Timedown has not been officially verified by Google yet, so only designated test
 ![Sunny](https://lh3.googleusercontent.com/a-/AOh14Ghc3aZ3QNJXczLbp0HrOZR_4vkRJW2hW9sz2xi_=s96-c)
  -   **Email:** sunny.codetester@gmail.com
  -   **Password:** qwerd123
- -   **Persona:** Sunny Codetester is a busy, 21-year-old college student working a part-time job as a kitchen assistant. Trying to build up her portfolio and work experience, she's been trying to squeeze in time to do freelance design work.
+ -   **Persona:** Sunny Codetester is a busy, 21-year-old college student working a part-time job as a kitchen assistant. Wanting to build up her portfolio and work experience, she's been trying to squeeze in time to do freelance design work.
 
 ![Cody](https://lh3.googleusercontent.com/a-/AOh14GhFm6Uu2vvG1KoQqKbIBSxhf5PCTmvopo-ZHApo=s96-c)
  -   **Email:** cods7699@gmail.com
