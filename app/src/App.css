@@ -92,7 +92,8 @@ h3 {
   line-height: 1em;
 }
 
-button {
+button,
+[type="submit"] {
   background-color: var(--green);
   border-radius: var(--small_radius);
   border-color: var(--softblue);
@@ -714,13 +715,18 @@ td:last-child {
 .accountPanel {
   display: block;
   position: absolute;
-  margin: auto;
+  margin: 5%;
   padding: 1em;
-  width: 90%;
+  width: 80%;
+  text-align: center;
+  background-color: var(--transparent_white);
+  border-radius: var(--small_radius);
 }
 
 form.userSettingsForm {
-  display: inline-block;
+  display: block;
+  margin: auto;
+  max-width: 70%;
 }
 
 /* DETAILS BOARD */
@@ -747,7 +753,10 @@ form.userSettingsForm {
   box-shadow: var(--large_shadow);
   border-radius: var(--large_radius);
 
-  transition: right 500ms ease-in-out, height 400ms linear, width 1s ease-in-out,
+  transition: right 500ms cubic-bezier(0.17, 0.04, 0.03, 0.94),
+    height 400ms linear, width 1000ms cubic-bezier(0.17, 0.04, 0.03, 0.94),
+    min-width 1000ms cubic-bezier(0.17, 0.04, 0.03, 0.94),
+    max-width 1000ms cubic-bezier(0.17, 0.04, 0.03, 0.94),
     margin-top 800ms linear 0.25s;
 }
 
@@ -756,16 +765,14 @@ form.userSettingsForm {
   float: left;
   top: 40%;
   bottom: 40%;
-  left: -2.25em;
+  left: -2.5em;
   padding: 2.5%;
-  height: 2em;
+  height: 5em;
   width: 1.75em;
 
-  -webkit-appearance: none;
-  outline: none;
   background: url("./assets/toggleLeft.png"), var(--transparent_bloodorange);
   border: none;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-blend-mode: color;

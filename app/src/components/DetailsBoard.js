@@ -120,15 +120,19 @@ function DetailsBoard({
       className="detailsBoard"
       style={{
         display: action === "" ? "none" : "block",
-        right: open ? "-10%" : "0%",
+        right: open ? "0%" : "0%",
         height: open ? "90%" : "50%",
-        width: open ? "100%" : "2em",
+        width: open ? "max-content" : "1em",
+        minWidth: open ? "min-content" : "1em",
+        maxWidth: open ? "min-content" : "1em",
         marginTop: open ? "auto" : "0",
       }}
     >
       <button
         className="toggleButton"
         alt="toggle details"
+        tabIndex={0}
+        role="button"
         style={{
           backgroundImage: open
             ? `url('https://raw.githubusercontent.com/sunnybrie/Timedown/user-settings/app/src/assets/toggleRight.png')`
@@ -138,6 +142,9 @@ function DetailsBoard({
         }}
         onClick={() => {
           setOpen(!open);
+        }}
+        onKeyPress={(e) => {
+          if (e.key === "Enter" || e.key === "Space") setOpen(!open);
         }}
       />
       <button
@@ -163,28 +170,32 @@ function TaskInfo({ details, setAction, type }) {
   return (
     <div className="taskInfo">
       <h2>{details.summary}</h2>
-      <p className="taskDesc">{details.description}</p>
       <p className="taskDueDate">
         {type === "task" ? (
           `Due: ${new Date(details.dueDate).toLocaleString()}`
         ) : (
-          <p>
+          <>
             <b>Starts:</b>{" "}
             {dayjs(details.start.dateTime).format(`ddd, MMM D, 'YY h:mma`)}
             <br />
             <b>Ends:</b>{" "}
             {dayjs(details.end.dateTime).format(`ddd, MMM D, 'YY h:mma`)}
-          </p>
+          </>
         )}
       </p>
-      <button
-        value="suggestTimes"
-        className="suggestButton"
-        onClick={(e) => setAction(e.target.value)}
-      >
-        {" "}
-        Suggest Times
-      </button>
+      <p className="taskDesc">{details.description}</p>
+      {type === "task" ? (
+        <button
+          value="suggestTimes"
+          className="suggestButton"
+          onClick={(e) => setAction(e.target.value)}
+        >
+          {" "}
+          Suggest Times
+        </button>
+      ) : (
+        <p className="loadingMessage">This is not a Timedown task</p>
+      )}
     </div>
   );
 }
