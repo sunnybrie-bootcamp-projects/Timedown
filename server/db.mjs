@@ -98,42 +98,54 @@ WHERE users.email = $1`,
 
 export const addUser = async (email, name) => {
   try {
-    const user = await db.any(
-      `INSERT INTO users("email")
-VALUES($1) RETURNING *`,
-      [email],
-    );
-
-    const settings = await db.any(
-      `INSERT INTO settings("userId", "awakeTime") VALUES($1, '{"start": '00:00', "end":'23:00'}') RETURNING *`,
-      [user[0].id],
-    );
-
-    const task = await db.any(
-      `INSERT INTO tasks("userId", "summary", "description", "estTime", "dueDate") VALUES($1, 'Hi $2!', 'Welcome to Timedown!', '{"hours": 0, "minutes": 0}', NOW())`,
-      [user[0].id, name],
-    );
-
-    const newAccount = await db.any(
-      `SELECT * 
-FROM users
-LEFT JOIN settings
-  ON users."id" = settings."userId"
-WHERE users."id" = $1`,
-      [user[0].id],
-    );
-
-    return {
-      success: true,
-      message:
-        "Your new account has been successfully registered! You may now try logging in with Google.",
-      account: newAccount,
-    };
+    return await db
+      .tx(async (t) => {
+        // execute a chain of queries against the task context, and return the result:
+        console.debug("INSERTING USER...");
+        return await t
+          .one(
+            `INSERT INTO users("email", "username") VALUES($1, $2) RETURNING *`,
+            [email, name],
+          )
+          .then(async (user) => {
+            console.debug("INSERTING TASK...");
+            let query = `INSERT INTO tasks("userId", "summary", "description", "estTime", "dueDate") VALUES($1, 'Hi ${name}!', 'Welcome to Timedown!', '{"hours": 0, "minutes": 0}', NOW()) RETURNING *`;
+            return await t.any(query, [user.id]);
+          })
+          .then(async (task) => {
+            console.debug("INSERTING SETTINGS...");
+            return await t.any(
+              `INSERT INTO settings("userId", "awakeTime") VALUES($1, '{"start": "8:00", "end":"23:00"}') RETURNING *`,
+              [task[0].userId],
+            );
+          })
+          .then(async (settings) => {
+            console.debug("SELECTING USER INFO...");
+            return await t.any(
+              `SELECT * FROM users LEFT JOIN settings ON users."id" = settings."userId" WHERE users.id = $1`,
+              [settings.userId],
+            );
+          });
+      })
+      .then((newAccount) => {
+        console.debug("SENDING USER INFO...");
+        return {
+          success: true,
+          message:
+            "Your new account has been successfully registered! You may now try logging in with Google.",
+          account: newAccount[0],
+        };
+      })
+      .catch((err) => {
+        console.debug("ERROR: ", err);
+        return {
+          success: false,
+          message:
+            "Account creation failed. Try refreshing and registering again.",
+        };
+      });
   } catch (err) {
-    return {
-      success: false,
-      message: "Account creation failed. Try refreshing and registering again.",
-    };
+    console.debug(err);
   }
 };
 
