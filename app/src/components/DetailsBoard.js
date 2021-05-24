@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
@@ -75,7 +75,10 @@ function DetailsBoard({
         );
         break;
       case "readTask":
-        infoToRender = <TaskInfo {...{ setAction, details }} />;
+        infoToRender = <TaskInfo type="task" {...{ setAction, details }} />;
+        break;
+      case "readEvent":
+        infoToRender = <TaskInfo type="event" {...{ setAction, details }} />;
         break;
       case "suggestTimes":
         infoToRender = (
@@ -106,14 +109,21 @@ function DetailsBoard({
     window.alert("Task deleted.", deletedTask);
   }
 
+  useLayoutEffect(() => {
+    if (action !== "") {
+      setOpen(true);
+    }
+  }, [action]);
+
   return (
     <div
       className="detailsBoard"
       style={{
         display: action === "" ? "none" : "block",
-        right: open ? "10%" : "-77.5%",
-        height: open ? "100%" : "50%",
-        marginTop: open ? "auto" : "25%",
+        right: open ? "-10%" : "0%",
+        height: open ? "90%" : "50%",
+        width: open ? "100%" : "2em",
+        marginTop: open ? "auto" : "0",
       }}
     >
       <button
@@ -141,18 +151,31 @@ function DetailsBoard({
       >
         X
       </button>
-      {getDetails()}
+      <br />
+      <div className="content" style={{ display: open ? "block" : "none" }}>
+        {getDetails()}
+      </div>
     </div>
   );
 }
 
-function TaskInfo({ details, setAction }) {
+function TaskInfo({ details, setAction, type }) {
   return (
     <div className="taskInfo">
       <h2>{details.summary}</h2>
       <p className="taskDesc">{details.description}</p>
       <p className="taskDueDate">
-        {new Date(details.dueDate).toLocaleString()}
+        {type === "task" ? (
+          `Due: ${new Date(details.dueDate).toLocaleString()}`
+        ) : (
+          <p>
+            <b>Starts:</b>{" "}
+            {dayjs(details.start.dateTime).format(`ddd, MMM D, 'YY h:mma`)}
+            <br />
+            <b>Ends:</b>{" "}
+            {dayjs(details.end.dateTime).format(`ddd, MMM D, 'YY h:mma`)}
+          </p>
+        )}
       </p>
       <button
         value="suggestTimes"

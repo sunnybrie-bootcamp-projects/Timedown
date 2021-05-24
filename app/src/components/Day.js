@@ -15,7 +15,17 @@ dayjs.extend(AdvancedFormat);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-function Day({ days, index, timeRows, gcal, day, dayStart, suggestions }) {
+function Day({
+  days,
+  index,
+  timeRows,
+  gcal,
+  day,
+  dayStart,
+  suggestions,
+  setAction,
+  setDetails,
+}) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -119,7 +129,10 @@ function Day({ days, index, timeRows, gcal, day, dayStart, suggestions }) {
             end={dayjs(event.end.dateTime)}
             summary={event.summary}
             dayStart={dayStart}
+            setAction={setAction}
+            setDetails={setDetails}
             type="event"
+            info={event}
           />
         ))
       )}
@@ -135,7 +148,10 @@ function Day({ days, index, timeRows, gcal, day, dayStart, suggestions }) {
             end={dayjs(suggestion.end)}
             summary={suggestion.summary}
             dayStart={dayStart}
+            setAction={setAction}
+            setDetails={setDetails}
             type="suggestion"
+            info={suggestion}
           />
         ))
       )}

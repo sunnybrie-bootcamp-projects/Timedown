@@ -148,11 +148,17 @@ button {
   margin: auto;
   padding: 12.5%;
   width: fit-content;
+  max-width: 25em;
 
   border-radius: var(--large_radius);
+  box-shadow: var(--large_shadow);
 
   background-color: var(--transparent_softblue);
   text-align: center;
+}
+
+.guestLanding h2 {
+  color: var(--white);
 }
 
 .guestLanding p {
@@ -566,6 +572,7 @@ div.day {
 
   grid-column: auto / span 1;
   row-gap: 1px;
+  grid-template-columns: 1fr;
   justify-content: space-evenly;
   align-content: space-between;
 
@@ -583,15 +590,15 @@ div.day p.noResults {
 
 .timeBlock {
   display: inline-block;
-  position: relative;
+  position: absolute;
   box-sizing: border-box;
-  margin: 0px;
+  margin: 0px 5%;
   padding: 0.125em;
   min-height: 100%;
   max-height: 100%;
-  max-width: 100%;
+  max-width: 90%;
   height: 100%;
-  width: 100%;
+  width: 90%;
 
   border-radius: var(--small_radius);
   box-shadow: var(--small_shadow);
@@ -725,7 +732,6 @@ form.userSettingsForm {
   z-index: 15;
   margin: auto 5vw auto 62.5vw;
   padding: 0.5%;
-  min-width: fit-content;
   width: 100%;
   max-width: 30vw;
   min-height: fit-content;
@@ -741,12 +747,8 @@ form.userSettingsForm {
   box-shadow: var(--large_shadow);
   border-radius: var(--large_radius);
 
-  transition: right 500ms ease 0.5s, height 400ms linear 0s,
+  transition: right 500ms ease-in-out, height 400ms linear, width 1s ease-in-out,
     margin-top 800ms linear 0.25s;
-}
-
-.detailsBoard > * {
-  transition: height 25ms linear;
 }
 
 .toggleButton {
@@ -754,7 +756,7 @@ form.userSettingsForm {
   float: left;
   top: 40%;
   bottom: 40%;
-  left: -2em;
+  left: -2.25em;
   padding: 2.5%;
   height: 2em;
   width: 1.75em;
