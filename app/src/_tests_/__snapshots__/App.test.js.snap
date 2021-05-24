@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders consistently 1`] = `
+<main
+  className="App"
+>
+  <div
+    className="guestLanding"
+  >
+    <h2>
+      Welcome to Timedown!
+    </h2>
+    <p>
+      Timedown is an app designed to make it easier to manage your time. Log in or register, add a task to your taskboard, and get suggestions for times to work on it so you can finish it by its duedate!
+    </p>
+    <p
+      className="loadingMessage"
+    >
+      Get started!
+    </p>
+    <div
+      className="login"
+    >
+      <span
+        className="buttonLabel"
+      >
+         Members:
+      </span>
+      <button
+        onClick={[Function]}
+      >
+        Log in with Google
+      </button>
+      <br />
+      <span
+        className="buttonLabel"
+      >
+         Guests: 
+      </span>
+      <button
+        onClick={[Function]}
+      >
+        Register with Google
+      </button>
+    </div>
+  </div>
+</main>
+`;

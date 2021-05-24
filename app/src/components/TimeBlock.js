@@ -19,23 +19,23 @@ const TimeBlock = ({
     function minuteModify(time, edge) {
       let extra;
       if (edge === "start") {
-        extra = 0;
+        extra = -1;
       } else if (edge === "end") {
         extra = 2;
       }
       if (15 <= time.minute() < 30) {
-        return 2 + extra;
-      } else if (30 <= time.minute() < 45) {
         return 3 + extra;
-      } else if (45 <= time.minute()) {
+      } else if (30 <= time.minute() < 45) {
         return 4 + extra;
+      } else if (45 <= time.minute()) {
+        return 5 + extra;
       }
       return extra + 2;
     }
 
     let blockStart =
       (start.hour() - dayStart.hours()) * 4 + minuteModify(start, "start");
-    blockStart = blockStart <= 0 ? 1 : blockStart;
+    blockStart = blockStart <= 0 ? 2 : blockStart;
 
     let blockEnd =
       (end.hour() - dayStart.hours()) * 4 + minuteModify(end, "end");
