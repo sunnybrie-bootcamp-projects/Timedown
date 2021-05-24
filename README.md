@@ -2,12 +2,13 @@
 
 [Heroku Link](https://sb-timedown.herokuapp.com/)
 
-Timedown is a flexible time management app designed to cultivate a healthy work-life balance while staying on top of your deadlines. It allows a user to submit a task and uses the information to determine how they should allocate their time spent working on it so they finish before the due date. It then synchronizes with a user's calendar to suggest time blocks that fit into their schedule. 
+Timedown is a flexible time management app designed to cultivate a healthy work-life balance while staying on top of your deadlines. It allows a user to submit a task and uses the information to determine how they should allocate their time spent working on it so they finish before the due date. It then synchronizes with a user's google calendar to suggest time blocks that fit into their schedule. 
 
 ## To Use 
 
 ### On Heroku
-Timedown has not been officially verified by Google yet, so only designated test users can log in and try out this app. In order to try this app, you will need to either email the developer and ask to be added as a test user, or **try out one of these dummy test user accounts.**
+Timedown has not been officially verified by Google yet, so only designated test users can log in and try out this app. 
+In order to try this app, you will need to either email the developer and ask to be added as a test user, or **try out one of these dummy test user accounts.**
 
 ![Sunny](https://lh3.googleusercontent.com/a-/AOh14Ghc3aZ3QNJXczLbp0HrOZR_4vkRJW2hW9sz2xi_=s96-c)
  -   **Email:** sunny.codetester@gmail.com
@@ -28,17 +29,18 @@ Timedown has not been officially verified by Google yet, so only designated test
 ---
 
 ### Locally
-1. Fork and clone this repo
-2. Follow the first 15 minutes of [this video](https://www.youtube.com/watch?v=zrLf4KMs71E) to set up an API key and Client ID in order to use the Google API.
-3. Create a `.env` file in the `app/` directory
-4. Add two lines... 
+1. You will need to install and run [Docker](https://www.docker.com/?utm_source=google&utm_medium=cpc&utm_campaign=dockerhomepage&utm_content=namer&utm_term=dockerhomepage&utm_budget=growth&gclid=Cj0KCQjwna2FBhDPARIsACAEc_XLdggQ2swXvSxtB7aRugYq_aCHKQaTTA_d04oO00wfe2EGyKnsa4saAndkEALw_wcB).
+2. Fork and clone this repo
+3. Follow the first 15 minutes of [this video](https://www.youtube.com/watch?v=zrLf4KMs71E) to set up an API key and Client ID in order to use the Google API.
+4. Create a `.env` file in the `app/` directory
+5. Add two lines... 
 ```
 REACT_APP_API_KEY=<copy/paste your api key here>
 REACT_APP_CLIENT_ID=<copy/paste your client id here>
 ```
-5. In your CLI, from the root directory, run the command `npm run db:init` to set up the database
-6. Also from your root directory, run the command `npm start`
-7. Timedown will be running on `localhost:3000`
+6. In your CLI, from the root directory, run the command `npm run db:init` to set up the database
+7. Also from your root directory, run the command `npm start`
+8. Timedown will be running on `localhost:3000`
 
 ## Technologies
 - Technologies
