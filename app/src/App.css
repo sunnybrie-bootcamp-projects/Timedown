@@ -98,7 +98,9 @@ button {
   border-color: var(--softblue);
 
   color: var(--white);
-  font-size: 1rem;
+  font-size: 12px;
+  font-family: var(--thematic);
+  font-weight: 500;
 }
 
 .loadingMessage {
@@ -145,13 +147,20 @@ button {
 .guestLanding {
   margin: auto;
   padding: 12.5%;
+  width: fit-content;
 
+  border-radius: var(--large_radius);
+
+  background-color: var(--transparent_softblue);
   text-align: center;
 }
 
 .guestLanding p {
-  margin: auto;
-  width: 50%;
+  margin: 10% auto;
+  width: 85%;
+
+  border-radius: var(--small_radius);
+  background-color: var(--transparent_white);
 }
 
 .login {
@@ -631,7 +640,7 @@ table.taskBoard {
   vertical-align: middle;
   align-content: center;
 
-  border-radius: 1em 1em 1em;
+  border-radius: var(--small_radius);
   background-color: var(--transparent_white);
 }
 
