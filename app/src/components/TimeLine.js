@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
-function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
+function TimeLine({ timeRows, isAuthenticated, dayStart }) {
   //Returns an array of time objects at half-hour increments with row location
   //based on dayStart starting hour and totalHours
   function getTimes() {
     let timesToRender = [];
-    for (let i = 0; i <= totalHours; i += 0.25) {
-      let value = dayjs(dayStart).add(Math.floor(i), "hour"); //creates dayjs object, determines hour
+    for (let i = 0; i < (timeRows.split(" ").length - 1) / 4; i += 0.25) {
+      let value = dayjs().hour(dayStart.hours());
+      value = value.add(Math.floor(i), "hour"); //creates dayjs object, determines hour
       let minute;
       if (i % 1 === 0.25) {
         minute = 15;
@@ -21,7 +22,7 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
       }
       value = value.set("minute", minute); //sets minute
 
-      let timeLineLocation = `${i * 4 + 1}`; //determines row to render on
+      let timeLineLocation = `${i * 4 + 2}`; //determines row to render on
 
       timesToRender.push({ value, timeLineLocation }); //pushes as object
     }
@@ -29,12 +30,13 @@ function TimeLine({ timeRows, isAuthenticated, dayStart, totalHours }) {
     return timesToRender;
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getTimes();
   }, []);
 
   return (
     <div className="timeLine" style={{ gridTemplateRows: timeRows }}>
+      <h3 className="dateTimeHeader">Time</h3>
       {getTimes().map((time, index) => {
         return <TimeNotch key={`TN${index}`} {...{ time }} />;
       })}
@@ -53,7 +55,13 @@ function TimeNotch({ time }) {
         gridRow: time.timeLineLocation,
       }}
     >
-      <span>
+      <span
+        className={
+          time.value.minute() === 0 || time.value.minute() === 30
+            ? "time"
+            : "notch"
+        }
+      >
         {time.value.minute() === 0 || time.value.minute() === 30
           ? `${time.value.format("hh:mma")}`
           : "-"}
@@ -69,13 +77,13 @@ function TimeIndicator({ dayStart }) {
   function findCurrentTime() {
     let minuteModify = 0;
     if (15 <= currentTime.minute() < 30) {
-      minuteModify = 3;
+      minuteModify = 1;
     } else if (30 <= currentTime.minute() < 45) {
-      minuteModify = 4;
+      minuteModify = 2;
     } else if (45 <= currentTime.minute()) {
-      minuteModify = 5;
+      minuteModify = 3;
     }
-    let row = (currentTime.hour() - dayjs(dayStart).hour()) * 4 + minuteModify;
+    let row = (currentTime.hour() - dayStart.hours()) * 4 + minuteModify;
 
     setIndicatorRender(`${row}`);
   }
@@ -87,10 +95,10 @@ function TimeIndicator({ dayStart }) {
   return (
     <div
       className="timeIndicator"
-      style={{ gridRow: indicatorRender, gridColumn: "2" }}
+      style={{ gridRow: indicatorRender, gridColumn: "1 / span 2" }}
     >
       <div className="timePointer"></div>
-      <span className="currentTime">{currentTime.format("hh:mma")}</span>
+      <span className="currentTime">{currentTime.format("h:mma")}</span>
     </div>
   );
 }

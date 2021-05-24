@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, StrictMode, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
@@ -6,48 +6,71 @@ import Day from "./Day";
 import { CalendarNavBar } from "./NavBar";
 import TimeLine from "./TimeLine";
 
-function Calendar({ isAuthenticated, gcal, timedownAccount }) {
+//dayjs plugins
+const AdvancedFormat = require("dayjs/plugin/advancedFormat");
+const duration = require("dayjs/plugin/duration");
+const isBetween = require("dayjs/plugin/isBetween");
+const relativeTime = require("dayjs/plugin/relativeTime");
+
+dayjs.extend(relativeTime);
+dayjs.extend(AdvancedFormat);
+dayjs.extend(duration);
+dayjs.extend(isBetween);
+
+function Calendar({
+  tab,
+  gcal,
+  user,
+  dayStart,
+  dayEnd,
+  suggestions,
+  setAction,
+  setDetails,
+}) {
   const [isReady, setIsReady] = useState(false);
   //Number of days the user wants to see
   const [calView, setCalView] = useState("1day");
-  //Starting hour for day rendering
-  const [dayStart, setDayStart] = useState(dayjs().hour(0));
-  //Ending hour for day rendering
-  const [dayEnd, setDayEnd] = useState(dayjs().hour(23));
-  //Total hours rendered in a day
-  const [totalHours, setTotalHours] = useState(24);
   //Days to be displayed in calendar
   const [days, setDays] = useState([
-    { start: dayjs().hour(0), end: dayjs().hour(23) },
+    { start: dayjs().set("hour", 0), end: dayjs().set("hour", 23) },
   ]);
   // Adjust days state when user clicks "previous" or "next" in navigation
   const [dateNavigation, setDateNavigation] = useState(0);
   //Sets Calendar's columns based on calView
-  const [dayColumns, setDayColumns] = useState("1fr 4fr");
+  const [dayColumns, setDayColumns] = useState("100%");
   //Sets the rows for TimeLine and Day components, based on total hours
   const [timeRows, setTimeRows] = useState("");
 
   //sets dayStart, dayEnd, and totalHours states for rendering
-  function setTimeRanges() {
-    if (timedownAccount.sleepTime) {
-      let start = dayjs().hour(timedownAccount.sleepTime.start.hours);
-      let end = dayjs().hour(timedownAccount.sleepTime.end.hours);
+  // function setTimeRanges() {
+  //   if (user.timedown.awakeTime) {
+  //     //^([01]\d|2[0-3]):?([0-5]\d)$ //regex time
+  //     let startArr = user.timedown.awakeTime.start.split(":");
+  //     let startObj = {
+  //       hours: parseInt(startArr[0]),
+  //       minutes: parseInt(startArr[1]),
+  //     };
+  //     let start = dayjs.duration(startObj);
 
-      setDayStart(start);
-      setDayEnd(end);
+  //     let endArr = user.timedown.awakeTime.end.split(":");
+  //     let endObj = { hours: parseInt(endArr[0]), minutes: parseInt(endArr[1]) };
+  //     let end = dayjs.duration(endObj);
 
-      let total = dayjs(end).hour() - dayjs(start).hour();
-      // console.debug({ total }); //TEST
-      setTotalHours(total);
-    }
-  }
+  //     setDayStart(start);
+  //     setDayEnd(end);
+
+  //     let total = end.hours() - start.hours();
+  //     // console.debug({ total }); //TEST
+  //     setTotalHours(total);
+  //   }
+  // }
 
   //generates string for timeRows state
   function timeToRows(total) {
-    let template = [];
+    let template = ["1em"];
     let size = 100 / (total * 4);
     for (let i = 0; i < total; i += 0.25) {
-      template.push(`${size}%`);
+      template.push(`1fr`);
     }
     setTimeRows(template.join(" "));
   }
@@ -56,31 +79,47 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   function getDates(num) {
     let newDates = [];
     for (let i = 0; i < num; i++) {
+      //set starting time
       let newStart = dayjs();
-      newStart = newStart.hour(dayStart.hour()); //set starting time
-      newStart = newStart.add(i + dateNavigation, "day"); //set day
+      newStart = newStart.set("hour", dayStart.hours());
+      newStart = newStart.set(
+        "minute",
+        dayStart.minutes() ? dayStart.minutes() : 0,
+      );
+      newStart = newStart.add(i, "day"); //set day
 
-      let newEnd = dayjs(dayEnd).add(i + dateNavigation, "day");
-      newEnd = newEnd.hour(dayEnd.hour()); //set starting time
-      newEnd = newEnd.add(i + dateNavigation, "day"); //set day
+      //set ending time
+      let newEnd = newStart;
+      newEnd = newEnd.set("hour", dayEnd.hours());
+      newEnd = newEnd.set("minute", dayEnd.minutes() ? dayEnd.minutes() : 0);
+      if (newEnd.isBefore(newStart)) {
+        newEnd = newEnd.add(1, "day"); //set day
+      }
 
+      if (dateNavigation < 0) {
+        newStart = newStart.subtract(
+          dayjs.duration({ days: Math.abs(dateNavigation) }),
+        );
+        newEnd = newEnd.subtract(
+          dayjs.duration({ days: Math.abs(dateNavigation) }),
+        );
+      } else if (dateNavigation > 0) {
+        newStart = newStart.add(Math.abs(dateNavigation), "days");
+        newEnd = newEnd.add(dayjs.duration({ days: Math.abs(dateNavigation) })); //set day
+      }
       newDates.push({ start: newStart, end: newEnd });
     }
-    console.debug(newDates);
+
     setDays(newDates);
 
     let newDayColumns =
       newDates.length === 1
-        ? "1fr 4fr"
-        : "1fr".concat(
-            newDates
-              .map((date, index) => {
-                return " 2fr";
-              })
-              .join(""),
-          );
-
-    console.debug("setting columns...", newDayColumns);
+        ? "100%"
+        : newDates
+            .map((date, index) => {
+              return " 1fr";
+            })
+            .join("");
 
     setDayColumns(newDayColumns);
   }
@@ -89,62 +128,87 @@ function Calendar({ isAuthenticated, gcal, timedownAccount }) {
   function getView() {
     switch (calView) {
       case "1day":
-        getDates(1);
-        break;
+        return 1;
       case "3day":
-        getDates(3);
-        break;
+        return 3;
       case "week":
-        getDates(7);
+        return 7;
       default:
-        break;
+        return 1;
     }
   }
 
   //USE EFFECTS
 
-  useEffect(() => {
-    setTimeRanges();
-    getView();
-    setIsReady(true);
-  }, [timedownAccount.sleepTime]);
+  useLayoutEffect(() => {
+    try {
+      let totalHours = dayEnd.hours() - dayStart.hours();
+      timeToRows(totalHours);
+    } catch (err) {
+      window.alert(err);
+    }
+    try {
+      getDates(getView());
+    } catch (err) {
+      window.alert(err);
+    }
+    try {
+      setIsReady(true);
+    } catch (err) {
+      window.alert(err);
+    }
+  }, []);
 
-  useEffect(() => {
-    timeToRows(totalHours);
-  }, [totalHours]);
+  useLayoutEffect(() => {
+    try {
+      setDays([]);
+      getDates(getView());
+    } catch (err) {
+      window.alert(err);
+    }
+  }, [calView, dateNavigation]);
 
-  useEffect(() => {
-    getView();
-  }, [calView]);
-
-  return (
-    <div
-      className="calendar"
-      style={{
-        gridTemplateColumns: dayColumns,
-      }}
-    >
-      <CalendarNavBar
-        {...{ calView, setCalView, dateNavigation, setDateNavigation }}
-      />
-      <TimeLine {...{ timeRows, isAuthenticated, totalHours, dayStart }} />
-      {days.map((day, index) => {
-        return (
-          <Day
-            key={`D${index}`}
-            {...{
-              index,
-              timeRows,
-              isAuthenticated,
-              gcal,
-              day,
-              dayStart,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
+  if (isReady) {
+    return (
+      <div
+        className="calendar"
+        style={{
+          display: tab === "calendar" ? "grid" : "none",
+        }}
+      >
+        <CalendarNavBar
+          {...{ calView, setCalView, dateNavigation, setDateNavigation, days }}
+        />
+        <TimeLine {...{ timeRows, dayStart }} />
+        <div
+          className="dayContainer"
+          style={{ gridTemplateColumns: dayColumns }}
+        >
+          {days.map((day, index) => {
+            return (
+              <Day
+                key={`D${index}`}
+                {...{
+                  index,
+                  timeRows,
+                  days,
+                  gcal,
+                  day,
+                  dayStart,
+                  suggestions,
+                  calView,
+                  setAction,
+                  setDetails,
+                }}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
+  } else {
+    return <p className="loadingMessage">Loading calendar...</p>;
+  }
 }
 
 export default Calendar;

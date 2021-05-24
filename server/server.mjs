@@ -10,20 +10,36 @@ const port = process.env.PORT || 4000;
 const tasks = express.Router();
 
 tasks.get("/", async (request, response) => {
-  console.debug(request.headers); //TEST
-  const timedownUser = request.header("timedown-user");
-  const tasks = await db.getTasks(timedownUser);
+  const { userId } = request.query;
+  const tasks = await db.getTasks(userId);
   response.json(tasks);
 });
 
 tasks.use(express.json());
 tasks.post("/", async (request, response) => {
-  const { userId, dueDate, estTime, summary, description } = request.body;
-  const task = await db.addTask(userId, dueDate, estTime, summary, description);
+  const {
+    userId,
+    dueDate,
+    estTimeHours,
+    estTimeMinutes,
+    summary,
+    description,
+  } = request.body;
+  console.debug({ estTimeHours, estTimeMinutes });
+  const task = await db.addTask(
+    userId,
+    dueDate,
+    estTimeHours,
+    estTimeMinutes,
+    summary,
+    description,
+  );
+
+  console.debug(task);
   response.status(201).json(task);
 });
-tasks.post("/delete", async (request, response) => {
-  const { id } = request.body;
+tasks.delete("/", async (request, response) => {
+  const { id } = request.query;
   const deletedTask = await db.deleteTask(id);
   response.status(201).json(deletedTask);
 });
@@ -31,17 +47,38 @@ tasks.post("/delete", async (request, response) => {
 app.use("/api/tasks", tasks);
 
 //User Routes
-const users = express.Router();
+const user = express.Router();
 
-users.use(express.json());
-users.post("/", async (request, response) => {
-  const { email } = request.body;
+user.use(express.json());
+user.get("/", async (request, response) => {
+  const { email } = request.query;
   const user = await db.getUser(email);
 
   response.status(201).json(user);
 });
+user.post("/", async (request, response) => {
+  const { email, name } = request.query;
+  const newAccount = await db.addUser(email, name);
 
-app.use("/api/users", users);
+  if (!newAccount.success) {
+    response.status(418).json(newAccount);
+  } else {
+    response.status(201).json(newAccount);
+  }
+});
+user.post("/settings", async (request, response) => {
+  const { userId } = request.query;
+  const { awakeTime, eventBuffer } = request.body;
+  const update = await db.updateSettings(userId, awakeTime, eventBuffer);
+
+  if (!update.success) {
+    response.status(418).json(update);
+  } else {
+    response.status(201).json(update);
+  }
+});
+
+app.use("/api/user", user);
 
 process.env?.SERVE_REACT?.toLowerCase() === "true" &&
   app.use(

@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
 
 //MAIN APP NAV BAR
-function NavBar({ isAuthenticated, gcal, setTab, tab }) {
+function NavBar({ tab, setTab, user }) {
   return (
     <div className="navBar">
       <button
         className={tab === "calendar" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("calendar")}
       >
-        Calendar
+        <nav>Calendar</nav>
       </button>
       <button
         className={tab === "taskboard" ? "navTab toggled" : "navTab notToggled"}
         onClick={() => setTab("taskboard")}
       >
-        Taskboard
+        <nav>Taskboard</nav>
+      </button>
+      <button
+        id="accountTab"
+        className={tab === "account" ? "navTab toggled" : "navTab notToggled"}
+        onClick={() => setTab("account")}
+      >
+        {user.google.getImageUrl() ? (
+          <img src={user.google.getImageUrl()} />
+        ) : (
+          <></>
+        )}
+        <nav>Account</nav>
       </button>
     </div>
   );
@@ -28,6 +40,7 @@ export const CalendarNavBar = ({
   setCalView,
   dateNavigation,
   setDateNavigation,
+  days,
 }) => {
   const [gridColumn, setGridColumn] = useState("2 / auto");
 
@@ -69,14 +82,15 @@ export const CalendarNavBar = ({
         className="calViewOptions"
         style={{ gridRow: "1", gridColumn: "1 / span 1" }}
       >
-        View Options:
+        <span className="buttonLabel">View:</span>
+        <br />
         <button
           className={
             calView === "1day" ? "navTab toggled" : "navTab notToggled"
           }
           onClick={() => setCalView("1day")}
         >
-          1 Day
+          1
         </button>
         <button
           className={
@@ -84,7 +98,7 @@ export const CalendarNavBar = ({
           }
           onClick={() => setCalView("3day")}
         >
-          3 Days
+          3
         </button>
         <button
           className={
@@ -92,17 +106,20 @@ export const CalendarNavBar = ({
           }
           onClick={() => setCalView("week")}
         >
-          Week
+          7
         </button>
       </div>
-      <div
-        className="day navBar"
-        style={{ gridRow: "1", gridColumn: gridColumn }}
-      >
+      <div className="day navBar" style={{ gridRow: "1" }}>
         <button className="prev" onClick={() => prevNext(-1)}>
           prev
         </button>
-        <span className="navTitle">Today</span>
+        <h3 className="navTitle">
+          {days.length > 1
+            ? `${days[0].start.format("MMM D, YYYY")} - ${days[
+                days.length - 1
+              ].start.format("MMM D, YYYY")}`
+            : `${days[0].start.format("MMM D, YYYY")}`}
+        </h3>
         <button className="next" onClick={() => prevNext(1)}>
           next
         </button>

@@ -1,10 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer, useLayoutEffect } from "react";
 
 import dayjs from "dayjs";
 
 import TimeBlock from "./TimeBlock.js";
 
-function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
+//dayjs plugins
+const AdvancedFormat = require("dayjs/plugin/advancedFormat");
+const duration = require("dayjs/plugin/duration");
+const isBetween = require("dayjs/plugin/isBetween");
+const relativeTime = require("dayjs/plugin/relativeTime");
+
+dayjs.extend(relativeTime);
+dayjs.extend(AdvancedFormat);
+dayjs.extend(duration);
+dayjs.extend(isBetween);
+
+function Day({
+  days,
+  index,
+  timeRows,
+  gcal,
+  day,
+  dayStart,
+  suggestions,
+  setAction,
+  setDetails,
+}) {
   //Parameters for getting the day's events
   // const [queryOptions, setQueryOptions] = useState({
   //   calendarId: "primary",
@@ -15,9 +36,10 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
   //   showDeleted: false,
   //   singleEvents: true,
   // });
+  const [min, setMin] = useState(day.start.toISOString());
+  const [max, setMax] = useState(day.end.toISOString());
+  const [daysSuggestions, setDaysSuggestions] = useState([]);
 
-  const [min, setMin] = useState("");
-  const [max, setMax] = useState("");
   const queryOptions = {
     calendarId: "primary",
     orderBy: "startTime",
@@ -40,37 +62,64 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
       });
   }
 
+  function getDaysSuggestions() {
+    let results = suggestions.filter((suggestion) => {
+      if (dayjs(suggestion.start).isBetween(day.start, day.end)) {
+        return true;
+      }
+      return false;
+    });
+
+    setDaysSuggestions(results);
+  }
+
   //Component load-in...
-  useEffect(() => {
-    // setQueryOptions({
-    //   ...queryOptions,
-    //   timeMax: dayEnd.toISOString(),
-    //   timeMin: dayStart.toISOString(),
-    // });
-    setMin(dayjs(day.start).toISOString());
-    setMax(dayjs(day.end).toISOString());
-  });
-
-  //After day's parameters are set...
-  useEffect(() => {
-    if (isAuthenticated) {
+  useLayoutEffect(() => {
+    try {
+      setMin(day.start.toISOString());
+      setMax(day.end.toISOString());
       getEvents();
+      if (suggestions.length > 0) {
+        getDaysSuggestions();
+      }
+    } catch (err) {
+      console.debug(err);
     }
-  }, [min, max, isAuthenticated]);
+  }, []);
 
-  // useEffect(() => {}, []);
+  //Component load-in...
+  useLayoutEffect(() => {
+    try {
+      setMin(day.start.toISOString());
+      setMax(day.end.toISOString());
+      getEvents();
+      if (suggestions.length > 0) {
+        getDaysSuggestions();
+      }
+    } catch (err) {
+      console.debug(err);
+    }
+  }, [day]);
+
+  useLayoutEffect(() => {
+    getDaysSuggestions();
+  }, [suggestions]);
 
   return (
     <div
       className="day"
       style={{
         gridTemplateRows: timeRows,
-        gridColumn: `${index + 2} / span 1`,
-        gridRow: "2 / span 1",
+        gridColumn: `${index + 1} / span 1`,
       }}
     >
+      <h3 className="dateTimeHeader" title={day.start.toISOString()}>
+        {days.length > 3
+          ? day.start.format("ddd, M/D")
+          : day.start.format("dddd, M/D")}
+      </h3>
       {events.length === 0 ? (
-        <p>You have no events for this day.</p>
+        <p className="noResults">You have no events for this day.</p>
       ) : (
         events.map((event) => (
           <TimeBlock
@@ -80,31 +129,34 @@ function Day({ index, timeRows, isAuthenticated, gcal, day, dayStart }) {
             end={dayjs(event.end.dateTime)}
             summary={event.summary}
             dayStart={dayStart}
+            setAction={setAction}
+            setDetails={setDetails}
+            type={/^Timedown/.test(event.summary) ? "taskBlock" : "event"}
+            info={event}
+          />
+        ))
+      )}
+
+      {suggestions.length === 0 ? (
+        <></>
+      ) : (
+        daysSuggestions.map((suggestion, index) => (
+          <TimeBlock
+            className="event"
+            key={`TBS${index}`}
+            start={dayjs(suggestion.start)}
+            end={dayjs(suggestion.end)}
+            summary={suggestion.summary}
+            dayStart={dayStart}
+            setAction={setAction}
+            setDetails={setDetails}
+            type="suggestion"
+            info={suggestion}
           />
         ))
       )}
     </div>
   );
 }
-
-// const Events = ({ gcal, queryOptions }) => {
-//   const [events, setEvents] = React.useState([]);
-
-//   React.useEffect(() => {
-//     gcal
-//       .listUpcomingEvents(10)
-//       .then(({ result: { items } }) => setEvents(items));
-//   }, []);
-
-//   return events.length === 0 ? (
-//     <p>You have no events for this day.</p>
-//   ) : (
-//       {events.map((event) => (
-//         <TimeBlock className="event" key={event.id} summary={event.summary} />
-
-//       ))}
-
-//   );
-// };
 
 export default Day;

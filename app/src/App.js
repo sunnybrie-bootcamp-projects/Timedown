@@ -2,40 +2,56 @@ import "./App.css";
 
 import * as React from "react";
 
-import Account from "./Account.js";
+import * as ApiClient from "./ApiClient";
 import gcal from "./api/ApiCalendar";
-import Login from "./components/Login";
 import Planner from "./components/Planner.js";
-import * as dbRequest from "./dbRequest";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(gcal.sign);
-  const [googleAccount, setGoogleAccount] = React.useState({});
-  const [timedownAccount, setTimedownAccount] = React.useState({});
+  const [user, setUser] = React.useState({});
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loginMessage, setLoginMessage] = React.useState("Get started!");
 
   async function getUserInfo(account) {
     switch (account) {
       case "google":
         if (isAuthenticated) {
-          var googleUserInfo = await gcal.getBasicUserProfile();
-          setGoogleAccount(googleUserInfo);
+          let googleUserInfo = await gcal.getBasicUserProfile();
+          setUser({ ...user, google: googleUserInfo });
           //console.debug(googleUserInfo);
         }
         break;
       case "timedown":
-        if (isAuthenticated) {
-          var timedownUserInfo = await dbRequest.getUser(
-            googleAccount.getEmail(),
-          );
-          setTimedownAccount(timedownUserInfo);
-          //console.debug(timedownUserInfo);
+        if (isAuthenticated && user.google) {
+          if (user.new) {
+            let register = await ApiClient.addUser(
+              user.google.getEmail(),
+              user.google.getGivenName(),
+            );
+            setLoginMessage(register.message);
+            setUser({ ...user, new: false, timedown: register.account });
+          } else {
+            let timedownUserInfo = await ApiClient.getUser(
+              user.google.getEmail(),
+            );
+            if (timedownUserInfo.error) {
+              setLoginMessage(timedownUserInfo.error);
+              gcal.handleSignoutClick();
+              setUser({});
+            } else {
+              setUser({ google: user.google, timedown: timedownUserInfo });
+              setLoginMessage("Loading account information...");
+            }
+          }
         }
+
         break;
       default:
         break;
     }
   }
 
+  //Authenticate client
   React.useEffect(() => {
     gcal.onLoad(() => {
       setIsAuthenticated(gcal.gapi.auth2.getAuthInstance().isSignedIn.get());
@@ -43,42 +59,90 @@ const App = () => {
     });
   }, []);
 
+  //load google user info
   React.useEffect(() => {
     getUserInfo("google");
   }, [isAuthenticated]);
 
+  //fetch timedown account
   React.useEffect(() => {
     getUserInfo("timedown");
-  }, [googleAccount]);
+  }, [user.google]);
 
-  if (isAuthenticated) {
-    return <UserDashboard {...{ isAuthenticated, gcal, timedownAccount }} />;
+  //logged in!
+  React.useEffect(() => {
+    if (user.timedown) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, [user.timedown]);
+
+  if (loggedIn) {
+    return (
+      <UserDashboard
+        {...{
+          isAuthenticated,
+          gcal,
+          setUser,
+          user,
+          setLoggedIn,
+        }}
+      />
+    );
   }
 
-  return <FooBar {...{ isAuthenticated, gcal }} />;
-};
-
-function UserDashboard({ isAuthenticated, gcal, timedownAccount }) {
   return (
     <main className="App">
-      <>
-        <div id="login">
-          <Login {...{ isAuthenticated, gcal }} />
-        </div>
-        <Planner {...{ isAuthenticated, gcal, timedownAccount }} />
-      </>
-    </main>
-  );
-}
-
-function FooBar({ isAuthenticated, gcal }) {
-  return (
-    <main className="App">
-      <div id="login">
-        <Login {...{ isAuthenticated, gcal }} />
+      <div className="guestLanding">
+        <h2>Welcome to Timedown!</h2>
+        <p>
+          Timedown is an app designed to make it easier to manage your time. Log
+          in or register, add a task to your taskboard, and get suggestions for
+          times to work on it so you can finish it by its duedate!
+        </p>
+        <p className="loadingMessage">{loginMessage}</p>
+        <Login {...{ loggedIn, gcal, setUser, user }} />
       </div>
     </main>
   );
+};
+
+function UserDashboard({
+  isAuthenticated,
+  loggedIn,
+  setLoggedIn,
+  gcal,
+  user,
+  setUser,
+}) {
+  return (
+    <main className="app">
+      <h1>Timedown</h1>
+      <Planner
+        {...{ isAuthenticated, loggedIn, setLoggedIn, gcal, user, setUser }}
+      />
+    </main>
+  );
 }
+
+const Login = ({ loggedIn, gcal, setUser, user }) => {
+  return (
+    <div className="login">
+      <span className="buttonLabel"> Members:</span>
+      <button onClick={gcal.handleAuthClick}>Log in with Google</button>
+      <br />
+      <span className="buttonLabel"> Guests: </span>
+      <button
+        onClick={() => {
+          setUser({ ...user, new: true });
+          gcal.handleAuthClick();
+        }}
+      >
+        Register with Google
+      </button>
+    </div>
+  );
+};
 
 export default App;
