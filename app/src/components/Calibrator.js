@@ -34,11 +34,13 @@ const Calibrator = ({
   const [taskPriority, setTaskPriority] = useState(0);
 
   //user's settings
-  const awakeTime = { start: dayStart, end: dayEnd };
-  const eventBuffer = dayjs.duration({
-    ...user.timedown.eventBuffer,
-    hours: 0,
-  });
+  const [awakeTime, setAwakeTime] = useState({ start: dayStart, end: dayEnd });
+  const [eventBuffer, setEventBuffer] = useState(
+    dayjs.duration({
+      hours: parseInt(user.timedown.eventBuffer.hours),
+      minutes: parseInt(user.timedown.eventBuffer.minutes),
+    }),
+  );
 
   //time remaining
   function getRemainingTime(dueDate) {
@@ -65,11 +67,7 @@ const Calibrator = ({
       });
 
       await Promise.all(additions);
-
-      window.alert("Successfully added to your Google calendar");
-    } catch (err) {
-      window.alert("ERROR: ", "Failed to add to your Google calendar.");
-    }
+    } catch (err) {}
   }
   //free time remaining
   async function getRemainingFreeTimes(dueDate) {
@@ -99,15 +97,21 @@ const Calibrator = ({
                 let ft = {};
                 let next = array[index + 1];
 
-                ft.start = dayjs(busyTime.end.dateTime).toISOString();
+                ft.start = dayjs(busyTime.end.dateTime)
+                  .add(eventBuffer)
+                  .toISOString();
                 ft.end = array[index + 1]
-                  ? dayjs(array[index + 1].start.dateTime).toISOString()
+                  ? dayjs(array[index + 1].start.dateTime)
+                      .subtract(eventBuffer)
+                      .toISOString()
                   : dayjs(ft.start).endOf("day").toISOString();
 
                 if (index === 0) {
                   freeTimes.push({
                     start: dayjs().toISOString(),
-                    end: dayjs(busyTime.start.dateTime).toISOString(),
+                    end: dayjs(busyTime.start.dateTime)
+                      .subtract(eventBuffer)
+                      .toISOString(),
                   });
                 }
 
@@ -166,7 +170,7 @@ const Calibrator = ({
       }
 
       let ftDuration = dayjs.duration(end.diff(start));
-      let minDuration = eventBuffer;
+      let minDuration = dayjs.duration({ minutes: 15 });
 
       if (ftDuration.asMilliseconds() < minDuration.asMilliseconds()) {
         return null;
