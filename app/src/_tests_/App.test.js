@@ -22,8 +22,3 @@ it("Renders consistently", () => {
   const testRenderer = TestRenderer.create(<App />).toJSON();
   expect(testRenderer).toMatchSnapshot();
 });
-
-it("Changes message on login/register click", () => {
-  const app = TestRenderer.create(<App />);
-  const $ = require("jquery");
-});
