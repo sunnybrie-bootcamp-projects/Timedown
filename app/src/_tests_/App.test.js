@@ -22,3 +22,9 @@ it("Renders consistently", () => {
   const testRenderer = TestRenderer.create(<App />).toJSON();
   expect(testRenderer).toMatchSnapshot();
 });
+
+it("Renders title", () => {
+  const testRenderer = TestRenderer.create(<App />);
+  const testInstance = testRenderer.root;
+  expect(testInstance.findAllByType("h2").length).toBe(1);
+});
