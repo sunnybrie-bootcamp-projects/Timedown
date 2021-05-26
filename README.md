@@ -1,7 +1,7 @@
 # Timedown
 
 [Heroku Link](https://sb-timedown.herokuapp.com/) 
-*Please look at the dummy profiles below to sign in with.*
+**Please look at the dummy profiles below to sign in with.*
 
 Timedown is a flexible time management app designed to cultivate a healthy work-life balance while staying on top of your deadlines. It allows a user to submit a task and uses the information to determine how they should allocate their time spent working on it so they finish before the due date. It then synchronizes with a user's google calendar to suggest time blocks that fit into their schedule. 
 
